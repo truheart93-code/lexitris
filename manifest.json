@@ -1,0 +1,13 @@
+{
+  "background_color": "#5533ee",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Lexitris",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Lexitris",
+  "start_url": "/",
+  "theme_color": "#eef2ff",
+  "id": "Lex",
+  "description": "Spell words as letters fall. A word puzzle game with 4 different modes!"
+}
