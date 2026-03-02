@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.netlify.lexitris2.twa",
+        "sha256_cert_fingerprints": ["78:D0:6F:45:FC:ED:E3:E3:82:13:A1:8B:A6:AA:F5:A9:99:E0:04:56:9D:96:CB:70:0F:55:73:7F:34:3B:3F:22"]
+      }
+    }]
