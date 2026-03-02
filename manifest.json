@@ -6,7 +6,7 @@
   "orientation": "any",
   "scope": "/",
   "short_name": "Lexitris",
-  "start_url": "/",
+  "start_url": "https://lexitris.netlify.app/index.html",
   "theme_color": "#eef2ff",
   "id": "Lex",
   "description": "Spell words as letters fall. A word puzzle game with 4 different modes!"
