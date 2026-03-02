@@ -313,34 +313,34 @@ canvas{display:block;border:2px solid #dde3f8;border-radius:6px;box-shadow:0 4px
   border:1.5px solid var(--border);
   backdrop-filter:var(--card-blur);
   -webkit-backdrop-filter:var(--card-blur);
-  border-radius:20px;padding:24px 20px 20px;
+  border-radius:20px;padding:16px 16px 14px;
   width:min(300px,90vw);
   display:flex;flex-direction:column;align-items:center;
   animation:lxFadeIn .18s ease;
-  max-height:84vh;overflow-y:auto;
+  max-height:90vh;overflow-y:auto;
 }
 @keyframes lxFadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
-.lx-modal-icon{font-size:2.2rem;margin-bottom:6px;}
+.lx-modal-icon{font-size:1.6rem;margin-bottom:4px;}
 .lx-modal-title{
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.25rem;
-  color:var(--purple);letter-spacing:.12em;text-align:center;margin-bottom:3px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;
+  color:var(--purple);letter-spacing:.12em;text-align:center;margin-bottom:2px;
 }
 .lx-modal-sub{
-  font-family:'Space Mono',monospace;font-size:.47rem;
-  color:var(--text-muted);text-align:center;margin-bottom:14px;
+  font-family:'Space Mono',monospace;font-size:.38rem;
+  color:var(--text-muted);text-align:center;margin-bottom:8px;
 }
 .lx-modal-box{
   background:rgba(245,246,255,.65);
   border:1px solid var(--border);
-  border-radius:10px;padding:10px 13px;
-  width:100%;margin-bottom:12px;
-  display:flex;flex-direction:column;gap:7px;
+  border-radius:10px;padding:8px 12px;
+  width:100%;margin-bottom:8px;
+  display:flex;flex-direction:column;gap:5px;
 }
 .lx-bullet{
   display:flex;gap:8px;
-  font-family:'Space Mono',monospace;font-size:.47rem;color:var(--text-dim);
+  font-family:'Space Mono',monospace;font-size:.38rem;color:var(--text-dim);
 }
-.lx-bullet::before{content:'·';color:var(--purple);font-size:.7rem;flex-shrink:0;}
+.lx-bullet::before{content:'·';color:var(--purple);font-size:.6rem;flex-shrink:0;}
 .lx-section{
   font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;
   letter-spacing:.18em;color:var(--text-muted);text-transform:uppercase;
@@ -665,8 +665,8 @@ canvas{display:block;border:2px solid #dde3f8;border-radius:6px;box-shadow:0 4px
     <div class="lx-modal-title" id="md-name">Classic</div>
     <div class="lx-modal-sub" id="md-tagline"></div>
     <div class="lx-modal-box" id="md-features"></div>
-    <button class="lx-btn lx-btn-primary" style="width:100%;margin-bottom:8px" onclick="confirmPlayMode()">▶ Play Now</button>
-    <button class="lx-btn lx-btn-ghost" style="width:100%;margin-bottom:0" onclick="closeModeDialog()">← Back</button>
+    <button class="lx-btn lx-btn-primary" style="width:100%;margin-bottom:6px;padding:10px" onclick="confirmPlayMode()">▶ Play Now</button>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;margin-bottom:0;padding:10px" onclick="closeModeDialog()">← Back</button>
   </div>
 </div>
 
