@@ -67,6 +67,7 @@ body{
 
 /* Side panels */
 .side{width:70px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
+@media(max-width:479px){.side{display:none;}}
 .panel{
   background:#fff;border:1.5px solid #dde3f8;border-radius:10px;
   padding:7px 5px;text-align:center;
@@ -522,7 +523,10 @@ canvas{display:block;border:2px solid #dde3f8;border-radius:6px;box-shadow:0 4px
     <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:40px;height:40px">⏸</button>
   </div>
 </div>
-<div id="timer-bar-wrap" style="width:100%;padding:0 0 2px;flex-shrink:0"><div id="timer-bar" style="height:5px;border-radius:0;transition:width .5s linear,background .5s"></div></div>
+<div id="timer-bar-wrap" style="width:100%;flex-shrink:0;display:none;position:relative;background:#eef1ff;">
+  <div id="timer-bar" style="height:28px;background:#5533ee;width:100%;transition:none;"></div>
+  <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;letter-spacing:.1em;color:#fff;pointer-events:none;">3:00</div>
+</div>
 
 <!-- Settings / Pause backdrop -->
 <div id="settings-backdrop">
@@ -803,15 +807,26 @@ const ctx=cv.getContext('2d');
 
 function calcCell(){
   const hdrH=document.getElementById('hdr').offsetHeight||48;
-  const tbarH=document.getElementById('tbar').offsetHeight||72;
-  const avH=window.innerHeight-hdrH-tbarH-12;
-  const avW=window.innerWidth-160;
-  return Math.max(32,Math.floor(Math.min(avH/ROWS,avW/COLS,64)));
+  const tbarH=document.getElementById('tbar').offsetHeight||64;
+  const timerH=(gameMode==='timed'?28:0);
+  const avH=window.innerHeight-hdrH-tbarH-timerH-16;
+  // Side panels are 70px each + gaps, but on narrow screens hide them
+  const narrow=window.innerWidth<480;
+  const sideW=narrow?0:148;
+  const avW=window.innerWidth-sideW-16;
+  // Height-driven sizing — tall phones should use the height
+  const cellByH=Math.floor(avH/ROWS);
+  const cellByW=Math.floor(avW/COLS);
+  return Math.max(36,Math.min(cellByH,cellByW));
 }
 let CELL=calcCell();
-function resizeCv(){CELL=calcCell();cv.width=COLS*CELL;cv.height=ROWS*CELL;}
+function resizeCv(){
+  CELL=calcCell();
+  cv.width=COLS*CELL;
+  cv.height=ROWS*CELL;
+}
 resizeCv();
-window.addEventListener('resize',resizeCv);
+window.addEventListener('resize',()=>{resizeCv();draw();});
 
 // State
 let grid,falling,nextLetter;
@@ -848,8 +863,11 @@ function spawnFalling(){
   falling={l,col:Math.floor(COLS/2),row:0};
   if(grid[0][falling.col]){
     if(gameMode==='zen'){
-      // In zen mode, clear the top row instead of ending
-      grid.splice(0,1);grid.push(Array(COLS).fill(null));
+      // Shift the entire grid down by clearing the top 2 rows to make space
+      grid.splice(0,2);
+      grid.unshift(Array(COLS).fill(null));
+      grid.unshift(Array(COLS).fill(null));
+      flashRow(0);flashRow(1);
       return true;
     }
     endGame();return false;
@@ -1225,6 +1243,12 @@ function draw(){
 // ── Game loop ──────────────────────────────────────────────────────────────
 function lock(){
   if(!falling)return;
+  // Double-check the piece is actually at the bottom before locking
+  const nr=falling.row+1;
+  if(nr<ROWS&&!grid[nr][falling.col]){
+    // Not actually at bottom yet, keep falling
+    return;
+  }
   grid[falling.row][falling.col]=falling.l;
   playLand();
   falling=null;
@@ -1267,15 +1291,22 @@ function loop(ts){
     const remaining=Math.max(0,timedDuration-elapsed);
     const pct=remaining/timedDuration;
     const tb=document.getElementById('timer-bar');
+    const tl=document.getElementById('timer-label');
     tb.style.width=(pct*100)+'%';
-    tb.style.background=pct<0.2?'#ee2266':pct<0.4?'#ff8800':'#5533ee';
+    const color=pct<0.2?'#ee2266':pct<0.4?'#ff8800':'#5533ee';
+    tb.style.background=color;
+    document.getElementById('timer-bar-wrap').style.background=pct<0.2?'#ffeef3':pct<0.4?'#fff4e8':'#eef1ff';
+    const mins=Math.floor(remaining/60);
+    const secs=Math.floor(remaining%60);
+    tl.textContent=mins+':'+(secs<10?'0':'')+secs;
+    tl.style.color=pct<0.4?'#fff':'#fff';
     if(remaining<=0&&!gameOver){endGame();return;}
   }
   if(!paused&&falling&&ts-lastDropT>getEffectiveDropMs()){
     lastDropT=ts;
     const nr=falling.row+1;
-    if(nr>=ROWS||grid[nr][falling.col])lock();
-    else falling.row=nr;
+    if(nr>=ROWS||grid[nr][falling.col]){lock();lastDropT=ts;}
+    else{falling.row=nr;}
   }
   updateDangerBar();
   draw();
@@ -1897,6 +1928,7 @@ function startGame(){
     timedDuration=180;
     document.getElementById('timer-bar-wrap').style.display='block';
     document.getElementById('timer-bar').style.width='100%';
+    document.getElementById('timer-bar').style.background='#5533ee';
   } else {
     document.getElementById('timer-bar-wrap').style.display='none';
   }
