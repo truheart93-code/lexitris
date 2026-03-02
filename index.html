@@ -24,19 +24,21 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Space+Mono:wght@700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  height:100%;width:100%;overflow:hidden;
+html{
+  height:100%;width:100%;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  height:100%;width:100%;
+  overflow:hidden;
   position:fixed;top:0;left:0;right:0;bottom:0;
-  background:#f2f5ff;
+  background:linear-gradient(160deg,#eef2ff 0%,#f7f0ff 50%,#edf8ff 100%);
   color:#1a2540;
   font-family:'Space Mono',monospace;
   user-select:none;-webkit-user-select:none;
   touch-action:none;
-}
-body{
   display:flex;flex-direction:column;align-items:center;
-  background:linear-gradient(160deg,#eef2ff 0%,#f7f0ff 50%,#edf8ff 100%);
-  min-height:100%;
+  margin:0;padding:0;
 }
 
 /* Header */
