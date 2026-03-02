@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1993,6 +1993,18 @@ function closeStats(e){
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────
+// Force full screen fill on Android WebView
+(function(){
+  function forceFullscreen(){
+    document.documentElement.style.height = window.innerHeight+'px';
+    document.body.style.height = window.innerHeight+'px';
+    document.body.style.width = window.innerWidth+'px';
+  }
+  forceFullscreen();
+  window.addEventListener('resize', forceFullscreen);
+  window.addEventListener('orientationchange', ()=>setTimeout(forceFullscreen,100));
+})();
+
 window.addEventListener('load',()=>{
   // intro-screen starts with open class in HTML; boot hides others then shows intro properly
   document.getElementById('intro-screen').classList.remove('open');
