@@ -1,13 +1,29 @@
 {
-  "background_color": "#5533ee",
-  "dir": "ltr",
-  "display": "standalone",
   "name": "Lexitris",
-  "orientation": "any",
-  "scope": "/",
   "short_name": "Lexitris",
-  "start_url": "https://lexitris.netlify.app/index.html",
-  "theme_color": "#eef2ff",
-  "id": "Lex",
-  "description": "Spell words as letters fall. A word puzzle game with 4 different modes!"
+  "description": "Spell words as letters fall. A word puzzle game with 4 modes.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef2ff",
+  "theme_color": "#5533ee",
+  "icons": [
+    {
+      "src": "icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "games",
+    "puzzle"
+  ],
+  "prefer_related_applications": false
 }
