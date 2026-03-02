@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- PWA core -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lexitris">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#5533ee">
+<meta name="description" content="Spell words as letters fall. A word puzzle game with 4 modes.">
+<link rel="manifest" href="manifest.json">
+
+<!-- Apple touch icon (inline SVG, no extra files needed) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%235533ee'/%3E%3Ctext x='256' y='320' text-anchor='middle' font-family='Arial Black,sans-serif' font-weight='900' font-size='210' fill='white'%3ELX%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%235533ee'/%3E%3Ctext x='256' y='320' text-anchor='middle' font-family='Arial Black,sans-serif' font-weight='900' font-size='210' fill='white'%3ELX%3C/text%3E%3C/svg%3E">
+
+<title>LEXITRIS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Space+Mono:wght@700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  height:100%;width:100%;overflow:hidden;
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:#f2f5ff;
+  color:#1a2540;
+  font-family:'Space Mono',monospace;
+  user-select:none;-webkit-user-select:none;
+  touch-action:none;
+}
+body{
+  display:flex;flex-direction:column;align-items:center;
+  background:linear-gradient(160deg,#eef2ff 0%,#f7f0ff 50%,#edf8ff 100%);
+  min-height:100%;
+}
+
+/* Header */
+#hdr{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;flex-shrink:0;
+  background:#fff;border-bottom:2px solid #dde3f8;
+  box-shadow:0 2px 10px #c8d0f044;
+}
+#hdr h1{
+  font-family:'Nunito',sans-serif;font-size:clamp(1rem,4vw,1.5rem);
+  font-weight:900;letter-spacing:.15em;color:#5533ee;
+}
+.stats{display:flex;gap:14px;}
+.stat{text-align:center;}
+.stat span{display:block;font-size:.4rem;letter-spacing:.15em;color:#99aacc;text-transform:uppercase;}
+.stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(.8rem,2.8vw,1.05rem);}
+.gold{color:#e08000;}
+.blue{color:#0077dd;}
+.red{color:#ee2266;}
+
+/* Main */
+#main{display:flex;flex:1;width:100%;justify-content:center;align-items:flex-start;gap:8px;padding:6px;overflow:hidden;}
+
+/* Side panels */
+.side{width:70px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
+.panel{
+  background:#fff;border:1.5px solid #dde3f8;border-radius:10px;
+  padding:7px 5px;text-align:center;
+  box-shadow:0 2px 8px #c8d0f033;
+}
+.panel label{display:block;font-size:.38rem;letter-spacing:.15em;color:#99aacc;text-transform:uppercase;margin-bottom:4px;}
+.next-box{
+  width:46px;height:46px;margin:0 auto;
+  border:2.5px solid #5533ee;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;
+  color:#5533ee;background:#f0eeff;
+  box-shadow:0 3px 10px #5533ee22;
+}
+#word-log{max-height:200px;overflow:hidden;font-size:.46rem;text-align:left;}
+.wle{display:flex;justify-content:space-between;padding:2px 1px;border-bottom:1px solid #eef1ff;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.wle .w{color:#117700;font-weight:700;letter-spacing:.04em;}
+.wle .p{color:#e08000;font-weight:700;}
+
+/* Canvas wrap */
+#cw{position:relative;flex-shrink:0;}
+canvas{display:block;border:2px solid #dde3f8;border-radius:6px;box-shadow:0 4px 18px #b8c4e844;}
+
+/* Flash & popup */
+.flash{
+  position:absolute;pointer-events:none;border-radius:4px;
+  background:rgba(80,180,255,.38);
+  animation:rowFlash .45s ease forwards;
+}
+@keyframes rowFlash{0%{opacity:1}100%{opacity:0}}
+.popup{
+  position:absolute;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:900;
+  color:#e08000;
+  pointer-events:none;white-space:nowrap;
+  text-shadow:0 1px 0 #fff;
+  animation:floatUp .9s ease-out forwards;
+}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-44px)}}
+
+/* Touch bar */
+#tbar{
+  display:flex;width:100%;gap:10px;padding:8px 14px;
+  border-top:2px solid #dde3f8;flex-shrink:0;background:#fff;
+}
+.tbtn{
+  flex:1;height:56px;
+  background:#f0eeff;border:2px solid #9988dd;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:900;
+  color:#5533ee;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 0 #9988dd;
+  transition:transform .08s,box-shadow .08s;
+}
+.tbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #9988dd;}
+#btn-drop{
+  flex:1.6;background:#fff0f5;border-color:#ee2266;color:#ee2266;
+  box-shadow:0 4px 0 #ee2266;font-size:.8rem;letter-spacing:.08em;
+}
+#btn-drop:active{transform:translateY(3px);box-shadow:0 1px 0 #ee2266;}
+
+/* Overlay */
+#overlay{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,#eef2ff 0%,#f7f0ff 50%,#edf8ff 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:50;padding:24px;
+}
+#overlay h2{
+  font-family:'Nunito',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);
+  font-weight:900;letter-spacing:.15em;color:#5533ee;margin-bottom:14px;
+}
+#overlay p{
+  color:#5566aa;font-size:clamp(.62rem,2.2vw,.78rem);
+  text-align:center;line-height:2;margin-bottom:5px;max-width:300px;
+}
+.big-score{
+  font-family:'Nunito',sans-serif;font-size:clamp(2rem,8vw,3.2rem);
+  font-weight:900;color:#e08000;margin:8px 0;
+}
+.record{
+  font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;
+  color:#ee2266;animation:pulse .7s ease-in-out infinite alternate;margin-bottom:4px;
+}
+@keyframes pulse{from{opacity:.5}to{opacity:1}}
+.obtn{
+  margin-top:16px;
+  background:#5533ee;color:#fff;border:none;
+  font-family:'Nunito',sans-serif;font-size:clamp(.75rem,2.5vw,.95rem);font-weight:900;
+  letter-spacing:.15em;padding:13px 32px;cursor:pointer;
+  text-transform:uppercase;border-radius:10px;
+  box-shadow:0 5px 0 #3311bb;
+  -webkit-tap-highlight-color:transparent;
+}
+.obtn:active{transform:translateY(3px);box-shadow:0 2px 0 #3311bb;}
+.hs-wrap{margin-top:14px;width:230px;border-top:2px solid #dde3f8;padding-top:10px;}
+
+/* ══ LEXITRIS SCREEN SYSTEM ══════════════════════════════════════════════
+   One gradient, one font system, one button style. No white boxes.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* The gradient used everywhere */
+:root{
+  --bg: linear-gradient(160deg,#eef2ff 0%,#f7f0ff 50%,#edf8ff 100%);
+  --purple:#5533ee;
+  --purple-dark:#3311bb;
+  --purple-light:#f0eeff;
+  --border:rgba(170,160,230,0.35);
+  --card-bg:rgba(255,255,255,0.45);
+  --card-blur:blur(12px);
+  --text-muted:#aabbdd;
+  --text-dim:#6677aa;
+}
+
+/* Full-screen layer (intro, game-over, share, stats, mode dialog) */
+.lx-screen{
+  position:fixed;inset:0;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  padding:24px 20px;
+  z-index:300;
+  overflow-y:auto;
+}
+.lx-screen.open{ display:flex; }
+
+/* Logo */
+.lx-logo{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:clamp(2.8rem,11vw,4.2rem);
+  letter-spacing:.18em;color:var(--purple);
+  margin-bottom:4px;
+  animation:lxPulse 3s ease-in-out infinite;
+}
+@keyframes lxPulse{
+  0%,100%{text-shadow:0 4px 20px rgba(85,51,238,.2)}
+  50%{text-shadow:0 4px 48px rgba(85,51,238,.5)}
+}
+.lx-sub{
+  font-family:'Space Mono',monospace;
+  font-size:.55rem;letter-spacing:.28em;
+  color:var(--text-muted);margin-bottom:28px;text-transform:uppercase;
+}
+
+/* Card — frosted, blends with gradient */
+.lx-card{
+  background:var(--card-bg);
+  border:1.5px solid var(--border);
+  backdrop-filter:var(--card-blur);
+  -webkit-backdrop-filter:var(--card-blur);
+  border-radius:16px;
+  padding:16px 18px;
+  width:min(300px,88vw);
+  margin-bottom:12px;
+}
+.lx-card-label{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.5rem;letter-spacing:.2em;color:var(--text-muted);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.lx-row{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Space Mono',monospace;font-size:.55rem;
+  padding:5px 0;border-bottom:1px solid var(--border);color:var(--text-dim);
+}
+.lx-row:last-child{border:none;}
+.lx-row b{font-family:'Nunito',sans-serif;font-weight:900;color:var(--purple);}
+
+/* Primary button — solid purple */
+.lx-btn{
+  width:min(300px,88vw);padding:15px 20px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;
+  letter-spacing:.08em;cursor:pointer;margin-bottom:10px;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s;
+  text-align:center;
+}
+.lx-btn-primary{
+  background:var(--purple);color:#fff;
+  box-shadow:0 5px 0 var(--purple-dark);
+}
+.lx-btn-primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--purple-dark);}
+/* Ghost button — transparent, blends with bg */
+.lx-btn-ghost{
+  background:var(--card-bg);color:var(--purple);
+  border:1.5px solid var(--border);
+  box-shadow:0 4px 0 rgba(170,160,230,.25);
+  backdrop-filter:var(--card-blur);
+  -webkit-backdrop-filter:var(--card-blur);
+}
+.lx-btn-ghost:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(170,160,230,.25);}
+.lx-btn:disabled{opacity:.35;pointer-events:none;}
+
+/* Mode list */
+.lx-mode-list{
+  display:flex;flex-direction:column;gap:9px;
+  width:min(300px,88vw);margin-bottom:12px;
+}
+.lx-mode-btn{
+  display:flex;align-items:center;gap:13px;
+  background:var(--card-bg);
+  border:1.5px solid var(--border);
+  backdrop-filter:var(--card-blur);
+  -webkit-backdrop-filter:var(--card-blur);
+  border-radius:12px;padding:13px 16px;
+  width:100%;cursor:pointer;
+  box-shadow:0 4px 0 rgba(170,160,230,.22);
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s,background .1s;
+}
+.lx-mode-btn:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 rgba(170,160,230,.22);
+  background:rgba(240,236,255,.7);
+}
+.lx-mode-icon{font-size:1.5rem;flex-shrink:0;}
+.lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
+.lx-mode-name{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.9rem;color:#2a1a88;
+}
+.lx-mode-desc{
+  font-family:'Space Mono',monospace;font-size:.42rem;
+  color:var(--text-muted);margin-top:2px;
+}
+.lx-mode-arrow{font-size:1.1rem;color:var(--text-muted);flex-shrink:0;}
+
+/* Small footer hint */
+.lx-hint{
+  font-family:'Space Mono',monospace;font-size:.44rem;
+  color:var(--text-muted);text-align:center;line-height:2;margin-top:6px;
+}
+
+/* Modal content area (smaller dialog within lx-screen) */
+.lx-modal{
+  background:var(--card-bg);
+  border:1.5px solid var(--border);
+  backdrop-filter:var(--card-blur);
+  -webkit-backdrop-filter:var(--card-blur);
+  border-radius:20px;padding:24px 20px 20px;
+  width:min(300px,90vw);
+  display:flex;flex-direction:column;align-items:center;
+  animation:lxFadeIn .18s ease;
+  max-height:84vh;overflow-y:auto;
+}
+@keyframes lxFadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.lx-modal-icon{font-size:2.2rem;margin-bottom:6px;}
+.lx-modal-title{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.25rem;
+  color:var(--purple);letter-spacing:.12em;text-align:center;margin-bottom:3px;
+}
+.lx-modal-sub{
+  font-family:'Space Mono',monospace;font-size:.47rem;
+  color:var(--text-muted);text-align:center;margin-bottom:14px;
+}
+.lx-modal-box{
+  background:rgba(245,246,255,.65);
+  border:1px solid var(--border);
+  border-radius:10px;padding:10px 13px;
+  width:100%;margin-bottom:12px;
+  display:flex;flex-direction:column;gap:7px;
+}
+.lx-bullet{
+  display:flex;gap:8px;
+  font-family:'Space Mono',monospace;font-size:.47rem;color:var(--text-dim);
+}
+.lx-bullet::before{content:'·';color:var(--purple);font-size:.7rem;flex-shrink:0;}
+.lx-section{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;
+  letter-spacing:.18em;color:var(--text-muted);text-transform:uppercase;
+  margin:8px 0 6px;align-self:flex-start;
+}
+.lx-stat-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  margin-bottom:10px;width:100%;
+}
+.lx-stat-box{
+  background:rgba(245,246,255,.65);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;
+}
+.lx-stat-box label{
+  display:block;font-family:'Space Mono',monospace;
+  font-size:.36rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px;
+}
+.lx-stat-box b{font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:var(--purple);}
+.lx-stat-box.gold b{color:#e08000;}
+.lx-stat-box.green b{color:#117700;}
+.lx-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
+.lx-table th{font-family:'Space Mono',monospace;font-size:.36rem;color:var(--text-muted);
+  text-transform:uppercase;padding:3px 6px;text-align:left;border-bottom:1px solid var(--border);}
+.lx-table td{font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;color:#334;
+  padding:5px 6px;border-bottom:1px solid var(--border);}
+.lx-hall-entry{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 10px;background:rgba(245,246,255,.65);
+  border:1px solid var(--border);border-radius:8px;margin-bottom:5px;width:100%;
+}
+.lx-hall-word{font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:var(--purple);}
+.lx-hall-pts{font-family:'Space Mono',monospace;font-size:.45rem;color:#e08000;font-weight:700;}
+.lx-hall-date{font-family:'Space Mono',monospace;font-size:.36rem;color:var(--text-muted);}
+
+/* Share score display */
+.lx-score-big{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:2.8rem;color:#e08000;margin-bottom:4px;
+}
+.lx-share-pips{display:flex;gap:5px;margin:8px 0 14px;}
+.lx-pip{width:22px;height:22px;border-radius:5px;background:var(--purple);}
+.lx-pip.half{background:rgba(85,51,238,.4);}
+.lx-pip.low{background:rgba(170,160,230,.25);}
+.lx-share-stats{display:flex;gap:16px;margin-bottom:12px;}
+.lx-share-stat{text-align:center;}
+.lx-share-stat span{display:block;font-family:'Space Mono',monospace;font-size:.36rem;color:var(--text-muted);text-transform:uppercase;}
+.lx-share-stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:.82rem;color:#2a1a88;}
+.lx-share-word{
+  background:rgba(240,236,255,.6);border:1px solid var(--border);
+  border-radius:8px;padding:6px 14px;margin-bottom:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.82rem;color:var(--purple);
+  text-align:center;
+}
+.lx-share-btns{display:flex;gap:8px;width:100%;}
+.lx-share-btn{
+  flex:1;padding:12px;border:none;border-radius:10px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;
+  letter-spacing:.06em;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s;
+}
+.lx-share-btn.p{background:var(--purple);color:#fff;box-shadow:0 4px 0 var(--purple-dark);}
+.lx-share-btn.p:active{transform:translateY(3px);box-shadow:0 1px 0 var(--purple-dark);}
+.lx-share-btn.g{background:var(--card-bg);color:var(--purple);border:1.5px solid var(--border);
+  box-shadow:0 4px 0 rgba(170,160,230,.25);backdrop-filter:var(--card-blur);}
+.lx-share-btn.g:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(170,160,230,.25);}
+
+/* Game-over overlay reuses lx-screen */
+#overlay{
+  position:fixed;inset:0;
+  background:var(--bg);
+  display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  z-index:50;padding:24px;
+}
+#overlay h2{font-family:'Nunito',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);
+  font-weight:900;letter-spacing:.15em;color:var(--purple);margin-bottom:14px;}
+#overlay p{color:var(--text-dim);font-size:clamp(.62rem,2.2vw,.78rem);
+  text-align:center;line-height:2;margin-bottom:5px;max-width:300px;}
+.big-score{font-family:'Nunito',sans-serif;font-size:clamp(2rem,8vw,3.2rem);
+  font-weight:900;color:#e08000;margin-bottom:8px;}
+.record{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;
+  color:#ee2266;animation:pulse .7s ease-in-out infinite alternate;margin-bottom:4px;}
+@keyframes pulse{from{opacity:.5}to{opacity:1}}
+.obtn{
+  margin-top:10px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:900;
+  letter-spacing:.1em;padding:14px 28px;cursor:pointer;text-transform:uppercase;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s;
+}
+.obtn-primary{background:var(--purple);color:#fff;box-shadow:0 5px 0 var(--purple-dark);}
+.obtn-primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--purple-dark);}
+.obtn-ghost{background:var(--card-bg);color:var(--purple);
+  border:1.5px solid var(--border);backdrop-filter:var(--card-blur);
+  box-shadow:0 4px 0 rgba(170,160,230,.25);}
+.obtn-ghost:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(170,160,230,.25);}
+.hs-wrap{margin-top:12px;width:min(280px,86vw);
+  border-top:1px solid var(--border);padding-top:10px;}
+.hs-wrap h4{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:900;
+  letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase;text-align:center;margin-bottom:6px;}
+.hsr{display:flex;justify-content:space-between;font-size:.56rem;
+  padding:3px 0;border-bottom:1px solid var(--border);color:var(--text-muted);}
+.hsr.top{color:var(--purple);font-weight:700;}
+.hsr .hs{color:#e08000;font-weight:700;}
+
+/* ── Settings / Pause panel ── */
+#settings-backdrop{
+  position:fixed;inset:0;background:rgba(20,20,60,.45);
+  display:none;z-index:200;align-items:center;justify-content:center;
+}
+#settings-backdrop.open{display:flex;}
+#settings-panel{
+  background:#fff;border-radius:20px;
+  box-shadow:0 12px 48px rgba(20,20,80,.22);
+  padding:24px 20px 20px;width:min(320px,90vw);
+  display:flex;flex-direction:column;
+  animation:slideUp .22s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+#settings-panel h2{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;
+  color:#5533ee;letter-spacing:.12em;text-align:center;margin-bottom:4px;
+}
+.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:#aabbdd;text-align:center;margin-bottom:16px;}
+.s-section{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:900;
+  letter-spacing:.18em;color:#aabbdd;text-transform:uppercase;margin:10px 0 6px;}
+.s-row{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;background:#f5f6ff;border-radius:10px;margin-bottom:6px;}
+.s-row-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;color:#334;
+  display:flex;align-items:center;gap:8px;}
+.s-row-label span{font-size:1.1rem;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;background:#dde3f8;border-radius:12px;cursor:pointer;transition:background .2s;}
+.toggle input:checked+.toggle-track{background:#5533ee;}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;
+  background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px #0002;pointer-events:none;}
+.toggle input:checked~.toggle-thumb{transform:translateX(20px);}
+.s-btn{width:100%;padding:13px;border:none;border-radius:10px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;
+  letter-spacing:.1em;cursor:pointer;margin-top:8px;
+  -webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;}
+.s-btn.primary{background:#5533ee;color:#fff;box-shadow:0 4px 0 #3311bb;}
+.s-btn.primary:active{transform:translateY(3px);box-shadow:0 1px 0 #3311bb;}
+.s-btn.secondary{background:#f0eeff;color:#5533ee;box-shadow:0 4px 0 #d0c8ff;}
+.s-btn.secondary:active{transform:translateY(3px);box-shadow:0 1px 0 #d0c8ff;}
+.s-btn.danger{background:#ee2266;color:#fff;box-shadow:0 4px 0 #aa1144;}
+.s-btn.danger:active{transform:translateY(3px);box-shadow:0 1px 0 #aa1144;}
+.s-divider{border:none;border-top:1.5px solid #eef1ff;margin:10px 0 4px;}
+
+/* Keep old s-row class working in settings (untouched) */
+/* Keep old intro-btn alias for continue button */
+.intro-btn{
+  width:min(300px,88vw);padding:15px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;
+  letter-spacing:.08em;cursor:pointer;margin-bottom:10px;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s;
+}
+.intro-btn.secondary{
+  background:var(--card-bg);color:var(--purple);
+  border:1.5px solid var(--border);
+  box-shadow:0 4px 0 rgba(170,160,230,.25);
+  backdrop-filter:var(--card-blur);-webkit-backdrop-filter:var(--card-blur);
+}
+.intro-btn.secondary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(170,160,230,.25);}
+.intro-btn:disabled{opacity:.35;pointer-events:none;}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
+  <div class="stats">
+    <div class="stat"><span>Score</span><b class="gold" id="s-score">0</b></div>
+    <div class="stat"><span>Best</span><b class="gold" id="s-best">0</b></div>
+    <div class="stat"><span>Level</span><b class="blue" id="s-level">1</b></div>
+    <div class="stat"><span>Lines</span><b class="blue" id="s-lines">0</b></div>
+    <div class="stat"><span>Combo</span><b class="red" id="s-combo">×1</b></div>
+  </div>
+  <div style="display:flex;align-items:center;flex-shrink:0">
+    <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:40px;height:40px">⏸</button>
+  </div>
+</div>
+<div id="timer-bar-wrap" style="width:100%;padding:0 0 2px;flex-shrink:0"><div id="timer-bar" style="height:5px;border-radius:0;transition:width .5s linear,background .5s"></div></div>
+
+<!-- Settings / Pause backdrop -->
+<div id="settings-backdrop">
+  <div id="settings-panel">
+    <h2>⏸ PAUSED</h2>
+    <div class="s-badge">Level <span id="p-level">1</span> &nbsp;·&nbsp; Score <span id="p-score">0</span> &nbsp;·&nbsp; Lines <span id="p-lines">0</span></div>
+
+    <div class="s-section">Settings</div>
+
+    <div class="s-row">
+      <div class="s-row-label"><span>🔊</span> Sound</div>
+      <label class="toggle">
+        <input type="checkbox" id="tog-sound" checked onchange="toggleSound()">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+
+    <div class="s-row">
+      <div class="s-row-label"><span>📳</span> Haptics</div>
+      <label class="toggle">
+        <input type="checkbox" id="tog-haptic" checked onchange="toggleHaptic()">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+
+    <div class="s-section">How to play</div>
+    <div class="s-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+      <div style="font-family:'Space Mono',monospace;font-size:.5rem;color:#6677aa;line-height:2.1">
+        <b style="color:#5533ee">→</b> horizontal &nbsp; <b style="color:#5533ee">↓↑</b> vertical &nbsp; <b style="color:#5533ee">↘↗</b> diagonal<br>
+        Row word = clears row · Other = clears cells<br>
+        Longer words &amp; combos = more points
+      </div>
+    </div>
+
+    <hr class="s-divider">
+    <button class="s-btn primary" onclick="resumeGame()">▶ RESUME</button>
+    <button class="s-btn secondary" onclick="newGameFromSettings()">↺ NEW GAME</button>
+    <button class="s-btn secondary" onclick="openStats()">📊 STATS</button>
+  </div>
+</div>
+
+<div id="main">
+  <div class="side">
+    <div class="panel"><label>Next</label><div class="next-box" id="next-box">?</div></div>
+    <div class="panel" style="flex:1"><label>Words</label><div id="word-log"></div></div>
+  </div>
+  <div id="cw"><div id="danger-bar"></div><canvas id="cv"></canvas></div>
+  <div class="side">
+    <div class="panel">
+      <label>Dirs</label>
+      <div class="tip-row">
+        <b>→</b> horiz<br>
+        <b>↓↑</b> vert<br>
+        <b>↘</b> diag<br>
+        <b>↗</b> diag
+      </div>
+      <div class="tip-row" style="margin-top:8px">
+        <span style="color:#0077cc">■</span> vowel<br>
+        <span style="color:#8822cc">■</span> cons<br>
+        <span style="color:#cc5500">■</span> rare
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tbar">
+  <button class="tbtn" id="btn-left">◀</button>
+  <button class="tbtn" id="btn-drop">▼ DROP</button>
+  <button class="tbtn" id="btn-right">▶</button>
+</div>
+
+<!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
+<div id="intro-screen" class="lx-screen open">
+  <div class="lx-logo">LEXITRIS</div>
+  <div class="lx-sub">spell to survive</div>
+
+  <div class="lx-card" id="intro-resume-card" style="display:none">
+    <div class="lx-card-label">Last Game</div>
+    <div class="lx-row"><span>Score</span><b id="intro-last-score">0</b></div>
+    <div class="lx-row"><span>Level</span><b id="intro-last-level">1</b></div>
+    <div class="lx-row"><span>Lines</span><b id="intro-last-lines">0</b></div>
+    <div class="lx-row"><span>Best ever</span><b id="intro-best">0</b></div>
+  </div>
+
+  <div class="lx-mode-list">
+    <button class="lx-mode-btn" onclick="openModeDialog('classic')">
+      <span class="lx-mode-icon">📖</span>
+      <span class="lx-mode-text">
+        <span class="lx-mode-name">Classic</span>
+        <span class="lx-mode-desc">Endless · speed builds with level</span>
+      </span>
+      <span class="lx-mode-arrow">›</span>
+    </button>
+    <button class="lx-mode-btn" onclick="openModeDialog('arcade')">
+      <span class="lx-mode-icon">⚡</span>
+      <span class="lx-mode-text">
+        <span class="lx-mode-name">Arcade</span>
+        <span class="lx-mode-desc">Fast from the start · high scores</span>
+      </span>
+      <span class="lx-mode-arrow">›</span>
+    </button>
+    <button class="lx-mode-btn" onclick="openModeDialog('timed')">
+      <span class="lx-mode-icon">⏱</span>
+      <span class="lx-mode-text">
+        <span class="lx-mode-name">Timed</span>
+        <span class="lx-mode-desc">3 minutes · score as much as you can</span>
+      </span>
+      <span class="lx-mode-arrow">›</span>
+    </button>
+    <button class="lx-mode-btn" onclick="openModeDialog('zen')">
+      <span class="lx-mode-icon">🧘</span>
+      <span class="lx-mode-text">
+        <span class="lx-mode-name">Zen</span>
+        <span class="lx-mode-desc">No game over · relax and spell</span>
+      </span>
+      <span class="lx-mode-arrow">›</span>
+    </button>
+  </div>
+
+  <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled>↩ Continue last game</button>
+
+  <div class="lx-hint">
+    4+ letter words · → ↓↑ ↘ ↗ directions<br>
+    Row word = clears row · Combo = more points
+  </div>
+</div>
+
+<!-- ═══ MODE DIALOG ══════════════════════════════════════════════════ -->
+<div id="mode-dialog-backdrop" class="lx-screen">
+  <div class="lx-modal">
+    <div class="lx-modal-icon" id="md-icon">📖</div>
+    <div class="lx-modal-title" id="md-name">Classic</div>
+    <div class="lx-modal-sub" id="md-tagline"></div>
+    <div class="lx-modal-box" id="md-features"></div>
+    <button class="lx-btn lx-btn-primary" style="width:100%;margin-bottom:8px" onclick="confirmPlayMode()">▶ Play Now</button>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;margin-bottom:0" onclick="closeModeDialog()">← Back</button>
+  </div>
+</div>
+
+<!-- ═══ GAME OVER ════════════════════════════════════════════════════ -->
+<div id="overlay" style="display:none"></div>
+
+<!-- ═══ SHARE SCREEN ════════════════════════════════════════════════ -->
+<div id="share-overlay" class="lx-screen">
+  <div class="lx-modal">
+    <div class="lx-modal-title">LEXITRIS</div>
+    <div class="lx-modal-sub" id="share-mode-label">Classic</div>
+    <div class="lx-score-big" id="share-score-el">0</div>
+    <div class="lx-share-pips" id="share-grid-el"></div>
+    <div class="lx-share-stats">
+      <div class="lx-share-stat"><span>Level</span><b id="share-level-el">1</b></div>
+      <div class="lx-share-stat"><span>Lines</span><b id="share-lines-el">0</b></div>
+      <div class="lx-share-stat"><span>Words</span><b id="share-words-el">0</b></div>
+      <div class="lx-share-stat"><span>Combo</span><b id="share-combo-el">×1</b></div>
+    </div>
+    <div class="lx-share-word" id="share-bestword-el" style="display:none"></div>
+    <div class="lx-share-btns">
+      <button class="lx-share-btn p" onclick="doShare()">📤 Share</button>
+      <button class="lx-share-btn g" onclick="closeShare()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATS SCREEN ════════════════════════════════════════════════ -->
+<div id="stats-overlay" class="lx-screen">
+  <div class="lx-modal">
+    <div class="lx-modal-title">📊 Stats</div>
+    <div class="lx-stat-grid" id="stats-grid"></div>
+    <div class="lx-section">Per Mode Best</div>
+    <table class="lx-table" id="mode-table"></table>
+    <div class="lx-section">🏆 Best Words</div>
+    <div id="hall-of-fame" style="width:100%"></div>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;margin-top:6px;margin-bottom:0" onclick="closeStats()">Close</button>
+  </div>
+</div>
+
+<script>
+// ── Word list (4+ letter words only) ─────────────────────────────────────────
+const RAW = `
+ABLE ABLY ACHE ACRE ACTS AGED AIDE AIMS AIRS AIRY AKIN ALOE ALSO ALTO AMOK AMPS ANAL ANEW ANKH ANTE ANTI ANTS APEX ARCH AREA ARIA ARMY ARTS ASHY ATOM ATOP AURA AVID AVOW AWED AWES AWFUL AWRY
+BACK BAIL BAKE BALE BALL BAND BANE BANK BARE BARK BARN BARS BASH BATH BATS BEAD BEAM BEAN BEAR BEAT BEDS BEEF BEEN BELL BELT BEST BILE BIND BITE BLED BLEW BLOB BLOC BLOT BLOW BLUE BLUR BOAT BODE BOLD BOLT BOND BONE BOOK BOOM BOON BOOT BORE BORN BOTH BOUT BOWL BRAG BRAN BREW BRIG BRIM BROW BUCK BULB BULK BULL BUMP BUNK BURN BURP BUST BYTE
+CAFE CAGE CAKE CALL CALM CAME CAMP CAPE CARE CART CASE CASH CAST CAVE CENT CHAP CHIN CHIP CHOP CLAD CLAM CLAN CLAP CLAW CLAY CLIP CLOD CLOG CLUB CLUE COAL COAT CODE COIL COIN COLD COME CONE COPE CORD CORE CORN COST COUP COVE COZY CRAB CREW CROP CURE CUTE CUTS
+DALE DARE DARK DART DASH DATE DAWN DAYS DAZE DEAD DEAF DEAL DEAR DEBT DECK DEED DEEP DEFT DELI DENT DENY DICE DINE DIRE DISC DISH DISK DIVE DOCK DOME DONE DOOR DOSE DOTE DOVE DRAB DRAG DRIP DROP DRUG DRUM DUEL DULL DUNE DUSK DUST
+EACH EARL EARN EASE EAST EDIT ELSE EMIT EPIC EVEN EVER EVIL EXAM EXIT EXPO EYES
+FACE FADE FAIL FAIR FAKE FALL FAME FANG FARE FARM FAST FATE FAWN FEAR FEAT FEED FEEL FELT FERN FEUD FILE FILL FILM FIND FIRE FIST FIVE FIZZ FLAP FLAT FLAW FLEA FLED FLOG FLOP FLOW FOAM FOND FONT FORD FORE FORM FORT FOUL FOUR FOWL FRAY FROG FROM FUEL FULL FUND FURL
+GALE GANG GASH GATE GAVE GAZE GEAR GELD GERM GIBE GILD GLEE GLIB GLOB GLOW GLUE GOAL GOAT GORE GOWN GRAB GRAD GRAM GRIM GRIP GRIT GROW GRUB GULF GULL GUST
+HACK HAIL HALE HALF HALL HALT HAND HANG HARD HARE HARK HARM HARP HASH HATE HAVE HAWK HAZE HEAL HEAP HEAT HEAD HEAR HEED HEEL HELP HELM HEMP HERE HERD HERO HIGH HILL HILT HIVE HOCK HOLD HOLE HOME HONE HOOD HOOF HOOK HOPE HORN HOSE HOST HOUR HUGE HULL HUMP HUNG HUNK HUNT HYMN
+ICON IDLE INCH INTO ISLE ITCH
+JADE JAIL JAVA JAWS JEST JIBE JOLT JUMP JUNK JURY JUST
+KEEN KEEP KELP KILT KIND KING KNOB KNOT KNOW
+LACE LACK LAME LAMP LAND LARD LARK LASH LASS LAST LATE LAZE LAZY LEAD LEAF LEAK LEAN LEAP LEER LEFT LEND LENS LEST LEVY LEWD LIAR LICK LIFE LIFT LIKE LILT LIMP LINE LINT LION LIST LIVE LOBE LOFT LOIN LONE LONG LOOK LORE LOSE LOST LOUD LOUT LOVE LUCK LUMP LUNG LURE LURK LUTE
+MACE MADE MAIL MAIN MALL MALT MANE MANY MARE MARK MART MAST MATE MATH MAZE MEAL MEAN MEET MELT MERE MESH MILD MILE MILL MIME MIND MINE MINT MIRE MISS MIST MOAN MOAT MODE MOLD MOLE MOON MOOR MOPE MORN MOST MOTH MOVE MUCH MULL MURK MUSE MUST MUTE
+NAIL NAPE NARC NAVE NAVY NEAR NEAT NEED NEON NEST NEXT NICE NIGH NODE NONE NORM NOSE NOSH NOTE NULL NUMB
+OATH OBEY ONCE ONLY ONTO OPEN OVAL OVEN OVER
+PACE PACK PAGE PAIL PALE PALM PANG PARK PART PAST PATH PAVE PEAK PEAL PEAR PEAT PECK PEEK PEEL PEER PELT PICK PIKE PILE PINE PINK PION PIPE PITH PITY PLAN PLAY PLOD PLOT PLOW PLUG PLUM PLUS POEM POET POKE POLE POLL POLO POND PONY POOL PORE PORK POSE POUR POUT PRAY PREY PRIG PRIM PROD PROP PROW PULL PULP PUMP PURE PUSH
+RACE RACK RAGE RAIL RAIN RAKE RAMP RANG RANK RANT RARE RASH RATE RAVE RAZE READ REAP REAR REEF REEL REIN RELY REND RENT RIDE RIFE RIFF RIFT RING RINK RIOT RISK RITE RIVE ROAD ROAM ROAN ROAR ROBE ROCK ROLE ROLL ROOF ROOK ROPE ROSE ROSY ROTA ROTE ROVE RUDE RULE RUNE RUNG RUSH RUST
+SAFE SAGE SAKE SALE SALT SANE SARI SASH SAVE SCAN SCAR SEAM SEAT SECT SEED SEEK SEEP SELF SELL SEND SENT SHED SHIN SHIP SHOE SHOD SHOT SHOW SHUT SICK SILL SILT SING SINK SIRE SKEW SKIN SKIP SLAB SLAM SLAP SLAY SLED SLEW SLIM SLIP SLOT SLUG SLUM SLUR SMOG SNAP SNUB SOAP SOAR SOCK SOLE SOME SONG SORT SOUL SOUP SOUR SOWN SPAN SPAR SPAT SPIN SPIT SPOT SPUD SPUR STAB STAG STAR STAY STEM STEW STIR STOP STOW STUB STUD STUN SUIT SULK SUMP SUNG SUNK SURE SWAM SWAN SWAP SWAT SWAY SWIM
+TACK TAKE TALE TALK TALL TAME TAMP TANG TARP TART TASK TAUT TEED TEEN TELL TEND TERM TEST TEXT THAN THAT THEE THEM THEN THEY THUS TICK TIDE TIER TIFF TILL TILT TIME TINY TOIL TOLL TOMB TONE TONG TOOK TOOL TORE TORN TOSS TOUR TOWN TRAM TRAP TRAY TREK TREE TRIM TRIP TROD TROT TROY TRUE TUCK TUFT TUNE TURF TUSK TWIG TWIN
+UGLY UNDO UNIT UPON URGE USED
+VAIN VALE VANE VARY VEAL VEIL VEIN VENT VERB VERY VEST VETO VIBE VINE VISA VOID VOLE VOLT VOTE
+WADE WAIL WAIF WAIT WAKE WALK WANE WARD WARE WARM WART WARY WEAL WEAN WEED WEEK WELD WELT WENT WERE WEST WHAT WHEN WHOM WIDE WILL WILE WILT WINE WING WINK WIRE WISE WISH WITH WOKE WOLF WOMB WOOL WORE WORD WORK WORM WORN WOVE WRAP WREN WRIT
+YELL YELP YOGA YOKE YORE YEAR YOUR
+ZEAL ZERO ZONE ZOOM
+ABIDE ABOVE ABUSE ACUTE ADORE ADMIT ADOPT ADULT AFTER AGAIN AGENT AGILE AGREE AHEAD AISLE ALERT ALIGN ALIKE ALIVE ALLAY ALLOT ALLOW ALONE ALONG ALOOF ALOUD ALTER AMBER AMBLE AMEND AMPLE ANGEL ANGRY ANKLE ANNEX ANNOY ANTIC ANVIL APART APPLE APPLY APRON ARBOR ARDOR ARGUE ARISE ARMOR AROMA ARRAY ASIDE ASSET ATLAS ATONE ATTIC AUDIO AUDIT AVERT AVOID AWARD AWARE AWFUL
+BACON BADGE BAKER BASIC BASIN BASIS BATCH BEACH BEGAN BEGIN BEING BENCH BERRY BEVEL BIRTH BISON BLACK BLADE BLAME BLAND BLANK BLARE BLAST BLAZE BLESS BLIND BLINK BLISS BOARD BONUS BOOST BOOTH BRACE BRASH BRAVE BREAK BREED BRIBE BRICK BRIDE BRIEF BRINE BRISK BROTH BROWN BRUNT BRUSH BUILD BUILT BULGE BULLY BURST
+CABIN CABLE CAMEL CANDY CANON CARGO CARRY CEDAR CHAIN CHAIR CHALK CHANT CHAOS CHASE CHEAP CHEAT CHECK CHEEK CHEER CHESS CHEST CHOSE CIVIC CIVIL CLAIM CLANG CLANK CLASH CLASP CLASS CLEAN CLEAR CLERK CLICK CLIMB CLING CLOAK CLOCK CLONE CLOSE CLOTH CLOUD CLOUT CLUCK CLUMP COACH COAST COLOR COMMA CORAL COUCH COUNT COURT COVER COVET CRAFT CRAMP CRANK CRASH CRAWL CRAZE CRAZY CREAM CREST CRIME CRISP CROCK CROSS CROWD CROWN CRUEL CRUSH CRUST CRYPT CURVE
+DAILY DAISY DANCE DATUM DECOY DELAY DELTA DELVE DENSE DEPOT DEPTH DERBY DEVIL DIVER DIZZY DODGE DOUGH DRAFT DRAMA DRAPE DRAWL DREAM DRESS DRIED DRILL DROOL DROOP DROVE DROWN DUNCE DUSTY DWARF DWELL
+EAGER EARLY EARTH ELBOW ELDER ELECT ELITE EMBER EMPTY ENEMY ENJOY ENTER ENVOY EPOCH EQUIP ESSAY EVADE EVENT EVERY EXACT EXERT EXILE EXTRA
+FABLE FACET FAIRY FATAL FAULT FEAST FERAL FEVER FIBER FIELD FIEND FIFTH FIFTY FIGHT FINAL FLAME FLANK FLASH FLASK FLESH FLAIR FLIER FLOCK FLOOD FLOOR FLORA FLOSS FLOUR FOCUS FORAY FORCE FORGE FORUM FOUND FRAIL FRAME FREAK FRESH FRIAR FROST FROZE FROTH FUDGE FUNGI FUNNY FURRY FUZZY
+GAMUT GAUZE GAVEL GIDDY GIVEN GLAND GLARE GLASS GLEAM GLIDE GLINT GLOOM GLOSS GLOVE GOING GORGE GOUGE GOURD GRACE GRADE GRAFT GRAIL GRAIN GRAND GRANT GRAPE GRASP GRATE GRAZE GREED GREEN GREET GRIEF GRILL GRIME GRIND GROAN GROIN GROSS GROUT GROUP GROVE GROWN GRUEL GRUFF GUESS GUEST GUILD GUILE GUISE GUSTO
+HABIT HAPPY HARSH HAVEN HAVOC HAZEL HEART HEAVY HEDGE HEIST HIPPO HOIST HOLLY HOMER HONEY HONOR HORDE HOVER HUMAN HUMID HUMOR HUSKY HUTCH HYPER
+ICING IDIOM IDIOT IGLOO IMAGE IMPLY INANE INEPT INERT INFIX INLAY INNER INLET INPUT INTER INTRO IRATE
+JAUNT JAZZY JEWEL JOUST JUDGE JUMPY JUROR
+KARMA KNACK KNIFE KNOCK KNOLL KNOWN KOALA
+LABEL LABOR LANCE LANKY LARGE LASER LATCH LATER LAYER LEAKY LEASH LEECH LEVEL LIGHT LIMIT LINER LINGO LIVER LOBBY LOCAL LODGE LOGIC LOOPY LOTUS LOUSY LOVER LOWER LUCID LYRIC
+MAGIC MAJOR MAKER MANOR MAPLE MARCH MAYOR MELEE MERCY MERIT METAL MINOR MINUS MIRTH MIXER MODAL MOLDY MONEY MONTH MOODY MORAL MORON MOSSY MOTIF MOTOR MOTTO MOULD MUDDY MURKY MUSIC MUSTY
+NAIVE NANNY NASTY NAVAL NERDY NERVE NEVER NIGHT NINJA NOBLE NOISY NOMAD NOVEL NYMPH
+OCEAN OPERA ORBIT ORDER ORGAN OTHER OTTER OUGHT OUTDO OUTER OXIDE
+PADDY PAGAN PAINT PANSY PAPER PARTY PASTA PATCH PAUSE PEACE PEACH PETAL PETTY PHASE PHONE PHOTO PIANO PILOT PIXIE PIZZA PLACE PLAID PLAIN PLAIT PLANE PLANK PLANT PLAZA PLEAT PLUCK PLUMB PLUME PLUNK PLUSH POINT POLAR POWER PRESS PRICE PRICK PRIDE PRIME PRINT PRIOR PRIZE PROBE PRONE PRONG PROOF PROSE PROUD PUDGY PULSE PUPPY PURSE PUTTY
+QUALM QUEEN QUERY QUEST QUICK QUIET QUIRK QUITE QUOTA QUOTE
+RABBI RADAR RAINY RALLY RANCH RANGE RAPID RASPY RAVEN REACH READY REALM REBEL REGAL REIGN RELAY REPAY REPEL RERUN REUSE REVEL RIDER RIDGE RIFLE RIGHT RIGID RIPEN RIVET ROBOT ROCKY RODEO ROGUE ROOMY ROOST ROUGE ROUGH ROUND ROWAN ROWDY ROYAL RUGBY RULER RUPEE RUSTY
+SAINT SANDY SAUCE SAVVY SAVOR SCALD SCALP SCENE SCONE SCOOP SCORE SCOUT SCOWL SCRAP SCREW SEDAN SERUM SERVE SEVER SHADE SHAFT SHAKE SHAKY SHAME SHAPE SHARE SHARK SHARP SHAVE SHEAR SHEEN SHEEP SHEET SHELL SHIFT SHINY SHOAL SHOCK SHORT SHOVE SHRUG SIEGE SINCE SIXTH SIXTY SKILL SKULL SKUNK SLACK SLAIN SLANT SLATE SLAVE SLEEK SLEEP SLEET SLICK SLIDE SLIMY SLINK SLOPE SLOTH SLUMP SLUNG SLURP SMART SMEAR SMELL SMILE SMIRK SMOKE SMOKY SNAKY SNARE SNEER SNIDE SNIFF SNOOP SNORE SNORT SOLID SOOTY SPACE SPARK SPASM SPEAK SPEAR SPECK SPEED SPEND SPILL SPITE SPLAY SPLIT SPOKE SPOOK SPOON SPORT STAID STAIN STALE STALL STAMP STAND STARK STASH STAVE STAKE STEAM STEEP STEER STERN STICK STIFF STILL STING STOMP STONE STORE STORM STORY STOUT STOVE STRAP STRAW STRAY STRUM STRUT STUCK STUDY STUFF STUMP STUNG STUNK STUNT STYLE SUAVE SUGAR SUITE SURLY SUSHI SWEAR SWEAT SWELL SWEPT SWIFT SWIRL SWOOP SWORD
+TABLE TABOO TAFFY TALON TASTE TAUNT TEASE TEDDY TERSE THANK THEME THICK THINK THIRD THORN THOSE THREE THREW THROW THUMB THUMP TIDAL TIGER TIGHT TINGE TIPSY TITAN TOADY TOAST TODAY TONAL TOPAZ TORCH TOTAL TOTEM TOUCH TOUGH TOXIC TRACK TRADE TRAIL TRAIN TRAIT TRAMP TRASH TREND TRIAL TRIBE TRICK TRIED TROOP TROUT TRUCE TRUCK TRULY TRUSS TRUST TRUTH TUBER TULIP TUMOR TWEED TWEET TWICE TWILL TWIST TYRANT
+ULCER ULTRA UNCLE UNDER UNFIT UNION UNITY UNTIL UPPER UPSET URBAN USHER USUAL UTTER
+VALOR VALVE VAPID VAULT VEGAN VIGIL VINYL VIRAL VIRUS VISIT VISOR VITAL VIVID VOCAL VODKA VOTER VOUCH
+WAGER WALTZ WASTE WATCH WATER WAIVE WEARY WEAVE WEEDY WEIRD WHACK WHALE WHEAT WHEEL WHERE WHICH WHILE WHIFF WHINE WHIRL WHOOP WHOSE WIDEN WIMPY WITCH WISPY WORDY WORLD WORRY WORTH WOULD WOUND WRATH WREAK WRECK WRING WRIST WROTE WRONG
+YACHT YEARN YIELD YOUNG YOURS YOUTH YUMMY
+ZAPPY ZESTY ZIPPY ZONAL
+ABLED ACING ADORE AGING AHOLD AIDED AIRED ALAND ALOFT AMBLE AMISS AMONG AMPLE ANGST ANNUL AORTA ARDOR AREAL ARENT ARGOT ARSON ARTSY ASKEW ASSAY ATONE AWOKE AXING
+BADGE BASIC BATCH BEARD BEAST BENCH BOLTS BOOZE BORED BOXED BRACE BRAID BRAWN BRAYS BRAZE BRIMS BROOD BUDGE BUGGY BUXOM
+CAGED CASTE CAULK CHAFE CHUMP CHURN CINCH CLEFT CLONE COMET COUCH COVEN CREAK CROON CRUMB CUBIC CURRY CZAR
+DALLY DATED DEBUT DECAL DECRY DETER DICED DISCO DITTY DOING DOTED DOTTY DOWRY DOZED DRAGS DREAR DROSS DUNNO
+EASEL EJECT EKING ELATE ELUDE ENNUI ENSUE EPOXY ERODE EVOKE EXUDE EXULT
+FAWNS FEIGN FETID FLAIR FLIER FLOSS FORGO FORTE FOYER FRAUGHT FROND FUROR FURZY
+GAUDY GAUZE GELID GHOST GLINT GLOAT GLYPH GNOME GOUGE GRAFT GRASP GRAZE GREED
+HANDY HASTE HEADY HENCE HERON HIKED HIPPO HITCH HORDE HUSSY HYING
+ICIER ICING IMPEL INBOX INCUR INDIE INEPT INGOT INJUN IRKED ITCHY
+JIBED JIVED JOKEY JOKED JOKEY JUKED
+KUDOS KNAVE KNEEL KNOSP
+LAPEL LAPSE LARDY LATCH LATTE LAWNY LEAFY LEDGE LEERY LEMON LEMUR LIMIT LIMBO LINGO LINT LISTY LITHE LOFTY LONER LORRY LOUSY LOWLY
+MANGY MANIA MANOR MAXIM MINTY MIXED MOLAR MOLDY MOTIF MOURN MUDDY MUGGY MULCH MUSHY
+NASAL NIFTY NIPPY NITTY NOTCH NUTTY
+OAKEN OAKUM OBESE OCTET ODDER ODDLY OLDEN ONSET OPTIC ORATE OUTDO OUTGO OXIDE OZONE
+PADDY PAINS PANSY PARKA PARKY PEPPY PERKY PHONY PICKY PIGGY PITHY PIKED PIXIE PIZZA PLEAS PLIED PLIER PLONK PLOPS PLOYS PLUMB POUTY PREEN PRICY PRIVY PRUDE PUDGY PUNKY PUPPY PURGE PUSHY
+QUAFF QUALM QUASP QUEEN QUIRK
+RABID RADIX RADON RALLY RAMPY RANGY RAPID RASPY RAWLY REEDY REFIT REPOT RETRO RIVEN RISKY ROBIN ROCKY ROWDY RUDDY RUNTY
+SABLE SADLY SAPPY SARKY SASSY SAUTE SAVVY SCALP SCAMP SCOFF SCOLD SCONE SCOOT SCORN SCOUR SEDAN SEEDY SEIZE SHARD SHAWL SHOOK SHOWY SHRUB SISSY SIXTY SIXTH SKIFF SKIMP SLEEK SLEUTH SLICK SLIME SLIMY SLOSH SLUMP SLUNG SMELT SNAKY SNARE SOGGY SPECK SPIEL SPRIG SQUAB STEAD STEAL STEED SWEAT SWEDE SWIFT SWIPE SWOON SWOOP
+TACKY TALLY TARDY TAUNT TAWNY TEENY TERSE THANE TIPSY TONAL TOPSY TOTEM TOXIC TRICE TRILL TRIPE TRIVET TUBBY TULIP TUMID TUPID TUSHY TUSKY TWANG TWERP TWIT TYKE
+UNCUT UNDID UNFIT UNIFY UNLIT UNWED UNWRY UPPED UPPER UPSET USHER UTTER
+VAGUE VENOM VERGE VIOLA VIRGO VISOR VISTA VITAL VOGUE VOILE VOMIT VOTER
+WADDY WAGGY WAXEN WEEDY WEENY WEIRD WHIMSY WISER WITTY WOOLY WORMY WRING
+YAGIS YAPPY YOKEL YUCKY YUKKY
+ZAPPY ZONED ZOOMS
+`.trim().split(/\s+/).filter(w=>w.length>=4);
+
+const WORDS = new Set(RAW);
+
+// Letter points
+const LPTS={A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+
+// Letter bag — vowel-heavy to encourage 4+ letter words
+const LDIST={A:10,B:2,C:2,D:4,E:14,F:2,G:2,H:2,I:10,J:1,K:1,L:5,M:2,N:7,O:9,P:2,Q:1,R:7,S:5,T:7,U:5,V:1,W:2,X:1,Y:2,Z:1};
+
+let bag=[];
+function fillBag(){
+  bag=[];
+  for(const[l,n]of Object.entries(LDIST))for(let i=0;i<n;i++)bag.push(l);
+  for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+}
+function drawL(){if(!bag.length)fillBag();return bag.pop();}
+
+// Canvas
+const COLS=6, ROWS=10;
+const cv=document.getElementById('cv');
+const ctx=cv.getContext('2d');
+
+function calcCell(){
+  const hdrH=document.getElementById('hdr').offsetHeight||48;
+  const tbarH=document.getElementById('tbar').offsetHeight||72;
+  const avH=window.innerHeight-hdrH-tbarH-12;
+  const avW=window.innerWidth-160;
+  return Math.max(32,Math.floor(Math.min(avH/ROWS,avW/COLS,64)));
+}
+let CELL=calcCell();
+function resizeCv(){CELL=calcCell();cv.width=COLS*CELL;cv.height=ROWS*CELL;}
+resizeCv();
+window.addEventListener('resize',resizeCv);
+
+// State
+let grid,falling,nextLetter;
+let score=0,bestScore=0,level=1,lines=0,combo=1;
+let gameOver=false,paused=false;
+let dropMs=1000,lastDropT=0,animId=null;
+let wordLog=[],highScores=[];
+// Per-mode best scores
+let modeBests={classic:0,arcade:0,timed:0,zen:0};
+// Lifetime stats
+let lifetimeStats={
+  gamesPlayed:0, totalScore:0, totalWords:0, totalLines:0,
+  longestWord:'', longestWordPts:0,
+  bestCombo:0, wordsFoundByLen:{},
+  streak:0, lastPlayDate:'',
+};
+// Hall of fame — top 5 best words ever
+let hallOfFame=[];
+// Session tracking
+let sessionWords=0, sessionBestCombo=1, sessionBestWord='', sessionBestWordPts=0;
+// Hint system
+let hintTimer=null, hintCells=[], hintWord='';
+// Bonus letters on board: {r,c,type} — 'wild','x2','bomb'
+let bonusCells={};
+// Animation state for row-clear drop
+let clearAnim=null;
+
+function initGrid(){grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));}
+
+function spawnFalling(){
+  const l=nextLetter||drawL();
+  nextLetter=drawL();
+  document.getElementById('next-box').textContent=nextLetter;
+  falling={l,col:Math.floor(COLS/2),row:0};
+  if(grid[0][falling.col]){
+    if(gameMode==='zen'){
+      // In zen mode, clear the top row instead of ending
+      grid.splice(0,1);grid.push(Array(COLS).fill(null));
+      return true;
+    }
+    endGame();return false;
+  }
+  return true;
+}
+
+// ── Word detection (→, ↓↑, ↘, ↗) ─────────────────────────────────────────
+function scanSequence(positions,dr,dc){
+  const results=[];
+  const n=positions.length;
+  for(let s=0;s<n;s++){
+    for(let e=s+4;e<=n;e++){  // minimum 4 letters
+      const slice=positions.slice(s,e);
+      const word=slice.map(({r,c})=>grid[r][c]).join('');
+      if(WORDS.has(word)){
+        results.push({word,cells:slice,cx:slice[0].c*CELL+CELL/2,cy:slice[0].r*CELL,dr,dc});
+      }
+    }
+  }
+  return results;
+}
+
+function scanAll(){
+  const raw=[];
+
+  // → Horizontal (left to right only)
+  for(let r=0;r<ROWS;r++){
+    let run=[];
+    for(let c=0;c<COLS;c++){
+      if(grid[r][c])run.push({r,c});
+      else{raw.push(...scanSequence(run,0,1));run=[];}
+    }
+    raw.push(...scanSequence(run,0,1));
+  }
+
+  // ↓↑ Vertical (both directions)
+  for(let c=0;c<COLS;c++){
+    let run=[];
+    for(let r=0;r<ROWS;r++){
+      if(grid[r][c])run.push({r,c});
+      else{
+        if(run.length>=4){
+          raw.push(...scanSequence(run,1,0));
+          raw.push(...scanSequence([...run].reverse(),-1,0));
+        }
+        run=[];
+      }
+    }
+    if(run.length>=4){
+      raw.push(...scanSequence(run,1,0));
+      raw.push(...scanSequence([...run].reverse(),-1,0));
+    }
+  }
+
+  // ↘ Diagonal (top-left to bottom-right)
+  for(let start=-(ROWS-1);start<COLS;start++){
+    let run=[];
+    for(let r=0;r<ROWS;r++){
+      const c=start+r;
+      if(c>=0&&c<COLS&&grid[r][c])run.push({r,c});
+      else{raw.push(...scanSequence(run,1,1));run=[];}
+    }
+    raw.push(...scanSequence(run,1,1));
+  }
+
+  // ↗ Diagonal (bottom-left to top-right)
+  for(let start=0;start<ROWS+COLS-1;start++){
+    let run=[];
+    for(let r=ROWS-1;r>=0;r--){
+      const c=start-(ROWS-1-r);
+      if(c>=0&&c<COLS&&grid[r][c])run.push({r,c});
+      else{raw.push(...scanSequence(run,-1,1));run=[];}
+    }
+    raw.push(...scanSequence(run,-1,1));
+  }
+
+  return dedupResults(raw);
+}
+
+function dedupResults(results){
+  results.sort((a,b)=>b.word.length-a.word.length);
+  const used=new Set();
+  const kept=[];
+  for(const res of results){
+    const keys=res.cells.map(({r,c})=>`${r},${c}`);
+    if(keys.every(k=>!used.has(k))){
+      kept.push(res);
+      keys.forEach(k=>used.add(k));
+    }
+  }
+  return kept;
+}
+
+// ── Score & clear ──────────────────────────────────────────────────────────
+function wordPts(word){
+  return word.split('').reduce((s,l)=>s+(LPTS[l]||1),0)*word.length;
+}
+
+function checkWords(){
+  const found=scanAll();
+  if(!found.length){combo=Math.max(1,combo-1);updateHUD();return;}
+
+  const rowsToClear=new Set();
+  const cellsToClear=new Set();
+
+  for(const res of found){
+    const pts=wordPts(res.word)*combo;
+    score+=pts;
+    combo=Math.min(combo+1,8);
+    sessionWords++;
+    lifetimeStats.totalWords++;
+    lifetimeStats.totalScore+=pts;
+    lifetimeStats.wordsFoundByLen[res.word.length]=(lifetimeStats.wordsFoundByLen[res.word.length]||0)+1;
+    if(pts>sessionBestWordPts){sessionBestWordPts=pts;sessionBestWord=res.word;}
+    if(pts>lifetimeStats.longestWordPts){lifetimeStats.longestWordPts=pts;lifetimeStats.longestWord=res.word;}
+    if(res.word.length>=(lifetimeStats.longestWord||'').length){}
+    sessionBestCombo=Math.max(sessionBestCombo,combo);
+    lifetimeStats.bestCombo=Math.max(lifetimeStats.bestCombo,combo);
+    // Hall of fame
+    hallOfFame.push({word:res.word,pts,date:new Date().toLocaleDateString()});
+    hallOfFame.sort((a,b)=>b.pts-a.pts);
+    hallOfFame=hallOfFame.slice(0,5);
+    playWord(res.word.length);hapticStrong();
+    logWord(res.word,pts,res.dr,res.dc);
+    showPopup(pts,res.cx,res.cy);
+    resetHintTimer();
+    if(res.dr===0&&res.dc===1){
+      rowsToClear.add(res.cells[0].r);
+    } else {
+      flashCells(res.cells);
+      res.cells.forEach(({r,c})=>cellsToClear.add(`${r},${c}`));
+    }
+  }
+
+  cellsToClear.forEach(key=>{
+    const [r,c]=key.split(',').map(Number);
+    if(!rowsToClear.has(r))grid[r][c]=null;
+  });
+
+  if(rowsToClear.size>0){
+    rowsToClear.forEach(r=>flashRow(r));
+    if(rowsToClear.size>1){
+      const bonus=Math.floor(rowsToClear.size*80*combo);
+      score+=bonus;
+      showPopup(bonus,cv.width/2,cv.height/3);
+    }
+    const rowArr=[...rowsToClear].sort((a,b)=>b-a);
+    playClear();hapticStrong();
+    // Animate: briefly flash then drop
+    paused=true;
+    setTimeout(()=>{
+      rowArr.forEach(r=>{grid.splice(r,1);grid.unshift(Array(COLS).fill(null));});
+      lines+=rowsToClear.size;
+      lifetimeStats.totalLines+=rowsToClear.size;
+      level=Math.floor(lines/5)+1;
+      updateSpeed();
+      paused=false;
+    },300);
+  }
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById('s-score').textContent=score.toLocaleString();
+  document.getElementById('s-level').textContent=level;
+  document.getElementById('s-lines').textContent=lines;
+  document.getElementById('s-combo').textContent='×'+combo;
+}
+
+function dirArrow(dr,dc){
+  if(dr===0&&dc===1)return '→';
+  if(dr===1&&dc===0)return '↓';
+  if(dr===-1&&dc===0)return '↑';
+  if(dr===1&&dc===1)return '↘';
+  if(dr===-1&&dc===1)return '↗';
+  return '';
+}
+function logWord(word,pts,dr,dc){
+  wordLog.unshift({word,pts,dr,dc});
+  if(wordLog.length>20)wordLog.pop();
+  document.getElementById('word-log').innerHTML=
+    wordLog.map(e=>`<div class="wle"><span class="w">${dirArrow(e.dr,e.dc)} ${e.word}</span><span class="p">+${e.pts}</span></div>`).join('');
+}
+
+function showPopup(pts,x,y){
+  const cw=document.getElementById('cw');
+  const el=document.createElement('div');
+  el.className='popup';
+  el.textContent='+'+pts.toLocaleString();
+  el.style.left=Math.min(x,cv.width-70)+'px';
+  el.style.top=Math.max(y,4)+'px';
+  cw.appendChild(el);
+  setTimeout(()=>el.remove(),950);
+  spawnParticles(x,y,pts);
+}
+
+function spawnParticles(x,y,pts){
+  const cw=document.getElementById('cw');
+  const count=Math.min(4+Math.floor(pts/50),12);
+  const colors=['#5533ee','#9988dd','#e08000','#ee2266','#0077dd','#117700'];
+  for(let i=0;i<count;i++){
+    const el=document.createElement('div');
+    el.className='particle';
+    const size=4+Math.random()*5;
+    el.style.cssText=`
+      width:${size}px;height:${size}px;
+      left:${x-size/2}px;top:${y}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --tx:${(Math.random()-0.5)*60}px;
+      --ty:${-(20+Math.random()*50)}px;
+      animation-duration:${0.5+Math.random()*0.4}s;
+      animation-delay:${Math.random()*0.1}s;
+    `;
+    cw.appendChild(el);
+    setTimeout(()=>el.remove(),1000);
+  }
+}
+
+function screenShake(){
+  const el=document.getElementById('cw');
+  el.classList.remove('shaking');
+  void el.offsetWidth;
+  el.classList.add('shaking');
+  setTimeout(()=>el.classList.remove('shaking'),420);
+}
+
+// ── Hint system ──────────────────────────────────────────────────────────
+function clearHints(){
+  document.querySelectorAll('.hint-cell').forEach(e=>e.remove());
+  hintCells=[];hintWord='';
+}
+
+function showHint(){
+  clearHints();
+  // Scan for a valid word in the current grid + falling piece
+  const testGrid=grid.map(r=>[...r]);
+  if(falling)testGrid[falling.row][falling.col]=falling.l;
+  // Try all sequences
+  const dirs=[{dr:0,dc:1},{dr:1,dc:0},{dr:-1,dc:0},{dr:1,dc:1},{dr:-1,dc:1}];
+  let best=null;
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    for(const{dr,dc}of dirs){
+      let cells=[],word='';
+      for(let i=0;i<8;i++){
+        const nr=r+dr*i,nc=c+dc*i;
+        if(nr<0||nr>=ROWS||nc<0||nc>=COLS||!testGrid[nr][nc])break;
+        cells.push({r:nr,c:nc});word+=testGrid[nr][nc];
+        if(word.length>=4&&WORDS.has(word)){
+          if(!best||word.length>best.word.length)best={word,cells:[...cells]};
+        }
+      }
+    }
+  }
+  if(!best)return;
+  const cw=document.getElementById('cw');
+  best.cells.forEach(({r,c})=>{
+    const el=document.createElement('div');
+    el.className='hint-cell';
+    el.style.top=r*CELL+'px';el.style.left=c*CELL+'px';
+    el.style.width=CELL+'px';el.style.height=CELL+'px';
+    cw.appendChild(el);
+    hintCells.push(el);
+  });
+  hintWord=best.word;
+  setTimeout(clearHints,2500);
+}
+
+function resetHintTimer(){
+  if(hintTimer)clearTimeout(hintTimer);
+  hintTimer=setTimeout(()=>{if(!paused&&!gameOver)showHint();},8000);
+}
+
+function flashRow(r){
+  const cw=document.getElementById('cw');
+  const el=document.createElement('div');
+  el.className='flash';
+  el.style.top=r*CELL+'px';el.style.left='0';
+  el.style.width=cv.width+'px';el.style.height=CELL+'px';
+  cw.appendChild(el);setTimeout(()=>el.remove(),460);
+}
+function flashCells(cells){
+  const cw=document.getElementById('cw');
+  cells.forEach(({r,c})=>{
+    const el=document.createElement('div');
+    el.className='flash';
+    el.style.top=r*CELL+'px';el.style.left=c*CELL+'px';
+    el.style.width=CELL+'px';el.style.height=CELL+'px';
+    cw.appendChild(el);setTimeout(()=>el.remove(),460);
+  });
+}
+
+// ── Drawing ────────────────────────────────────────────────────────────────
+const COLORS={
+  vowel: {fill:'#e8f4ff',stroke:'#2288ee',text:'#005599',dot:'#2288ee'},
+  cons:  {fill:'#f4eeff',stroke:'#8833cc',text:'#5511aa',dot:'#8833cc'},
+  rare:  {fill:'#fff4e0',stroke:'#dd6600',text:'#994400',dot:'#dd6600'},
+};
+function lc(l){
+  if((LPTS[l]||1)>=8)return COLORS.rare;
+  if('AEIOU'.includes(l))return COLORS.vowel;
+  return COLORS.cons;
+}
+
+function drawCell(x,y,letter,alpha=1,ghost=false){
+  if(!letter)return;
+  const c=lc(letter);
+  ctx.globalAlpha=alpha;
+  // shadow
+  if(!ghost){
+    ctx.shadowColor='#c0cce8';
+    ctx.shadowBlur=6;
+    ctx.shadowOffsetY=2;
+  }
+  ctx.fillStyle=ghost?'rgba(200,210,255,0.25)':c.fill;
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
+  ctx.fill();
+  ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+
+  // border
+  ctx.strokeStyle=ghost?'#aabbdd':c.stroke;
+  ctx.lineWidth=ghost?1:2;
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
+  ctx.stroke();
+
+  if(!ghost){
+    // letter
+    ctx.fillStyle=c.text;
+    ctx.font=`900 ${Math.floor(CELL*.48)}px 'Nunito',sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(letter,x+CELL/2,y+CELL/2+1);
+    // point value dot
+    ctx.fillStyle=c.dot;
+    ctx.font=`700 ${Math.floor(CELL*.18)}px 'Space Mono',monospace`;
+    ctx.textAlign='right';ctx.textBaseline='bottom';
+    ctx.fillText(LPTS[letter]||'',x+CELL-4,y+CELL-3);
+  }
+  ctx.globalAlpha=1;
+}
+
+function roundRect(c,x,y,w,h,r){
+  c.beginPath();
+  c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
+  c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);
+  c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);
+  c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);
+  c.closePath();
+}
+
+function draw(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  // board bg
+  ctx.fillStyle='#f8faff';
+  roundRect(ctx,0,0,cv.width,cv.height,6);ctx.fill();
+
+  // grid lines
+  ctx.strokeStyle='#e4eaf8';ctx.lineWidth=1;
+  for(let r=1;r<ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*CELL);ctx.lineTo(cv.width,r*CELL);ctx.stroke();}
+  for(let c=1;c<COLS;c++){ctx.beginPath();ctx.moveTo(c*CELL,0);ctx.lineTo(c*CELL,cv.height);ctx.stroke();}
+
+  // placed
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(grid[r][c])drawCell(c*CELL,r*CELL,grid[r][c]);
+
+  // ghost + falling
+  if(falling){
+    let gr=falling.row;
+    while(gr+1<ROWS&&!grid[gr+1][falling.col])gr++;
+    if(gr!==falling.row)drawCell(falling.col*CELL,gr*CELL,falling.l,0.3,true);
+    drawCell(falling.col*CELL,falling.row*CELL,falling.l);
+  }
+}
+
+// ── Game loop ──────────────────────────────────────────────────────────────
+function lock(){
+  if(!falling)return;
+  grid[falling.row][falling.col]=falling.l;
+  playLand();
+  falling=null;
+  checkWords();
+  if(!gameOver){spawnFalling();saveState();}
+}
+
+function getStackHeight(){
+  for(let r=0;r<ROWS;r++)
+    for(let c=0;c<COLS;c++)
+      if(grid[r][c])return ROWS-r;
+  return 0;
+}
+
+function updateDangerBar(){
+  const h=getStackHeight();
+  const pct=h/ROWS;
+  const bar=document.getElementById('danger-bar');
+  if(pct>0.5){
+    const intensity=Math.min(1,(pct-0.5)/0.4);
+    const r=Math.round(85+170*intensity),g=Math.round(51-51*intensity),b=Math.round(238-238*intensity);
+    bar.style.background=`rgba(${r},${g},${b},${0.4+intensity*0.6})`;
+  } else {
+    bar.style.background='transparent';
+  }
+}
+
+function getEffectiveDropMs(){
+  // Stack-height pressure: speed up as board fills (up to 35% faster)
+  const h=getStackHeight()/ROWS;
+  const pressureFactor=1-Math.pow(h,2)*0.35;
+  return Math.max(80,Math.floor(dropMs*pressureFactor));
+}
+
+function loop(ts){
+  if(gameOver)return;
+  // Timed mode countdown
+  if(gameMode==='timed'&&!paused){
+    const elapsed=(ts-timedStart)/1000;
+    const remaining=Math.max(0,timedDuration-elapsed);
+    const pct=remaining/timedDuration;
+    const tb=document.getElementById('timer-bar');
+    tb.style.width=(pct*100)+'%';
+    tb.style.background=pct<0.2?'#ee2266':pct<0.4?'#ff8800':'#5533ee';
+    if(remaining<=0&&!gameOver){endGame();return;}
+  }
+  if(!paused&&falling&&ts-lastDropT>getEffectiveDropMs()){
+    lastDropT=ts;
+    const nr=falling.row+1;
+    if(nr>=ROWS||grid[nr][falling.col])lock();
+    else falling.row=nr;
+  }
+  updateDangerBar();
+  draw();
+  animId=requestAnimationFrame(loop);
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────
+function goLeft(){if(!gameOver&&!paused&&falling&&falling.col>0&&!grid[falling.row][falling.col-1]){falling.col--;playMove();hapticLight();}}
+function goRight(){if(!gameOver&&!paused&&falling&&falling.col<COLS-1&&!grid[falling.row][falling.col+1]){falling.col++;playMove();hapticLight();}}
+function drop(){if(!gameOver&&!paused&&falling){while(falling.row+1<ROWS&&!grid[falling.row+1][falling.col])falling.row++;hapticMed();lock();}}
+function softDrop(){if(!gameOver&&!paused&&falling){const nr=falling.row+1;if(nr<ROWS&&!grid[nr][falling.col]){falling.row=nr;lastDropT=performance.now();}}}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='p'||e.key==='P'||e.key==='Escape')return; // handled separately
+  if(gameOver||paused)return;
+  if(e.key==='ArrowLeft'||e.key==='a')goLeft();
+  else if(e.key==='ArrowRight'||e.key==='d')goRight();
+  else if(e.key==='ArrowDown'||e.key==='s')softDrop();
+  else if(e.key===' '){e.preventDefault();drop();}
+  else if(e.key.toLowerCase()==='r')startGame();
+});
+
+document.getElementById('btn-left').addEventListener('click',goLeft);
+document.getElementById('btn-right').addEventListener('click',goRight);
+document.getElementById('btn-drop').addEventListener('click',drop);
+
+let holdId=null;
+['btn-left','btn-right'].forEach(id=>{
+  const btn=document.getElementById(id);
+  const fn=id==='btn-left'?goLeft:goRight;
+  const start=()=>{fn();holdId=setInterval(fn,100);};
+  const stop=()=>clearInterval(holdId);
+  btn.addEventListener('touchstart',e=>{e.preventDefault();start();},{passive:false});
+  btn.addEventListener('touchend',stop);
+  btn.addEventListener('mousedown',start);
+  document.addEventListener('mouseup',stop);
+});
+document.getElementById('btn-drop').addEventListener('touchstart',e=>{e.preventDefault();drop();},{passive:false});
+
+// Swipe
+let sx=0,sy=0,st=0;
+cv.addEventListener('touchstart',e=>{e.preventDefault();sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();},{passive:false});
+cv.addEventListener('touchend',e=>{
+  e.preventDefault();
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;
+  if(Math.abs(dx)<15&&Math.abs(dy)<15&&dt<250){drop();return;}
+  if(Math.abs(dx)>Math.abs(dy)){if(dx<-20)goLeft();else if(dx>20)goRight();}
+  else if(dy>20)drop();
+},{passive:false});
+
+
+// ── Sound (Web Audio API) ──────────────────────────────────────────────────
+let soundOn=true, hapticOn=true, audioCtx=null;
+function getAC(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function beep(freq,dur,vol=0.15,type='sine'){
+  if(!soundOn)return;
+  try{
+    const ac=getAC(),o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
+    o.start(ac.currentTime);o.stop(ac.currentTime+dur);
+  }catch(e){}
+}
+function playMove(){beep(380,0.06,0.08,'square');}
+function playLand(){beep(220,0.1,0.12,'triangle');}
+function playWord(len){
+  const notes=[440,523,659,784,880,1047];
+  notes.slice(0,Math.min(len-2,notes.length)).forEach((f,i)=>setTimeout(()=>beep(f,0.14,0.18,'sine'),i*55));
+}
+function playClear(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.16,0.2,'sine'),i*50));}
+function playPause(){beep(330,0.12,0.12,'triangle');}
+function playStart(){[440,554,659].forEach((f,i)=>setTimeout(()=>beep(f,0.12,0.15,'sine'),i*80));}
+function playGameOver(){[440,330,220,165].forEach((f,i)=>setTimeout(()=>beep(f,0.22,0.18,'sawtooth'),i*110));}
+
+// ── Haptics ────────────────────────────────────────────────────────────────
+function haptic(p){if(hapticOn&&navigator.vibrate)navigator.vibrate(p);}
+function hapticLight(){haptic(12);}
+function hapticMed(){haptic(35);}
+function hapticStrong(){haptic([25,15,25]);}
+
+// ── Toggle sound/haptic ────────────────────────────────────────────────────
+function toggleSound(){
+  soundOn=!soundOn;
+  const on=soundOn;
+  document.getElementById('btn-sound').textContent=on?'🔊':'🔇';
+  document.getElementById('btn-sound').classList.toggle('on',on);
+  document.getElementById('p-sound-btn').textContent=(on?'🔊':'🔇')+' Sound: '+(on?'ON':'OFF');
+  if(on)beep(440,0.1);
+}
+function toggleHaptic(){
+  hapticOn=!hapticOn;
+  const on=hapticOn;
+  document.getElementById('btn-haptic').textContent=on?'📳':'📴';
+  document.getElementById('btn-haptic').classList.toggle('on',on);
+  document.getElementById('p-haptic-btn').textContent=(on?'📳':'📴')+' Haptic: '+(on?'ON':'OFF');
+  if(on)haptic(25);
+}
+
+// ── Pause / Settings ──────────────────────────────────────────────────────
+function openSettings(){
+  if(gameOver)return;
+  paused=true;
+  document.getElementById('btn-pause').textContent='▶';
+  document.getElementById('p-level').textContent=level;
+  document.getElementById('p-score').textContent=score.toLocaleString();
+  document.getElementById('p-lines').textContent=lines;
+  document.getElementById('settings-backdrop').classList.add('open');
+  playPause();hapticLight();
+}
+function resumeGame(){
+  paused=false;
+  document.getElementById('btn-pause').textContent='⏸';
+  document.getElementById('settings-backdrop').classList.remove('open');
+  lastDropT=performance.now();
+  playPause();
+}
+function togglePause(){if(paused)resumeGame();else openSettings();}
+function newGameFromSettings(){
+  document.getElementById('settings-backdrop').classList.remove('open');
+  stopMusic();
+  savedState=null;
+  try{sessionStorage.removeItem('lexitris_save');}catch(e){}
+  cancelAnimationFrame(animId);
+  gameOver=true;
+  showIntro();
+}
+
+// Close backdrop on outside tap
+document.getElementById('settings-backdrop').addEventListener('click',function(e){
+  if(e.target===this)resumeGame();
+});
+
+// Toggle sound/haptic (now driven by checkbox)
+function toggleSound(){
+  soundOn=document.getElementById('tog-sound').checked;
+  if(soundOn)beep(440,0.1);
+}
+function toggleHaptic(){
+  hapticOn=document.getElementById('tog-haptic').checked;
+  if(hapticOn)haptic(25);
+}
+
+// Wire pause button
+document.getElementById('btn-pause').addEventListener('click',togglePause);
+// Keyboard pause
+document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key==='P')togglePause();});
+
+// ── End / Start ────────────────────────────────────────────────────────────
+function endGame(){
+  gameOver=true;cancelAnimationFrame(animId);
+  if(hintTimer)clearTimeout(hintTimer);clearHints();
+  screenShake();
+  savedState=null;
+  try{sessionStorage.removeItem('lexitris_save');}catch(e){}
+  stopMusic();
+  document.getElementById('settings-backdrop').classList.remove('open');
+  playGameOver();hapticStrong();
+  if(score>bestScore)bestScore=score;
+  highScores.push({score,level});
+  highScores.sort((a,b)=>b.score-a.score);
+  highScores=highScores.slice(0,5);
+  document.getElementById('s-best').textContent=bestScore.toLocaleString();
+  // Update per-mode best
+  if(score>=(modeBests[gameMode]||0))modeBests[gameMode]=score;
+  // Update lifetime stats
+  lifetimeStats.gamesPlayed++;
+  const today=new Date().toDateString();
+  if(lifetimeStats.lastPlayDate===today){/* same day */}
+  else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
+  else lifetimeStats.streak=1;
+  lifetimeStats.lastPlayDate=today;
+  try{
+    sessionStorage.setItem('lexitris_save',JSON.stringify({
+      bestScore,highScores,modeBests,lifetimeStats,hallOfFame,
+      hasState:false,score:0,level:1,lines:0
+    }));
+  }catch(e){}
+  const isRecord=highScores.length>1&&highScores[0].score===score;
+  const ov=document.getElementById('overlay');
+  ov.innerHTML=`
+    <h2>LEXITRIS</h2>
+    ${isRecord?'<div class="record">✦ NEW HIGH SCORE ✦</div>':''}
+    <div class="big-score">${score.toLocaleString()}</div>
+    <p>Level ${level} · ${lines} lines · Best combo ×${combo}</p>
+    <div class="hs-wrap">
+      <h4>Leaderboard</h4>
+      ${highScores.map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('')}
+    </div>
+    <button class="obtn obtn-primary" onclick="openShare()">📤 Share</button>
+    <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
+  `;
+  ov.style.display='flex';
+}
+
+function goToIntro(){
+  document.getElementById('overlay').style.display='none';
+  showIntro();
+}
+
+// ── Background Music ──────────────────────────────────────────────────────
+// ── Background Music Engine ───────────────────────────────────────────────
+let musicNodes=[], musicOn=true, musicStarted=false, musicStyle='chill';
+
+// Music styles
+const MUSIC_STYLES={
+  off:   {label:'Off'},
+  chill: {label:'Chill'},
+  retro: {label:'Retro'},
+  lofi:  {label:'Lo-Fi'},
+};
+
+// Shared: stop all running nodes
+function stopMusic(){
+  if(musicNodes._timer)clearTimeout(musicNodes._timer);
+  if(musicNodes._timer2)clearTimeout(musicNodes._timer2);
+  musicNodes.forEach(n=>{try{n.stop&&n.stop(0);n.disconnect&&n.disconnect();}catch(e){}});
+  musicNodes=[];
+  musicStarted=false;
+}
+
+// Master volume node
+function masterGain(vol=0.18){
+  const ac=getAC();
+  const g=ac.createGain();
+  g.gain.value=vol;
+  g.connect(ac.destination);
+  musicNodes.push(g);
+  return g;
+}
+
+// ── Style: Chill — slow sparse piano-ish notes, long gaps, very quiet ────
+function startChill(){
+  const ac=getAC();
+  const master=masterGain(0.12);
+  // Gentle C major / Am chord tones only, low register
+  const NOTES=[130.8,164.8,196,220,261.6,329.6,392,440];
+  const PATTERN=[0,2,4,2,0,4,2,0,  4,2,0,2,4,0,2,4];
+  let step=0;
+  function tick(){
+    if(!musicStarted)return;
+    try{
+      const ac2=getAC();
+      const f=NOTES[PATTERN[step%PATTERN.length]];
+      const o=ac2.createOscillator();
+      const g=ac2.createGain();
+      o.type='sine';
+      o.frequency.value=f;
+      // Very gentle attack/decay
+      g.gain.setValueAtTime(0,ac2.currentTime);
+      g.gain.linearRampToValueAtTime(0.55,ac2.currentTime+0.08);
+      g.gain.exponentialRampToValueAtTime(0.001,ac2.currentTime+1.8);
+      o.connect(g);g.connect(master);
+      o.start(ac2.currentTime);o.stop(ac2.currentTime+2);
+      step++;
+    }catch(e){}
+    musicNodes._timer=setTimeout(tick, 1400+Math.random()*600);
+  }
+  tick();
+}
+
+// ── Style: Retro — classic game arpeggios, square wave, punchy ───────────
+function startRetro(){
+  const ac=getAC();
+  const master=masterGain(0.09);
+  // C pentatonic
+  const ARP=[261.6,329.6,392,523.3,659.3,523.3,392,329.6];
+  const ARP2=[196,246.9,293.7,392,493.9,392,293.7,246.9];
+  let s1=0,s2=4;
+  function tick(){
+    if(!musicStarted)return;
+    try{
+      const ac2=getAC();
+      // High voice
+      const o1=ac2.createOscillator();
+      const g1=ac2.createGain();
+      o1.type='square';
+      o1.frequency.value=ARP[s1%ARP.length];
+      g1.gain.setValueAtTime(0.4,ac2.currentTime);
+      g1.gain.exponentialRampToValueAtTime(0.001,ac2.currentTime+0.14);
+      o1.connect(g1);g1.connect(master);
+      o1.start(ac2.currentTime);o1.stop(ac2.currentTime+0.15);
+      // Low voice (offset)
+      const o2=ac2.createOscillator();
+      const g2=ac2.createGain();
+      o2.type='square';
+      o2.frequency.value=ARP2[s2%ARP2.length];
+      g2.gain.setValueAtTime(0.25,ac2.currentTime+0.075);
+      g2.gain.exponentialRampToValueAtTime(0.001,ac2.currentTime+0.22);
+      o2.connect(g2);g2.connect(master);
+      o2.start(ac2.currentTime+0.075);o2.stop(ac2.currentTime+0.23);
+      s1++;s2++;
+    }catch(e){}
+    musicNodes._timer=setTimeout(tick,150);
+  }
+  tick();
+}
+
+// ── Style: Lo-Fi — slow chords with subtle noise texture, dreamy ──────────
+function startLofi(){
+  const ac=getAC();
+  const master=masterGain(0.11);
+  // Am7 → Fmaj7 → C → G chord sequence (root + 3rd + 5th + 7th)
+  const CHORDS=[
+    [220,261.6,329.6,392],    // Am7
+    [174.6,220,261.6,329.6],  // Fmaj7
+    [261.6,329.6,392,493.9],  // Cmaj7
+    [196,246.9,293.7,392],    // G
+  ];
+  let chord=0;
+  // Subtle crackle noise
+  function addNoise(){
+    try{
+      const buf=ac.createBuffer(1,ac.sampleRate*0.05,ac.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.015;
+      const src=ac.createBufferSource();
+      const g=ac.createGain();
+      src.buffer=buf;g.gain.value=0.3;
+      src.connect(g);g.connect(master);
+      src.start();
+      musicNodes.push(src,g);
+    }catch(e){}
+  }
+  function tick(){
+    if(!musicStarted)return;
+    try{
+      const ac2=getAC();
+      const ch=CHORDS[chord%CHORDS.length];
+      ch.forEach((f,i)=>{
+        const o=ac2.createOscillator();
+        const g=ac2.createGain();
+        o.type='sine';
+        o.frequency.value=f;
+        // Stagger note onset slightly for strummed feel
+        const delay=i*0.04;
+        g.gain.setValueAtTime(0,ac2.currentTime+delay);
+        g.gain.linearRampToValueAtTime(0.35,ac2.currentTime+delay+0.12);
+        g.gain.exponentialRampToValueAtTime(0.001,ac2.currentTime+delay+3.2);
+        o.connect(g);g.connect(master);
+        o.start(ac2.currentTime+delay);o.stop(ac2.currentTime+delay+3.5);
+      });
+      chord++;
+    }catch(e){}
+    addNoise();
+    musicNodes._timer=setTimeout(tick, 3200);
+  }
+  tick();
+}
+
+function startMusic(){
+  if(!musicOn||musicStarted||musicStyle==='off')return;
+  musicStarted=true;
+  try{
+    if(musicStyle==='chill')startChill();
+    else if(musicStyle==='retro')startRetro();
+    else if(musicStyle==='lofi')startLofi();
+  }catch(e){}
+}
+
+function setMusicOn(on){
+  musicOn=on;
+  if(on&&!musicStarted&&musicStyle!=='off')startMusic();
+  else if(!on)stopMusic();
+}
+
+function setMusicStyle(style){
+  const wasPlaying=musicStarted;
+  stopMusic();
+  musicStyle=style;
+  musicOn=(style!=='off');
+  const tog=document.getElementById('tog-music');
+  if(tog)tog.checked=musicOn;
+  // Update button highlights
+  ['chill','retro','lofi'].forEach(s=>{
+    const btn=document.getElementById('ms-'+s);
+    if(!btn)return;
+    const active=(s===style);
+    btn.style.background=active?'#5533ee':'#f0eeff';
+    btn.style.color=active?'#fff':'#5533ee';
+    btn.style.borderColor=active?'#5533ee':'#dde3f8';
+  });
+  if(wasPlaying&&musicOn)startMusic();
+  hapticLight();
+}
+
+// ── Save / Load state ─────────────────────────────────────────────────────
+let savedState=null;
+
+function saveState(){
+  savedState={
+    grid:grid.map(r=>[...r]),
+    score,level,lines,combo,dropMs,
+    nextLetter,
+    falling:falling?{...falling}:null,
+    wordLog:[...wordLog],
+    bag:[...bag],
+  };
+  // persist in sessionStorage so page refresh still shows continue
+  try{
+    sessionStorage.setItem('lexitris_save',JSON.stringify({
+      score,level,lines,
+      bestScore,highScores,
+      hasState:true,
+    }));
+  }catch(e){}
+}
+
+function loadSavedMeta(){
+  try{
+    const s=sessionStorage.getItem('lexitris_save');
+    if(!s)return null;
+    return JSON.parse(s);
+  }catch(e){return null;}
+}
+
+// ── Intro screen ──────────────────────────────────────────────────────────
+function showIntro(){
+  const meta=loadSavedMeta();
+  const hasContinue=savedState!==null||(meta&&meta.hasState&&meta.score>0);
+
+  if(meta){
+    bestScore=meta.bestScore||0;
+    highScores=meta.highScores||[];
+    modeBests=meta.modeBests||{classic:0,arcade:0,timed:0,zen:0};
+    if(meta.lifetimeStats)Object.assign(lifetimeStats,meta.lifetimeStats);
+    if(meta.hallOfFame)hallOfFame=meta.hallOfFame;
+    document.getElementById('s-best').textContent=bestScore.toLocaleString();
+  }
+
+  if(hasContinue&&(savedState||meta)){
+    const sc=(savedState?savedState.score:meta.score)||0;
+    const lv=(savedState?savedState.level:meta.level)||1;
+    const ln=(savedState?savedState.lines:meta.lines)||0;
+    document.getElementById('intro-last-score').textContent=sc.toLocaleString();
+    document.getElementById('intro-last-level').textContent=lv;
+    document.getElementById('intro-last-lines').textContent=ln;
+    document.getElementById('intro-best').textContent=bestScore.toLocaleString();
+    document.getElementById('intro-resume-card').style.display='block';
+    document.getElementById('intro-continue-btn').disabled=false;
+  } else {
+    document.getElementById('intro-resume-card').style.display='none';
+    document.getElementById('intro-continue-btn').disabled=true;
+  }
+
+  document.getElementById('intro-screen').classList.add('open');
+}
+
+function introNewGame(){
+  savedState=null;
+  try{sessionStorage.removeItem('lexitris_save');}catch(e){}
+  document.getElementById('intro-screen').classList.remove('open');
+  hapticMed();
+  startMusic();
+  startGame();
+}
+
+function introContinue(){
+  document.getElementById('intro-screen').classList.remove('open');
+  hapticMed();
+  startMusic();
+  if(savedState){
+    restoreState();
+  } else {
+    // only meta available (page was refreshed mid-game) — start fresh but keep scores
+    startGame();
+  }
+}
+
+function restoreState(){
+  cancelAnimationFrame(animId);
+  const s=savedState;
+  grid=s.grid.map(r=>[...r]);
+  score=s.score;level=s.level;lines=s.lines;combo=s.combo;dropMs=s.dropMs;
+  nextLetter=s.nextLetter;
+  falling=s.falling?{...s.falling}:null;
+  wordLog=[...s.wordLog];
+  bag=[...s.bag];
+  gameOver=false;paused=false;
+  document.getElementById('s-score').textContent=score.toLocaleString();
+  document.getElementById('s-level').textContent=level;
+  document.getElementById('s-lines').textContent=lines;
+  document.getElementById('s-combo').textContent='×'+combo;
+  document.getElementById('word-log').innerHTML=
+    wordLog.map(e=>`<div class="wle"><span class="w">${e.word||''}</span><span class="p">+${e.pts||0}</span></div>`).join('');
+  document.getElementById('next-box').textContent=nextLetter||'?';
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('settings-backdrop').classList.remove('open');
+  document.getElementById('btn-pause').textContent='⏸';
+  lastDropT=performance.now();
+  animId=requestAnimationFrame(loop);
+  playStart();
+}
+
+// ── Inject music controls into settings panel ────────────────────────────
+function injectMusicToggle(){
+  const soundRow=document.querySelector('#settings-panel .s-row');
+  if(!soundRow||document.getElementById('music-style-row'))return;
+  const container=soundRow.parentNode;
+
+  // Music on/off toggle row
+  const toggleRow=document.createElement('div');
+  toggleRow.className='s-row';
+  toggleRow.id='music-style-row';
+  toggleRow.innerHTML=`
+    <div class="s-row-label"><span>🎵</span> Music</div>
+    <label class="toggle">
+      <input type="checkbox" id="tog-music" checked onchange="setMusicOn(this.checked)">
+      <div class="toggle-track"></div>
+      <div class="toggle-thumb"></div>
+    </label>`;
+  container.insertBefore(toggleRow, soundRow);
+
+  // Style picker row
+  const styleRow=document.createElement('div');
+  styleRow.className='s-row';
+  styleRow.style.flexDirection='column';
+  styleRow.style.alignItems='stretch';
+  styleRow.style.gap='8px';
+  styleRow.innerHTML=`
+    <div class="s-row-label" style="font-size:.75rem"><span>🎼</span> Style</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${['chill','retro','lofi'].map(s=>`
+        <button onclick="setMusicStyle('${s}')" id="ms-${s}"
+          style="flex:1;padding:7px 4px;border-radius:8px;border:2px solid #dde3f8;
+          background:${s==='chill'?'#5533ee':'#f0eeff'};
+          color:${s==='chill'?'#fff':'#5533ee'};
+          font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;
+          cursor:pointer;-webkit-tap-highlight-color:transparent;
+          letter-spacing:.05em;text-transform:capitalize">${s}</button>
+      `).join('')}
+    </div>`;
+  container.insertBefore(styleRow, soundRow);
+}
+setTimeout(injectMusicToggle,0);
+
+
+
+// ── Mode system ────────────────────────────────────────────────────────────
+let gameMode='classic';
+let timedStart=0, timedDuration=180; // 3 minutes
+
+const MODE_CONFIG={
+  classic:{ startMs:1000, minMs:200,  levelStep:80,  label:'Classic', icon:'📖' },
+  arcade: { startMs:600,  minMs:120,  levelStep:60,  label:'Arcade',  icon:'⚡'  },
+  timed:  { startMs:800,  minMs:180,  levelStep:70,  label:'Timed',   icon:'⏱'  },
+  zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
+};
+
+// Mode metadata for dialog
+const MODE_META={
+  classic:{
+    icon:'📖',name:'Classic',tagline:'The original Lexitris experience',
+    features:['Letters fall faster as you level up','Every 5 cleared lines = new level','Endless — play until the board fills','All 4 word directions score points']
+  },
+  arcade:{
+    icon:'⚡',name:'Arcade',tagline:'High speed, high stakes',
+    features:['Starts fast, gets brutal quickly','Built for chasing leaderboard scores','Short, intense sessions','Perfect for one more go']
+  },
+  timed:{
+    icon:'⏱',name:'Timed',tagline:'3 minutes on the clock',
+    features:['Score as many points as possible','Countdown bar across the top','Game ends when time runs out','Speed still scales with level']
+  },
+  zen:{
+    icon:'🧘',name:'Zen',tagline:'No pressure, just words',
+    features:['Board never triggers game over','Slow, relaxing drop speed','Focus on finding long words','Great for learning the game']
+  }
+};
+
+let pendingMode='classic';
+
+function openModeDialog(mode){
+  pendingMode=mode;
+  const m=MODE_META[mode];
+  document.getElementById('md-icon').textContent=m.icon;
+  document.getElementById('md-name').textContent=m.name;
+  document.getElementById('md-tagline').textContent=m.tagline;
+  document.getElementById('md-features').innerHTML=
+    m.features.map(f=>`<div class="md-feature"><div class="md-feature-dot"></div>${f}</div>`).join('');
+  document.getElementById('mode-dialog-backdrop').classList.add('open');
+  hapticLight();
+}
+
+function closeModeDialog(e){
+  if(e&&e.target!==document.getElementById('mode-dialog-backdrop'))return;
+  document.getElementById('mode-dialog-backdrop').classList.remove('open');
+}
+
+function confirmPlayMode(){
+  document.getElementById('mode-dialog-backdrop').classList.remove('open');
+  gameMode=pendingMode;
+  hapticMed();
+  introNewGame();
+}
+
+function selectMode(mode){ gameMode=mode; }
+function playMode(mode){ openModeDialog(mode); }
+
+function updateSpeed(){
+  const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
+  dropMs=Math.max(cfg.minMs, cfg.startMs-(level-1)*cfg.levelStep);
+}
+
+// ── Updated startGame ─────────────────────────────────────────────────────
+function startGame(){
+  cancelAnimationFrame(animId);
+  gameOver=false;paused=false;
+  score=0;level=1;lines=0;combo=1;wordLog=[];
+  sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
+  clearHints();resetHintTimer();
+
+  const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
+  dropMs=cfg.startMs;
+
+  // Timed mode setup
+  if(gameMode==='timed'){
+    timedStart=performance.now();
+    timedDuration=180;
+    document.getElementById('timer-bar-wrap').style.display='block';
+    document.getElementById('timer-bar').style.width='100%';
+  } else {
+    document.getElementById('timer-bar-wrap').style.display='none';
+  }
+
+  // Mode badge
+  const badge=document.getElementById('mode-badge');
+  if(badge){badge.textContent=cfg.icon+' '+cfg.label;}
+
+  document.getElementById('s-score').textContent='0';
+  document.getElementById('s-level').textContent='1';
+  document.getElementById('s-lines').textContent='0';
+  document.getElementById('s-combo').textContent='×1';
+  document.getElementById('word-log').innerHTML='';
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('settings-backdrop').classList.remove('open');
+  document.getElementById('btn-pause').textContent='⏸';
+  document.getElementById('danger-bar').style.background='transparent';
+  fillBag();initGrid();
+  nextLetter=drawL();
+  spawnFalling();
+  lastDropT=performance.now();
+  animId=requestAnimationFrame(loop);
+  playStart();
+}
+
+
+// ── Share card ────────────────────────────────────────────────────────────
+function openShare(){
+  const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
+  document.getElementById('share-mode-label').textContent=cfg.icon+' '+cfg.label+' Mode';
+  document.getElementById('share-score-el').textContent=score.toLocaleString();
+  document.getElementById('share-level-el').textContent=level;
+  document.getElementById('share-lines-el').textContent=lines;
+  document.getElementById('share-words-el').textContent=sessionWords;
+  document.getElementById('share-combo-el').textContent='×'+sessionBestCombo;
+  const maxScore=Math.max(bestScore,1);
+  const pct=score/maxScore;
+  const sqs=Array.from({length:6},(_,i)=>{
+    const thresh=(i+1)/6;
+    const cls=pct>=thresh?'':pct>=(thresh-1/6)?'half':'low';
+    return `<div class="share-sq ${cls}"></div>`;
+  }).join('');
+  document.getElementById('share-grid-el').innerHTML=sqs.replace(/share-sq/g,'lx-pip');
+  const bw=document.getElementById('share-bestword-el');
+  if(sessionBestWord){bw.textContent='Best word: '+sessionBestWord+' (+'+sessionBestWordPts+')';bw.style.display='block';}
+  else bw.style.display='none';
+  document.getElementById('share-overlay').classList.add('open');
+}
+function closeShare(e){
+  if(e&&e.target!==document.getElementById('share-overlay'))return;
+  document.getElementById('share-overlay').classList.remove('open');
+}
+function doShare(){
+  const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
+  const maxScore=Math.max(bestScore,1);
+  const pct=score/maxScore;
+  const squares=Array.from({length:6},(_,i)=>{
+    const thresh=(i+1)/6;
+    return pct>=thresh?'🟣':pct>=(thresh-1/6)?'🔵':'⬜';
+  }).join('');
+  const text='LEXITRIS '+cfg.icon+' '+cfg.label+'\n'+squares+'\n'+score.toLocaleString()+' pts · Lv '+level+' · '+sessionWords+' words'+(sessionBestWord?'\nBest: '+sessionBestWord+' (+'+sessionBestWordPts+')'  :''  )+'\nPlay free at lexitris.app';
+  if(navigator.share){navigator.share({title:'Lexitris',text});}
+  else{navigator.clipboard.writeText(text).then(()=>alert('Result copied to clipboard!'));}
+}
+
+// ── Stats screen ──────────────────────────────────────────────────────────
+function openStats(){
+  document.getElementById('settings-backdrop').classList.remove('open');
+  const sg=document.getElementById('stats-grid');
+  const avgScore=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalScore/lifetimeStats.gamesPlayed):0;
+  const avgWords=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalWords/lifetimeStats.gamesPlayed):0;
+  sg.innerHTML=`
+    <div class="stat-box gold"><label>Games played</label><b>${lifetimeStats.gamesPlayed}</b></div>
+    <div class="stat-box"><label>Total score</label><b>${lifetimeStats.totalScore.toLocaleString()}</b></div>
+    <div class="stat-box green"><label>Total words</label><b>${lifetimeStats.totalWords}</b></div>
+    <div class="stat-box"><label>Total lines</label><b>${lifetimeStats.totalLines}</b></div>
+    <div class="stat-box"><label>Avg score/game</label><b>${avgScore.toLocaleString()}</b></div>
+    <div class="stat-box"><label>Avg words/game</label><b>${avgWords}</b></div>
+    <div class="stat-box gold"><label>Best combo</label><b>×${lifetimeStats.bestCombo}</b></div>
+    <div class="stat-box green"><label>Day streak</label><b>${lifetimeStats.streak} 🔥</b></div>
+  `;
+  const mt=document.getElementById('mode-table');
+  mt.innerHTML='<tr><th>Mode</th><th>Best Score</th></tr>'+
+    Object.entries(modeBests).map(([m,s])=>{
+      const cfg=MODE_CONFIG[m];
+      return '<tr><td>'+(cfg?cfg.icon+' '+cfg.label:m)+'</td><td>'+s.toLocaleString()+'</td></tr>';
+    }).join('');
+  const hof=document.getElementById('hall-of-fame');
+  if(!hallOfFame.length){hof.innerHTML='<div style="font-family:Space Mono,monospace;font-size:.48rem;color:#aabbdd;text-align:center;padding:10px">No words yet — play some games!</div>';}
+  else{hof.innerHTML=hallOfFame.map(e=>'<div class="hall-entry"><span class="hall-word">'+e.word+'</span><span class="hall-pts">+'+e.pts+'</span><span class="hall-date">'+(e.date||'')+'</span></div>').join('');}
+  document.getElementById('stats-overlay').classList.add('open');
+}
+function closeStats(e){
+  if(e&&e.target!==document.getElementById('stats-overlay'))return;
+  document.getElementById('stats-overlay').classList.remove('open');
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  // intro-screen starts with open class in HTML; boot hides others then shows intro properly
+  document.getElementById('intro-screen').classList.remove('open');
+  fillBag();initGrid();draw();
+  showIntro();
+});
+</script>
+<script>
+// ── PWA Service Worker registration ──────────────────────────────────────
+if('serviceWorker' in navigator){
+  // Inline service worker as a blob so no separate sw.js file is needed
+  const swCode = `
+    const CACHE = 'lexitris-v1';
+    const ASSETS = [location.href];
+    self.addEventListener('install', e => {
+      e.waitUntil(
+        caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+      );
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(
+        caches.keys().then(keys =>
+          Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+        ).then(() => self.clients.claim())
+      );
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        }))
+      );
+    });
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+</script>
+</body>
+</html>
