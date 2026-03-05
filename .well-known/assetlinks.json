@@ -4,7 +4,8 @@
     "namespace": "android_app",
     "package_name": "app.netlify.lexitris2.twa",
     "sha256_cert_fingerprints": [
-      "C1:43:3D:89:0A:37:A1:14:5F:61:9C:5E:02:A6:84:96:68:AB:04:EF:13:EC:9B:55:D1:C9:73:1B:09:BD:B8:3E"
+      "C1:43:3D:89:0A:37:A1:14:5F:61:9C:5E:02:A6:84:96:68:AB:04:EF:13:EC:9B:55:D1:C9:73:1B:09:BD:B8:3E",
+      "5D:B6:DF:9A:F1:F3:6C:ED:8F:55:B2:77:0F:C9:A0:26:3C:63:AB:49:87:0F:58:2F:C8:4C:E2:8B:05:C3:08:65"
     ]
   }
 }]
