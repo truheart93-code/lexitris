@@ -1104,7 +1104,24 @@ function fillBag(){
   for(const[l,n]of Object.entries(LDIST))for(let i=0;i<n;i++)bag.push(l);
   for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
 }
-function drawL(){if(!bag.length)fillBag();return bag.pop();}
+const VOWELS=new Set(['A','E','I','O','U']);
+let consecutiveVowels=0;
+function drawL(){
+  if(!bag.length)fillBag();
+  // If we've already drawn 3 vowels in a row, force a consonant
+  if(consecutiveVowels>=3){
+    const idx=bag.findLastIndex(l=>!VOWELS.has(l));
+    if(idx!==-1){
+      const l=bag[idx];
+      bag.splice(idx,1);
+      consecutiveVowels=0;
+      return l;
+    }
+  }
+  const l=bag.pop();
+  consecutiveVowels=VOWELS.has(l)?consecutiveVowels+1:0;
+  return l;
+}
 
 // Canvas
 const COLS=6, ROWS=10;
@@ -1134,7 +1151,7 @@ function resizeCv(){
   CELL=calcCell();
   cv.width=COLS*CELL;
   cv.height=ROWS*CELL;
-  draw();
+  if(grid)draw();
 }
 // Initial resize after layout paints
 requestAnimationFrame(()=>requestAnimationFrame(resizeCv));
@@ -1789,7 +1806,7 @@ function makeBass(ac,freq,t,dur,master){
 
 // ── Main loop ─────────────────────────────────────────────────────────────
 // 4/4 at ~72bpm. Each bar = 4 beats. One bar = ~3.33s
-let musicNodes=[], musicOn=true, musicStarted=false, musicStyle='lofi';
+let musicNodes=[], musicOn=true, musicStarted=false, musicStyle='chill';
 let loopTimer=null;
 
 const LOFI_CHORDS=[
@@ -1832,8 +1849,90 @@ function scheduleLofiBar(startT){
   }catch(e){}
 }
 
+// ── Style: Chill — sparse slow piano notes, no drums, dreamy ─────────────
+const CHILL_NOTES=[
+  {freqs:[130.8,164.8,196],    bass:65.4},  // C
+  {freqs:[110,138.6,165],      bass:55},    // Am
+  {freqs:[174.6,220,261.6],    bass:87.3},  // F
+  {freqs:[196,246.9,293.7],    bass:98},    // G
+];
+let chillChord=0, chillTimer=null;
+function scheduleChillBar(startT){
+  if(!musicStarted)return;
+  try{
+    const ac=getAC(); const master=getMaster();
+    const ch=CHILL_NOTES[chillChord%CHILL_NOTES.length];
+    const dur=4.8;
+    // Soft pad chord — sine, slow attack
+    ch.freqs.forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine'; o.frequency.value=f;
+      const delay=i*0.12;
+      g.gain.setValueAtTime(0,startT+delay);
+      g.gain.linearRampToValueAtTime(0.12,startT+delay+0.6);
+      g.gain.setValueAtTime(0.10,startT+dur-0.8);
+      g.gain.exponentialRampToValueAtTime(0.001,startT+dur);
+      o.connect(g);g.connect(master);
+      o.start(startT+delay);o.stop(startT+dur+0.1);
+    });
+    // Gentle bass note, very soft
+    const ob=ac.createOscillator(),gb=ac.createGain();
+    const fb=ac.createBiquadFilter();fb.type='lowpass';fb.frequency.value=200;
+    ob.type='sine'; ob.frequency.value=ch.bass;
+    gb.gain.setValueAtTime(0,startT);
+    gb.gain.linearRampToValueAtTime(0.22,startT+0.08);
+    gb.gain.exponentialRampToValueAtTime(0.001,startT+dur*0.6);
+    ob.connect(fb);fb.connect(gb);gb.connect(master);
+    ob.start(startT);ob.stop(startT+dur);
+    chillChord++;
+    const nextT=(startT+dur)-ac.currentTime;
+    chillTimer=setTimeout(()=>{
+      if(musicStarted)scheduleChillBar(getAC().currentTime+0.05);
+    },Math.max(0,(nextT-0.1)*1000));
+  }catch(e){}
+}
+
+// ── Style: Retro — bouncy square wave arpeggio, no crackle ───────────────
+const RETRO_ARP=[261.6,329.6,392,523.3,659.3,523.3,392,329.6];
+const RETRO_BASS=[130.8,130.8,196,196,174.6,174.6,196,196];
+let retroStep=0, retroTimer=null;
+function scheduleRetroTick(){
+  if(!musicStarted)return;
+  try{
+    const ac=getAC(); const master=getMaster();
+    const t=ac.currentTime;
+    const bpm=140; const beat=60/bpm;
+    // High arp voice
+    const o1=ac.createOscillator(),g1=ac.createGain();
+    o1.type='square'; o1.frequency.value=RETRO_ARP[retroStep%RETRO_ARP.length];
+    g1.gain.setValueAtTime(0.22,t); g1.gain.exponentialRampToValueAtTime(0.001,t+beat*0.7);
+    o1.connect(g1);g1.connect(master);o1.start(t);o1.stop(t+beat);
+    // Low bass every 2 steps
+    if(retroStep%2===0){
+      const o2=ac.createOscillator(),g2=ac.createGain();
+      const f2=ac.createBiquadFilter();f2.type='lowpass';f2.frequency.value=400;
+      o2.type='square'; o2.frequency.value=RETRO_BASS[Math.floor(retroStep/2)%RETRO_BASS.length];
+      g2.gain.setValueAtTime(0.18,t); g2.gain.exponentialRampToValueAtTime(0.001,t+beat*1.4);
+      o2.connect(f2);f2.connect(g2);g2.connect(master);o2.start(t);o2.stop(t+beat*1.5);
+    }
+    // Tiny noise snare on beat 3 of every 4
+    if(retroStep%4===2){
+      const buf=ac.createBuffer(1,ac.sampleRate*0.04,ac.sampleRate);
+      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+      const src=ac.createBufferSource();src.buffer=buf;
+      const filt=ac.createBiquadFilter();filt.type='bandpass';filt.frequency.value=3000;
+      const g3=ac.createGain();g3.gain.setValueAtTime(0.12,t);g3.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+      src.connect(filt);filt.connect(g3);g3.connect(master);src.start(t);
+    }
+    retroStep++;
+    retroTimer=setTimeout(scheduleRetroTick, beat*1000);
+  }catch(e){}
+}
+
 function stopMusic(){
   if(loopTimer)clearTimeout(loopTimer);loopTimer=null;
+  if(chillTimer)clearTimeout(chillTimer);chillTimer=null;
+  if(retroTimer)clearTimeout(retroTimer);retroTimer=null;
   stopCrackle();
   masterOut=null;masterFilter=null;
   musicStarted=false;
@@ -1844,8 +1943,14 @@ function startMusic(){
   musicStarted=true;
   try{
     const ac=getAC();getMaster();
-    startCrackle();
-    scheduleLofiBar(ac.currentTime+0.1);
+    if(musicStyle==='lofi'){
+      startCrackle();
+      scheduleLofiBar(ac.currentTime+0.1);
+    } else if(musicStyle==='chill'){
+      scheduleChillBar(ac.currentTime+0.1);
+    } else if(musicStyle==='retro'){
+      scheduleRetroTick();
+    }
   }catch(e){}
 }
 
@@ -2327,6 +2432,7 @@ function startGame(){
   gameOver=false;paused=false;
   score=0;level=1;lines=0;combo=1;wordLog=[];
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
+  consecutiveVowels=0;
   clearHints();resetHintTimer();
 
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
