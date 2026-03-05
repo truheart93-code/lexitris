@@ -1,8 +1,10 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.netlify.lexitris2.twa",
-        "sha256_cert_fingerprints": ["78:D0:6F:45:FC:ED:E3:E3:82:13:A1:8B:A6:AA:F5:A9:99:E0:04:56:9D:96:CB:70:0F:55:73:7F:34:3B:3F:22"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.netlify.lexitris2.twa",
+    "sha256_cert_fingerprints": [
+      "C1:43:3D:89:0A:37:A1:14:5F:61:9C:5E:02:A6:84:96:68:AB:04:EF:13:EC:9B:55:D1:C9:73:1B:09:BD:B8:3E"
+    ]
+  }
+}]
