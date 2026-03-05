@@ -69,18 +69,18 @@ body{
 .red{color:#ff3b6b;}
 
 /* Main */
-#main{display:flex;flex:1;width:100%;justify-content:center;align-items:flex-start;gap:4px;padding:4px;overflow:hidden;}
+#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:4px;overflow:hidden;min-height:0;}
 
 /* Side panels */
-.side{width:64px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
-/* On very narrow screens hide the right side panel entirely */
-@media(max-width:360px){
+.side{width:62px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
+/* Hide right panel (tips) on narrow screens — board space matters more */
+@media(max-width:420px){
   .side:last-child{display:none;}
+}
+@media(max-width:360px){
   .side{width:52px;}
 }
 
-/* Side panels */
-.side{width:76px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
 .panel{
   background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;
   padding:7px 5px;text-align:center;
@@ -1112,17 +1112,22 @@ const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
 
 function calcCell(){
+  // Use exact measured heights of chrome elements
   const hdrH=document.getElementById('hdr').offsetHeight||48;
-  const tbarH=document.getElementById('tbar').offsetHeight||68;
-  const timerH=document.getElementById('timer-bar-wrap').offsetHeight||0;
+  const tbarH=document.getElementById('tbar').offsetHeight||58;
+  const timerEl=document.getElementById('timer-bar-wrap');
+  const timerH=(timerEl&&timerEl.style.display!=='none')?timerEl.offsetHeight:0;
+  // Available height: fill everything between header and touch bar
   const avH=window.innerHeight-hdrH-tbarH-timerH-8;
-  const mainEl=document.getElementById('main');
-  const mainW=mainEl?mainEl.offsetWidth:window.innerWidth;
-  // measure side panels that are actually visible
-  const sideEls=mainEl?[...mainEl.querySelectorAll('.side')].filter(s=>s.offsetWidth>0):[];
-  let sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth+4,0);
-  const avW=mainW-sideW-8;
-  return Math.max(30,Math.floor(Math.min(avH/ROWS,avW/COLS)));
+  // Cell size driven by height first
+  const cellByH=Math.floor(avH/ROWS);
+  // Available width: screen minus both side panels
+  const sideEls=[...document.querySelectorAll('#main .side')].filter(s=>s.offsetParent!==null);
+  const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
+  const avW=window.innerWidth-sideW-8;
+  const cellByW=Math.floor(avW/COLS);
+  // Take height-driven size, but don't exceed width constraint
+  return Math.max(28,Math.min(cellByH,cellByW));
 }
 let CELL=calcCell();
 function resizeCv(){
