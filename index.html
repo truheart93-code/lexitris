@@ -532,7 +532,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .s-btn.secondary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
 .s-btn.danger{background:rgba(255,59,107,0.15);color:#ff3b6b;border:1px solid rgba(255,59,107,0.3);box-shadow:0 4px 0 rgba(0,0,0,0.3);}
 .s-btn.danger:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
-.s-divider{border:none;border-top:1px solid rgba(124,92,252,0.12);margin:10px 0 4px;}
+.s-btn.s-btn-remove-ads{
+  background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(255,59,107,0.15));
+  color:#f5a623;border:1px solid rgba(245,166,35,0.35);
+  box-shadow:0 4px 0 rgba(0,0,0,0.3);
+}
+.s-btn.s-btn-remove-ads:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
+.s-btn.s-btn-remove-ads.owned{
+  background:rgba(74,222,128,0.08);color:#4ade80;
+  border-color:rgba(74,222,128,0.25);pointer-events:none;
+}
 
 /* Keep old intro-btn alias for continue button */
 .intro-btn{
@@ -853,6 +862,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <button class="s-btn primary" onclick="resumeGame()">▶ RESUME</button>
     <button class="s-btn secondary" onclick="newGameFromSettings()">↺ NEW GAME</button>
     <button class="s-btn secondary" onclick="openStats()">📊 STATS</button>
+    <button class="s-btn s-btn-remove-ads" id="btn-remove-ads" onclick="purchaseRemoveAds()">✨ Remove Ads</button>
   </div>
 </div>
 
@@ -2556,83 +2566,167 @@ function closeStats(e){
 })();
 
 // ══════════════════════════════════════════════════════════════════════════
-// AdMob Bridge — Android WebView
+// AdMob + In-App Purchase Bridge — Android WebView
 // ──────────────────────────────────────────────────────────────────────────
-// Your Android app exposes a JavascriptInterface named "Android".
-// Wire it up in Java/Kotlin like:
+// In your Android project:
+//   1. webView.addJavascriptInterface(AndroidBridge(this), "Android")
 //
-//   webView.addJavascriptInterface(AdMobBridge(this), "Android")
+//   AndroidBridge must implement:
+//     showBanner()          — show/refresh banner ad
+//     hideBanner()          — hide banner ad
+//     showInterstitial()    — load + show interstitial
+//     showRewarded()        — load + show rewarded ad
+//     purchaseRemoveAds()   — launch Play Billing for product "remove_ads"
+//     restorePurchases()    — re-query owned purchases on launch
 //
-// Then implement these methods on AdMobBridge:
-//   showBanner()        — show/refresh banner ad
-//   hideBanner()        — hide banner ad
-//   showInterstitial()  — load + show interstitial (if ready)
-//   showRewarded()      — load + show rewarded ad
-//   isAdReady(): Boolean
+//   2. After any async event, call back via:
+//     webView.evaluateJavascript("onAdEvent('EVENT')", null)
 //
-// JS calls the bridge; native side fires callbacks back via:
-//   webView.evaluateJavascript("onAdEvent('rewarded_earned')", null)
+//   Events you must fire from native:
+//     'rewarded_earned'     — user finished rewarded ad
+//     'ads_removed'         — remove_ads purchase succeeded OR already owned
+//     'purchase_cancelled'  — user cancelled billing flow
+//     'purchase_failed'     — billing error
 // ══════════════════════════════════════════════════════════════════════════
 
+// ── Remove Ads state ──────────────────────────────────────────────────────
+let adsRemoved=false;
+
+function loadAdsRemovedState(){
+  try{ adsRemoved=localStorage.getItem('lexitris_no_ads')==='1'; }catch(e){}
+  applyAdsRemovedUI();
+}
+
+function applyAdsRemovedUI(){
+  const btn=document.getElementById('btn-remove-ads');
+  if(!btn)return;
+  if(adsRemoved){
+    btn.textContent='✅ Ads Removed';
+    btn.classList.add('owned');
+  } else {
+    btn.textContent='✨ Remove Ads';
+    btn.classList.remove('owned');
+  }
+}
+
+function purchaseRemoveAds(){
+  if(adsRemoved)return;
+  try{
+    if(window.Android && window.Android.purchaseRemoveAds){
+      window.Android.purchaseRemoveAds();
+    } else {
+      // Dev/browser fallback — simulate for testing
+      console.log('[AdMob] purchaseRemoveAds called — no Android bridge present');
+    }
+  }catch(e){}
+}
+
+// ── AdMob ─────────────────────────────────────────────────────────────────
 const AdMob = {
-  // Show banner at bottom of screen (call once on game start)
   showBanner(){
+    if(adsRemoved)return;
     try{ window.Android && window.Android.showBanner(); }catch(e){}
   },
-  // Hide banner (e.g. on intro/overlay screens)
   hideBanner(){
     try{ window.Android && window.Android.hideBanner(); }catch(e){}
   },
-  // Interstitial — shown between games
   showInterstitial(){
+    if(adsRemoved)return;
     try{ window.Android && window.Android.showInterstitial(); }catch(e){}
   },
-  // Rewarded — player opts in for bonus (e.g. extra time in Timed mode)
   showRewarded(onEarned){
     AdMob._rewardCallback=onEarned||null;
     try{ window.Android && window.Android.showRewarded(); }catch(e){}
   },
   _rewardCallback:null,
   _gamesBetweenInterstitials:0,
-  INTERSTITIAL_EVERY:3,   // show interstitial every N games
+  INTERSTITIAL_EVERY:3,
 };
 
-// Called by Android native after a rewarded ad is watched
+// ── Native → JS event handler ─────────────────────────────────────────────
 window.onAdEvent=function(event){
-  if(event==='rewarded_earned' && AdMob._rewardCallback){
-    AdMob._rewardCallback();
-    AdMob._rewardCallback=null;
+  switch(event){
+    case 'rewarded_earned':
+      if(AdMob._rewardCallback){
+        AdMob._rewardCallback();
+        AdMob._rewardCallback=null;
+      }
+      break;
+
+    case 'ads_removed':
+      adsRemoved=true;
+      try{ localStorage.setItem('lexitris_no_ads','1'); }catch(e){}
+      AdMob.hideBanner();
+      applyAdsRemovedUI();
+      // Show a brief confirmation toast
+      showToast('✨ Ads removed — thank you!');
+      break;
+
+    case 'purchase_cancelled':
+      showToast('Purchase cancelled.');
+      break;
+
+    case 'purchase_failed':
+      showToast('Purchase failed. Please try again.');
+      break;
   }
 };
 
-// Hook into game lifecycle
+// ── Simple toast notification ─────────────────────────────────────────────
+function showToast(msg){
+  let el=document.getElementById('lx-toast');
+  if(!el){
+    el=document.createElement('div');
+    el.id='lx-toast';
+    el.style.cssText=`
+      position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+      background:rgba(15,18,40,0.95);border:1px solid rgba(124,92,252,0.3);
+      color:#d0d8f0;font-family:'Nunito',sans-serif;font-weight:700;
+      font-size:.65rem;letter-spacing:.06em;
+      padding:10px 20px;border-radius:20px;z-index:9999;
+      box-shadow:0 8px 24px rgba(0,0,0,0.5);
+      transition:opacity .3s;pointer-events:none;
+    `;
+    document.body.appendChild(el);
+  }
+  el.textContent=msg;
+  el.style.opacity='1';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.style.opacity='0',2800);
+}
+
+// ── Game lifecycle hooks ──────────────────────────────────────────────────
 const _origEndGame=endGame;
 window.endGame=function(){
   _origEndGame();
-  AdMob.hideBanner();   // hide during game-over screen
-  AdMob._gamesBetweenInterstitials++;
-  if(AdMob._gamesBetweenInterstitials>=AdMob.INTERSTITIAL_EVERY){
-    AdMob._gamesBetweenInterstitials=0;
-    setTimeout(()=>AdMob.showInterstitial(), 800); // slight delay after game over
+  AdMob.hideBanner();
+  if(!adsRemoved){
+    AdMob._gamesBetweenInterstitials++;
+    if(AdMob._gamesBetweenInterstitials>=AdMob.INTERSTITIAL_EVERY){
+      AdMob._gamesBetweenInterstitials=0;
+      setTimeout(()=>AdMob.showInterstitial(),800);
+    }
   }
 };
 
 const _origStartGame=startGame;
 window.startGame=function(){
   _origStartGame();
-  AdMob.showBanner();   // show banner during gameplay
+  AdMob.showBanner();
 };
 
 const _origShowIntro=showIntro;
 window.showIntro=function(){
   _origShowIntro();
-  AdMob.hideBanner();   // hide banner on home screen
+  AdMob.hideBanner();
 };
 
 window.addEventListener('load',()=>{
-  // intro-screen starts with open class in HTML; boot hides others then shows intro properly
   document.getElementById('intro-screen').classList.remove('open');
   fillBag();initGrid();draw();
+  loadAdsRemovedState();
+  // Ask native to re-check owned purchases (handles reinstalls / new devices)
+  try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
   showIntro();
 });
 </script>
