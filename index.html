@@ -329,11 +329,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-mode-arrow{font-size:1rem;color:rgba(124,92,252,0.5);flex-shrink:0;}
 
-/* Small footer hint */
-.lx-hint{
-  font-family:'Space Mono',monospace;font-size:.42rem;
-  color:rgba(180,190,230,0.35);text-align:center;line-height:2;margin-top:6px;
-}
 
 /* Modal content area */
 .lx-modal{
@@ -495,23 +490,24 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(15,18,40,0.96);border:1px solid rgba(124,92,252,0.25);
   border-radius:20px;
   box-shadow:0 20px 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.06);
-  padding:24px 20px 20px;width:min(320px,90vw);
+  padding:14px 14px 14px;width:min(300px,92vw);
+  max-height:92vh;overflow-y:auto;
   display:flex;flex-direction:column;
   animation:slideUp .22s ease;
 }
 @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 #settings-panel h2{
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.15rem;
   background:linear-gradient(90deg,#a78bfa,#7c5cfc);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:.12em;text-align:center;margin-bottom:4px;
+  letter-spacing:.12em;text-align:center;margin-bottom:2px;
 }
-.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:rgba(180,190,230,0.4);text-align:center;margin-bottom:16px;}
+.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:rgba(180,190,230,0.4);text-align:center;margin-bottom:8px;}
 .s-section{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:900;
-  letter-spacing:.18em;color:rgba(180,190,230,0.35);text-transform:uppercase;margin:10px 0 6px;}
+  letter-spacing:.18em;color:rgba(180,190,230,0.35);text-transform:uppercase;margin:7px 0 4px;}
 .s-row{display:flex;align-items:center;justify-content:space-between;
-  padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.12);
-  border-radius:10px;margin-bottom:6px;}
+  padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.12);
+  border-radius:10px;margin-bottom:5px;}
 .s-row-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;color:#d0d0f0;
   display:flex;align-items:center;gap:8px;}
 .s-row-label span{font-size:1.1rem;}
@@ -522,7 +518,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;
   background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.4);pointer-events:none;}
 .toggle input:checked~.toggle-thumb{transform:translateX(20px);}
-.s-btn{width:100%;padding:13px;border:none;border-radius:10px;
+.s-btn{width:100%;padding:10px;border:none;border-radius:10px;
   font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;
   letter-spacing:.1em;cursor:pointer;margin-top:8px;
   -webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;}
@@ -774,16 +770,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   color:rgba(180,190,230,0.55);line-height:2.1;
 }
 .tip-row b{color:#7c5cfc;}
-.hint-cell{
-  position:absolute;pointer-events:none;border-radius:6px;
-  background:rgba(0,229,204,0.08);
-  border:1px solid rgba(0,229,204,0.35);
-  animation:hintPulse 1s ease-in-out infinite alternate;
-}
-@keyframes hintPulse{
-  from{border-color:rgba(0,229,204,0.25);box-shadow:none}
-  to{border-color:rgba(0,229,204,0.6);box-shadow:0 0 10px rgba(0,229,204,0.2)}
-}
+
 .particle{
   position:absolute;pointer-events:none;border-radius:50%;
   animation:particleFly var(--dur,.7s) ease-out forwards;
@@ -936,13 +923,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </button>
   </div>
 
-  <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled>↩ Continue last game</button>
-
-  <div class="lx-hint">
-    3+ letter words · → ↓↑ ↘ ↗ directions<br>
-    Row word = clears row · Combo = more points
-  </div>
-</div>
+  <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled>↩ Continue last game</button></div>
 
 <!-- ═══ MODE DIALOG ══════════════════════════════════════════════════ -->
 <div id="mode-dialog-backdrop" class="lx-screen">
@@ -1114,8 +1095,6 @@ let lifetimeStats={
 let hallOfFame=[];
 // Session tracking
 let sessionWords=0, sessionBestCombo=1, sessionBestWord='', sessionBestWordPts=0;
-// Hint system
-let hintTimer=null, hintCells=[], hintWord='';
 // Bonus letters on board: {r,c,type} — 'wild','x2','bomb'
 let bonusCells={};
 // Animation state for row-clear drop
@@ -1195,18 +1174,22 @@ function scanAll(){
     let run=[];
     for(let r=0;r<ROWS;r++){
       const c=start+r;
-      if(c>=0&&c<COLS&&grid[r][c])run.push({r,c});
-      else{raw.push(...scanSequence(run,1,1));run=[];}
+      if(c>=0&&c<COLS){
+        if(grid[r][c])run.push({r,c});
+        else{raw.push(...scanSequence(run,1,1));run=[];}
+      }
     }
     raw.push(...scanSequence(run,1,1));
   }
 
-  // ↗ Diagonal (bottom-left to top-right)
-  for(let start=0;start<ROWS+COLS-1;start++){
+  // ↗ Diagonal (bottom-left to top-right, r+c = constant)
+  for(let diag=0;diag<ROWS+COLS-1;diag++){
     let run=[];
-    for(let r=ROWS-1;r>=0;r--){
-      const c=start-(ROWS-1-r);
-      if(c>=0&&c<COLS&&grid[r][c])run.push({r,c});
+    const rStart=Math.min(diag,ROWS-1);
+    const rEnd=Math.max(0,diag-COLS+1);
+    for(let r=rStart;r>=rEnd;r--){
+      const c=diag-r;
+      if(grid[r][c])run.push({r,c});
       else{raw.push(...scanSequence(run,-1,1));run=[];}
     }
     raw.push(...scanSequence(run,-1,1));
@@ -1217,13 +1200,16 @@ function scanAll(){
 
 function dedupResults(results){
   results.sort((a,b)=>b.word.length-a.word.length);
-  const used=new Set();
+  // Track used cells per direction separately so crossing words both score
+  const usedByDir={};
   const kept=[];
   for(const res of results){
+    const dirKey=`${res.dr},${res.dc}`;
+    if(!usedByDir[dirKey])usedByDir[dirKey]=new Set();
     const keys=res.cells.map(({r,c})=>`${r},${c}`);
-    if(keys.every(k=>!used.has(k))){
+    if(keys.every(k=>!usedByDir[dirKey].has(k))){
       kept.push(res);
-      keys.forEach(k=>used.add(k));
+      keys.forEach(k=>usedByDir[dirKey].add(k));
     }
   }
   return kept;
@@ -1261,13 +1247,8 @@ function checkWords(){
     playWord(res.word.length);hapticStrong();
     logWord(res.word,pts,res.dr,res.dc);
     showPopup(pts,res.cx,res.cy);
-    resetHintTimer();
-    if(res.dr===0&&res.dc===1){
-      rowsToClear.add(res.cells[0].r);
-    } else {
-      flashCells(res.cells);
-      res.cells.forEach(({r,c})=>cellsToClear.add(`${r},${c}`));
-    }
+    // Every scored word clears the entire row of every cell it touches
+    res.cells.forEach(({r})=>rowsToClear.add(r));
   }
 
   cellsToClear.forEach(key=>{
@@ -1360,52 +1341,6 @@ function screenShake(){
   void el.offsetWidth;
   el.classList.add('shaking');
   setTimeout(()=>el.classList.remove('shaking'),420);
-}
-
-// ── Hint system ──────────────────────────────────────────────────────────
-function clearHints(){
-  document.querySelectorAll('.hint-cell').forEach(e=>e.remove());
-  hintCells=[];hintWord='';
-}
-
-function showHint(){
-  clearHints();
-  // Scan for a valid word in the current grid + falling piece
-  const testGrid=grid.map(r=>[...r]);
-  if(falling)testGrid[falling.row][falling.col]=falling.l;
-  // Try all sequences
-  const dirs=[{dr:0,dc:1},{dr:1,dc:0},{dr:-1,dc:0},{dr:1,dc:1},{dr:-1,dc:1}];
-  let best=null;
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    for(const{dr,dc}of dirs){
-      let cells=[],word='';
-      for(let i=0;i<8;i++){
-        const nr=r+dr*i,nc=c+dc*i;
-        if(nr<0||nr>=ROWS||nc<0||nc>=COLS||!testGrid[nr][nc])break;
-        cells.push({r:nr,c:nc});word+=testGrid[nr][nc];
-        if(word.length>=3&&WORDS.has(word)){
-          if(!best||word.length>best.word.length)best={word,cells:[...cells]};
-        }
-      }
-    }
-  }
-  if(!best)return;
-  const cw=document.getElementById('cw');
-  best.cells.forEach(({r,c})=>{
-    const el=document.createElement('div');
-    el.className='hint-cell';
-    el.style.top=r*CELL+'px';el.style.left=c*CELL+'px';
-    el.style.width=CELL+'px';el.style.height=CELL+'px';
-    cw.appendChild(el);
-    hintCells.push(el);
-  });
-  hintWord=best.word;
-  setTimeout(clearHints,2500);
-}
-
-function resetHintTimer(){
-  if(hintTimer)clearTimeout(hintTimer);
-  hintTimer=setTimeout(()=>{if(!paused&&!gameOver)showHint();},8000);
 }
 
 function flashRow(r){
@@ -2027,7 +1962,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key=
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
   gameOver=true;cancelAnimationFrame(animId);
-  if(hintTimer)clearTimeout(hintTimer);clearHints();
   screenShake();
   savedState=null;
   try{localStorage.removeItem('lexitris_save');}catch(e){}
@@ -2369,7 +2303,6 @@ function startGame(){
   score=0;level=1;lines=0;combo=1;wordLog=[];
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
   consecutiveVowels=0;
-  clearHints();resetHintTimer();
 
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
   dropMs=cfg.startMs;
