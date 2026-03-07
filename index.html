@@ -61,6 +61,117 @@ body{
   width:100%;
 }
 
+/* Leaderboard overlay */
+#lb-overlay{
+  position:fixed;inset:0;z-index:400;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(8,6,20,0.96);
+  backdrop-filter:blur(12px);
+}
+#lb-overlay.open{display:flex;}
+#lb-panel{
+  width:min(340px,94vw);
+  max-height:88vh;
+  overflow-y:auto;
+  background:#0d0f20;
+  border:1px solid rgba(124,92,252,0.25);
+  border-radius:24px;
+  box-shadow:0 30px 80px rgba(0,0,0,0.7);
+  animation:mdSlideUp .25s cubic-bezier(.22,.68,0,1.2);
+}
+#lb-header{
+  padding:20px 20px 12px;
+  text-align:center;
+  border-bottom:1px solid rgba(124,92,252,0.15);
+}
+#lb-header h2{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:1.3rem;letter-spacing:.12em;
+  background:linear-gradient(135deg,#f5a623,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;
+}
+.lb-mode-tabs{
+  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+}
+.lb-tab{
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;
+  padding:5px 12px;border-radius:20px;border:1px solid rgba(124,92,252,0.3);
+  background:transparent;color:rgba(180,190,230,0.6);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:all .15s;
+}
+.lb-tab.active{
+  background:rgba(124,92,252,0.2);border-color:rgba(124,92,252,0.6);
+  color:#a78bfa;
+}
+#lb-list{padding:12px 16px;}
+.lb-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;margin-bottom:6px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(124,92,252,0.1);
+  border-radius:12px;
+}
+.lb-rank{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.85rem;color:rgba(180,190,230,0.4);
+  width:22px;text-align:center;flex-shrink:0;
+}
+.lb-rank.gold{color:#f5a623;}
+.lb-rank.silver{color:#aaa;}
+.lb-rank.bronze{color:#cd7f32;}
+.lb-name{
+  font-family:'Nunito',sans-serif;font-weight:700;
+  font-size:.82rem;color:#d0d8f0;flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.lb-score{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.9rem;color:#a78bfa;flex-shrink:0;
+}
+.lb-empty{
+  text-align:center;padding:30px;
+  font-family:'Nunito',sans-serif;font-size:.8rem;
+  color:rgba(180,190,230,0.4);
+}
+#lb-loading{
+  text-align:center;padding:30px;
+  font-family:'Nunito',sans-serif;font-size:.8rem;
+  color:rgba(180,190,230,0.5);
+}
+#lb-actions{padding:0 16px 20px;display:flex;flex-direction:column;gap:8px;}
+#lb-submit-area{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(124,92,252,0.15);
+  border-radius:14px;padding:12px 14px;
+  display:none;
+}
+#lb-submit-area.show{display:block;}
+#lb-submit-area label{
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;
+  color:rgba(180,190,230,0.6);letter-spacing:.08em;display:block;margin-bottom:6px;
+}
+#lb-name-input{
+  width:100%;box-sizing:border-box;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(124,92,252,0.25);
+  border-radius:10px;padding:10px 12px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;
+  color:#d0d8f0;outline:none;margin-bottom:8px;
+}
+#lb-submit-btn{
+  width:100%;padding:12px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.88rem;
+  background:linear-gradient(135deg,#7c5cfc,#5533cc);
+  color:#fff;cursor:pointer;letter-spacing:.06em;
+}
+#lb-close-btn{
+  width:100%;padding:12px;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;
+  color:rgba(160,170,210,0.7);cursor:pointer;
+  background:transparent;border:1px solid rgba(124,92,252,0.15);
+}
+
 /* High score celebration */
 #hs-celebration{
   position:fixed;inset:0;z-index:600;
@@ -899,6 +1010,49 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   75%{transform:translateX(-2px)}
 }
 </style>
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6oIR2S9qfgPOVpcviTfm23J8PI1AhBnY",
+    authDomain: "lexitris-84d9f.firebaseapp.com",
+    projectId: "lexitris-84d9f",
+    storageBucket: "lexitris-84d9f.firebasestorage.app",
+    messagingSenderId: "37849492936",
+    appId: "1:37849492936:web:13564e8c290f88c84764fd"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Submit score to leaderboard
+  window.submitLeaderboardScore = async function(name, score, mode) {
+    try {
+      await addDoc(collection(db, "scores"), {
+        name: name.trim().substring(0,16),
+        score,
+        mode,
+        date: new Date().toISOString()
+      });
+    } catch(e) { console.error("Score submit failed:", e); }
+  };
+
+  // Fetch top scores
+  window.fetchLeaderboard = async function(mode) {
+    try {
+      const q = query(
+        collection(db, "scores"),
+        where("mode", "==", mode),
+        orderBy("score", "desc"),
+        limit(10)
+      );
+      const snap = await getDocs(q);
+      return snap.docs.map(d => d.data());
+    } catch(e) { console.error("Fetch failed:", e); return []; }
+  };
+</script>
 </head>
 <body>
 
@@ -923,6 +1077,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="hdr">
   <div class="hdr-top">
     <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
+    <button class="hdr-btn" id="btn-lb" title="Leaderboard" onclick="openLeaderboard(0)" style="font-size:1.1rem;width:36px;height:36px">🏆</button>
     <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px">⏸</button>
   </div>
   <div class="stats">
@@ -1003,45 +1158,103 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open">
-  <div class="lx-logo">LEXITRIS</div>
-  <div class="lx-sub">spell to survive</div>
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:20px 20px 32px;">
+  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:12px;align-items:center;padding-top:8px;">
 
-  <div class="lx-mode-list">
-    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(124,92,252,0.45);" onclick="openModeDialog('classic')">
-      <span class="lx-mode-icon">📖</span>
-      <span class="lx-mode-text">
-        <span class="lx-mode-name">Classic</span>
-        <span class="lx-mode-desc">Endless · speed builds with level</span>
-      </span>
-      <span class="lx-mode-arrow">›</span>
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:4px;">
+      <div class="lx-logo">LEXITRIS</div>
+      <div class="lx-sub">spell to survive</div>
+    </div>
+
+    <!-- Stats card -->
+    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
+      <!-- Best score — full width top row -->
+      <div style="text-align:center;padding-bottom:12px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:12px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.6rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Best Score</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:#f5a623;" id="home-stat-best">0</div>
+      </div>
+      <!-- Three stats below -->
+      <div style="display:flex;justify-content:space-around;">
+        <div style="text-align:center;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#a78bfa;" id="home-stat-games">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Games</div>
+        </div>
+        <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#00e5cc;" id="home-stat-words">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Words</div>
+        </div>
+        <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#4ade80;" id="home-stat-combo">×1</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best Combo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Play button -->
+    <button onclick="showModeSelect()" style="width:100%;padding:18px;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
+      ▶ &nbsp;Play
     </button>
-    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(255,59,107,0.45);" onclick="openModeDialog('arcade')">
-      <span class="lx-mode-icon">⚡</span>
-      <span class="lx-mode-text">
-        <span class="lx-mode-name">Arcade</span>
-        <span class="lx-mode-desc">Fast from the start · high scores</span>
-      </span>
-      <span class="lx-mode-arrow">›</span>
-    </button>
-    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(245,166,35,0.45);" onclick="openModeDialog('timed')">
-      <span class="lx-mode-icon">⏱</span>
-      <span class="lx-mode-text">
-        <span class="lx-mode-name">Timed</span>
-        <span class="lx-mode-desc">3 minutes · score as much as you can</span>
-      </span>
-      <span class="lx-mode-arrow">›</span>
-    </button>
-    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(0,229,204,0.45);" onclick="openModeDialog('zen')">
-      <span class="lx-mode-icon">🧘</span>
-      <span class="lx-mode-text">
-        <span class="lx-mode-name">Zen</span>
-        <span class="lx-mode-desc">No game over · relax and spell</span>
-      </span>
-      <span class="lx-mode-arrow">›</span>
-    </button>
+
+    <!-- Mini leaderboard -->
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
+      <!-- Title row -->
+      <div style="text-align:center;padding-bottom:10px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:10px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
+      </div>
+      <!-- Mode tabs -->
+      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:10px;">
+        <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.56rem;padding:3px 7px;">Classic</button>
+        <button class="lb-tab" id="home-lb-tab-arcade" onclick="switchHomeLb('arcade')" style="font-size:.56rem;padding:3px 7px;">Arcade</button>
+        <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.56rem;padding:3px 7px;">Timed</button>
+        <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.56rem;padding:3px 7px;">Zen</button>
+      </div>
+      <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:12px;overflow:hidden;">
+        <div style="text-align:center;padding:14px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">Loading...</div>
+      </div>
+      <button onclick="openLeaderboard(0)" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;color:rgba(160,170,210,0.65);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
+    </div>
+
+    <!-- Bottom nav -->
+    <div style="display:flex;gap:10px;width:100%;">
+      <button onclick="document.getElementById('settings-backdrop').classList.add('open')" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
+      <button onclick="document.getElementById('stats-overlay').classList.add('open');buildStats()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
+    </div>
+
   </div>
+</div>
 
+<!-- ═══ MODE SELECT SHEET ═══════════════════════════════════════════ -->
+<div id="mode-select-sheet" class="lx-screen" style="justify-content:flex-end;padding-bottom:0;">
+  <div style="width:100%;max-width:420px;background:#0d0f20;border-radius:28px 28px 0 0;border-top:1px solid rgba(124,92,252,0.2);padding:20px 20px 40px;animation:mdSlideUp .25s cubic-bezier(.22,.68,0,1.2);">
+    <div style="width:36px;height:4px;background:rgba(124,92,252,0.3);border-radius:2px;margin:0 auto 18px;"></div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.7);text-transform:uppercase;text-align:center;margin-bottom:16px;">Choose Mode</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);" onclick="closeModeSelectSheet();openModeDialog('classic')">
+        <span class="lx-mode-icon">📖</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(255,59,107,0.3);" onclick="closeModeSelectSheet();openModeDialog('arcade')">
+        <span class="lx-mode-icon">⚡</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Arcade</span><span class="lx-mode-desc">Fast from the start · high scores</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(245,166,35,0.3);" onclick="closeModeSelectSheet();openModeDialog('timed')">
+        <span class="lx-mode-icon">⏱</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Timed</span><span class="lx-mode-desc">3 minutes · score as much as you can</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);" onclick="closeModeSelectSheet();openModeDialog('zen')">
+        <span class="lx-mode-icon">🧘</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
+    </div>
+    <button onclick="closeModeSelectSheet()" style="width:100%;margin-top:14px;padding:13px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;color:rgba(160,170,210,0.6);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">Cancel</button>
+  </div>
 </div>
 
 <!-- ═══ MODE DIALOG ══════════════════════════════════════════════════ -->
@@ -1059,11 +1272,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <!-- Last game for this mode -->
     <div class="md-last" id="md-last" style="display:none">
       <div class="md-last-label">Last Game</div>
+      <!-- Best score — own row -->
+      <div style="text-align:center;padding:8px 14px 10px;border-bottom:1px solid rgba(124,92,252,0.1);">
+        <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,215,255,0.65);">Best</span><br>
+        <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;color:#f5a623;" id="md-last-best">0</span>
+      </div>
+      <!-- Score / Level / Lines row -->
       <div class="md-last-stats">
         <div class="md-last-stat"><span id="md-last-score">0</span><label>Score</label></div>
         <div class="md-last-stat"><span id="md-last-level">1</span><label>Level</label></div>
         <div class="md-last-stat"><span id="md-last-lines">0</span><label>Lines</label></div>
-        <div class="md-last-stat md-last-best"><span id="md-last-best">0</span><label>Best</label></div>
       </div>
       <div class="md-last-word" id="md-last-word" style="display:none">
         <span class="md-last-word-label">Best word</span>
@@ -1080,6 +1298,30 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       </button>
       <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled style="width:100%;margin-top:0;">↩ Continue last game</button>
       <button class="md-back-btn" onclick="closeModeDialog()">← Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LEADERBOARD ══════════════════════════════════════════════════ -->
+<div id="lb-overlay">
+  <div id="lb-panel">
+    <div id="lb-header">
+      <h2>🏆 LEADERBOARD</h2>
+      <div class="lb-mode-tabs">
+        <button class="lb-tab active" onclick="switchLbTab('classic')">Classic</button>
+        <button class="lb-tab" onclick="switchLbTab('arcade')">Arcade</button>
+        <button class="lb-tab" onclick="switchLbTab('timed')">Timed</button>
+        <button class="lb-tab" onclick="switchLbTab('zen')">Zen</button>
+      </div>
+    </div>
+    <div id="lb-list"><div id="lb-loading">Loading...</div></div>
+    <div id="lb-actions">
+      <div id="lb-submit-area">
+        <label>SUBMIT YOUR SCORE</label>
+        <input id="lb-name-input" type="text" maxlength="16" placeholder="Enter your name..." autocomplete="off" />
+        <button id="lb-submit-btn" onclick="submitScore()">Submit Score</button>
+      </div>
+      <button id="lb-close-btn" onclick="closeLeaderboard()">← Back</button>
     </div>
   </div>
 </div>
@@ -2203,6 +2445,8 @@ function endGame(){
   highScores=highScores.slice(0,5);
   document.getElementById('s-best').textContent=bestScore.toLocaleString();
   if(isNewBest && score > 0) setTimeout(()=>showHighScoreCelebration(score), 600);
+  // Show leaderboard submit after game over
+  setTimeout(()=>openLeaderboard(score, gameMode), isNewBest ? 4500 : 2500);
   // Update per-mode best
   if(score>=(modeBests[gameMode]||0))modeBests[gameMode]=score;
   // Save last game stats for this mode
@@ -2310,6 +2554,8 @@ function showIntro(){
   // Continue button visibility handled in openModeDialog (zen only)
 
   document.getElementById('intro-screen').classList.add('open');
+  updateHomeStats();
+  loadHomeLb(currentHomeLbMode);
 }
 
 function introNewGame(){
@@ -2319,6 +2565,32 @@ function introNewGame(){
   hapticMed();
   startMusic();
   startGame();
+}
+
+function showModeSelect(){
+  // Open the mode dialog — show a simple mode picker sheet
+  // We reuse the existing mode dialog by showing a "choose mode" prompt
+  // Just open classic by default then let user pick from the mode buttons
+  openModeSelectSheet();
+}
+
+function openModeSelectSheet(){
+  document.getElementById('mode-select-sheet').classList.add('open');
+}
+
+function closeModeSelectSheet(){
+  document.getElementById('mode-select-sheet').classList.remove('open');
+}
+
+function updateHomeStats(){
+  const best = document.getElementById('home-stat-best');
+  const games = document.getElementById('home-stat-games');
+  const words = document.getElementById('home-stat-words');
+  const combo = document.getElementById('home-stat-combo');
+  if(best) best.textContent = (bestScore||0).toLocaleString();
+  if(games) games.textContent = (lifetimeStats.gamesPlayed||0).toLocaleString();
+  if(words) words.textContent = (lifetimeStats.totalWords||0).toLocaleString();
+  if(combo) combo.textContent = '×'+(lifetimeStats.bestCombo||1);
 }
 
 function introContinue(){
@@ -2764,6 +3036,128 @@ window.onAdEvent=function(event){
 };
 
 // ── Simple toast notification ─────────────────────────────────────────────
+// ── Home Leaderboard Preview ───────────────────────────────────────────────
+let currentHomeLbMode = 'classic';
+
+function switchHomeLb(mode){
+  currentHomeLbMode = mode;
+  ['classic','arcade','timed','zen'].forEach(m => {
+    const tab = document.getElementById('home-lb-tab-'+m);
+    if(tab) tab.classList.toggle('active', m === mode);
+  });
+  loadHomeLb(mode);
+}
+
+async function loadHomeLb(mode){
+  const list = document.getElementById('home-lb-list');
+  if(!list) return;
+  list.innerHTML = '<div style="text-align:center;padding:16px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">Loading...</div>';
+  const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
+  if(scores.length === 0){
+    list.innerHTML = '<div style="text-align:center;padding:16px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">No scores yet!</div>';
+    return;
+  }
+  const rankIcons = ['🥇','🥈','🥉'];
+  list.innerHTML = scores.slice(0,5).map((s,i) => {
+    const rank = rankIcons[i] || (i+1);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(124,92,252,0.08);">'
+      + '<span style="font-size:.8rem;width:20px;text-align:center;">' + rank + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.78rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.82rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
+      + '</div>';
+  }).join('');
+}
+
+// Load home leaderboard when page loads
+window.addEventListener('load', () => {
+  setTimeout(()=>loadHomeLb('classic'), 800);
+  setTimeout(updateHomeStats, 200);
+});
+
+// ── Leaderboard ────────────────────────────────────────────────────────────
+let currentLbMode = 'classic';
+let pendingLbScore = 0;
+let pendingLbMode = '';
+let playerName = '';
+
+try { playerName = localStorage.getItem('lexitris_player_name') || ''; } catch(e){}
+
+function openLeaderboard(submitScore, submitMode){
+  pendingLbScore = submitScore || 0;
+  pendingLbMode = submitMode || gameMode;
+  currentLbMode = pendingLbMode;
+
+  // Show submit area if we have a score to submit
+  const submitArea = document.getElementById('lb-submit-area');
+  if(pendingLbScore > 0){
+    submitArea.classList.add('show');
+    document.getElementById('lb-name-input').value = playerName;
+  } else {
+    submitArea.classList.remove('show');
+  }
+
+  // Set active tab
+  document.querySelectorAll('.lb-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent.toLowerCase() === currentLbMode);
+  });
+
+  document.getElementById('lb-overlay').classList.add('open');
+  loadLeaderboard(currentLbMode);
+}
+
+function closeLeaderboard(){
+  document.getElementById('lb-overlay').classList.remove('open');
+}
+
+function switchLbTab(mode){
+  currentLbMode = mode;
+  document.querySelectorAll('.lb-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent.toLowerCase() === mode);
+  });
+  loadLeaderboard(mode);
+}
+
+async function loadLeaderboard(mode){
+  const list = document.getElementById('lb-list');
+  list.innerHTML = '<div id="lb-loading">Loading...</div>';
+  const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
+  if(scores.length === 0){
+    list.innerHTML = '<div class="lb-empty">No scores yet — be the first!</div>';
+    return;
+  }
+  const rankIcons = ['🥇','🥈','🥉'];
+  const rankClass = ['gold','silver','bronze'];
+  list.innerHTML = scores.map((s,i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${rankIcons[i]||i+1}</div>
+      <div class="lb-name">${escLb(s.name)}</div>
+      <div class="lb-score">${Number(s.score).toLocaleString()}</div>
+    </div>
+  `).join('');
+}
+
+function escLb(str){
+  return String(str).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+
+async function submitScore(){
+  const nameInput = document.getElementById('lb-name-input');
+  const name = nameInput.value.trim();
+  if(!name){ nameInput.focus(); return; }
+  playerName = name;
+  try { localStorage.setItem('lexitris_player_name', name); } catch(e){}
+  const btn = document.getElementById('lb-submit-btn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+  if(window.submitLeaderboardScore){
+    await window.submitLeaderboardScore(name, pendingLbScore, pendingLbMode);
+  }
+  pendingLbScore = 0;
+  document.getElementById('lb-submit-area').classList.remove('show');
+  btn.textContent = '✅ Submitted!';
+  loadLeaderboard(currentLbMode);
+}
+
 function showHighScoreCelebration(score){
   const overlay = document.getElementById('hs-celebration');
   document.getElementById('hs-score-val').textContent = score.toLocaleString();
