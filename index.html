@@ -220,15 +220,17 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
   padding:24px 20px;
   z-index:300;
-  overflow-y:auto;
+  overflow:hidden;
+  touch-action:none;
+  overscroll-behavior:none;
 }
 .lx-screen.open{ display:flex; }
 
 /* Logo */
 .lx-logo{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:clamp(2.8rem,11vw,4.2rem);
-  letter-spacing:.2em;
+  font-size:clamp(2.2rem,9vw,3.8rem);
+  letter-spacing:.1em;
   background:linear-gradient(135deg,#a78bfa 0%,#7c5cfc 50%,#00e5cc 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:4px;
