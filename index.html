@@ -51,6 +51,12 @@ body{
 }
 
 /* Header */
+@media(min-width:400px){
+  #hdr{ padding-right:max(24px, env(safe-area-inset-right)) !important; }
+}
+@media(min-width:430px){
+  #hdr{ padding-right:max(32px, env(safe-area-inset-right)) !important; }
+}
 #hdr{
   width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;
   padding:8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
