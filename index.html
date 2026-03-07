@@ -42,6 +42,8 @@ body{
   touch-action:none;
   display:flex;flex-direction:column;align-items:center;
   margin:0;padding:0;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
   -webkit-transform:translateZ(0);
   transform:translateZ(0);
 }
@@ -62,7 +64,7 @@ body{
 }
 .stats{display:flex;gap:12px;}
 .stat{text-align:center;}
-.stat span{display:block;font-size:.38rem;letter-spacing:.15em;color:rgba(180,190,230,0.45);text-transform:uppercase;}
+.stat span{display:block;font-size:.38rem;letter-spacing:.15em;color:rgba(200,210,255,0.7);text-transform:uppercase;}
 .stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(.75rem,2.5vw,1rem);}
 .gold{color:#f5a623;}
 .blue{color:#00e5cc;}
@@ -87,7 +89,7 @@ body{
   box-shadow:0 4px 16px rgba(0,0,0,0.3);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
-.panel label{display:block;font-size:.36rem;letter-spacing:.18em;color:rgba(180,190,230,0.45);text-transform:uppercase;margin-bottom:4px;}
+.panel label{display:block;font-size:.36rem;letter-spacing:.18em;color:rgba(200,215,255,0.72);text-transform:uppercase;margin-bottom:4px;}
 .next-box{
   width:52px;height:52px;margin:0 auto;
   border:1.5px solid rgba(124,92,252,0.5);border-radius:10px;
@@ -96,7 +98,7 @@ body{
   color:#a78bfa;background:rgba(124,92,252,0.12);
   box-shadow:0 0 14px rgba(124,92,252,0.2),inset 0 1px 0 rgba(255,255,255,0.08);
 }
-#word-log{max-height:200px;overflow:hidden;font-size:.42rem;text-align:left;}
+#word-log{max-height:200px;overflow:hidden;font-size:.42rem;text-align:left;color:rgba(210,220,255,0.8);}
 .wle{display:flex;justify-content:space-between;padding:2px 1px;border-bottom:1px solid rgba(124,92,252,0.12);animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
 .wle .w{color:#4ade80;font-weight:700;letter-spacing:.04em;}
@@ -243,7 +245,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-sub{
   font-family:'Space Mono',monospace;
   font-size:.52rem;letter-spacing:.32em;
-  color:rgba(180,190,230,0.4);margin-bottom:28px;text-transform:uppercase;
+  color:rgba(200,215,255,0.7);margin-bottom:28px;text-transform:uppercase;
 }
 
 /* Card — frosted dark glass */
@@ -260,7 +262,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-card-label{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.5rem;letter-spacing:.2em;color:rgba(180,190,230,0.4);
+  font-size:.5rem;letter-spacing:.2em;color:rgba(200,215,255,0.7);
   text-transform:uppercase;margin-bottom:8px;
 }
 .lx-row{
@@ -319,7 +321,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(124,92,252,0.12);
   border-color:rgba(124,92,252,0.4);
 }
-.lx-mode-icon{font-size:1.5rem;flex-shrink:0;}
+.lx-mode-icon{font-size:1.5rem;flex-shrink:0;width:2rem;text-align:center;}
 .lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
 .lx-mode-name{
   font-family:'Nunito',sans-serif;font-weight:900;
@@ -327,7 +329,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-mode-desc{
   font-family:'Space Mono',monospace;font-size:.4rem;
-  color:rgba(180,190,230,0.4);margin-top:2px;
+  color:rgba(210,220,255,0.7);margin-top:2px;
 }
 .lx-mode-arrow{font-size:1rem;color:rgba(124,92,252,0.5);flex-shrink:0;}
 
@@ -354,8 +356,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   letter-spacing:.12em;text-align:center;margin-bottom:2px;
 }
 .lx-modal-sub{
-  font-family:'Space Mono',monospace;font-size:.38rem;
-  color:rgba(180,190,230,0.4);text-align:center;margin-bottom:8px;
+  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);
+  color:rgba(200,215,255,0.7);text-align:center;margin-bottom:8px;
 }
 .lx-modal-box{
   background:rgba(255,255,255,0.03);
@@ -366,12 +368,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-bullet{
   display:flex;gap:8px;
-  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(180,190,230,0.6);
+  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);color:rgba(180,190,230,0.6);
 }
 .lx-bullet::before{content:'·';color:#7c5cfc;font-size:.6rem;flex-shrink:0;}
 .lx-section{
   font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;
-  letter-spacing:.18em;color:rgba(180,190,230,0.35);text-transform:uppercase;
+  letter-spacing:.18em;color:rgba(200,215,255,0.65);text-transform:uppercase;
   margin:8px 0 6px;align-self:flex-start;
 }
 .lx-stat-grid{
@@ -384,13 +386,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-stat-box label{
   display:block;font-family:'Space Mono',monospace;
-  font-size:.36rem;color:rgba(180,190,230,0.4);text-transform:uppercase;margin-bottom:3px;
+  font-size:.36rem;color:rgba(200,215,255,0.7);text-transform:uppercase;margin-bottom:3px;
 }
 .lx-stat-box b{font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:#a78bfa;}
 .lx-stat-box.gold b{color:#f5a623;}
 .lx-stat-box.green b{color:#4ade80;}
 .lx-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
-.lx-table th{font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(180,190,230,0.4);
+.lx-table th{font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(200,215,255,0.7);
   text-transform:uppercase;padding:3px 6px;text-align:left;border-bottom:1px solid rgba(124,92,252,0.15);}
 .lx-table td{font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;color:rgba(200,210,240,0.8);
   padding:5px 6px;border-bottom:1px solid rgba(124,92,252,0.1);}
@@ -401,7 +403,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-hall-word{font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#a78bfa;}
 .lx-hall-pts{font-family:'Space Mono',monospace;font-size:.45rem;color:#f5a623;font-weight:700;}
-.lx-hall-date{font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(180,190,230,0.35);}
+.lx-hall-date{font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(200,215,255,0.65);}
 
 /* Share score display */
 .lx-score-big{
@@ -415,7 +417,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-pip.low{background:rgba(124,92,252,0.1);box-shadow:none;}
 .lx-share-stats{display:flex;gap:16px;margin-bottom:12px;}
 .lx-share-stat{text-align:center;}
-.lx-share-stat span{display:block;font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(180,190,230,0.4);text-transform:uppercase;}
+.lx-share-stat span{display:block;font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(200,215,255,0.7);text-transform:uppercase;}
 .lx-share-stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:.82rem;color:#d0d0f0;}
 .lx-share-word{
   background:rgba(124,92,252,0.1);border:1px solid rgba(124,92,252,0.2);
@@ -475,9 +477,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .hs-wrap{margin-top:12px;width:min(280px,86vw);
   border-top:1px solid rgba(124,92,252,0.2);padding-top:10px;}
 .hs-wrap h4{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:900;
-  letter-spacing:.2em;color:rgba(180,190,230,0.35);text-transform:uppercase;text-align:center;margin-bottom:6px;}
+  letter-spacing:.2em;color:rgba(200,215,255,0.65);text-transform:uppercase;text-align:center;margin-bottom:6px;}
 .hsr{display:flex;justify-content:space-between;font-size:.56rem;
-  padding:3px 0;border-bottom:1px solid rgba(124,92,252,0.1);color:rgba(180,190,230,0.45);}
+  padding:3px 0;border-bottom:1px solid rgba(124,92,252,0.1);color:rgba(200,215,255,0.72);}
 .hsr.top{color:#a78bfa;font-weight:700;}
 .hsr .hs{color:#f5a623;font-weight:700;}
 
@@ -504,9 +506,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   letter-spacing:.12em;text-align:center;margin-bottom:2px;
 }
-.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:rgba(180,190,230,0.4);text-align:center;margin-bottom:8px;}
+.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:rgba(200,215,255,0.7);text-align:center;margin-bottom:8px;}
 .s-section{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:900;
-  letter-spacing:.18em;color:rgba(180,190,230,0.35);text-transform:uppercase;margin:7px 0 4px;}
+  letter-spacing:.18em;color:rgba(200,215,255,0.65);text-transform:uppercase;margin:7px 0 4px;}
 .s-row{display:flex;align-items:center;justify-content:space-between;
   padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.12);
   border-radius:10px;margin-bottom:5px;}
@@ -719,7 +721,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .md-last-label{
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
   letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(180,190,230,0.45);
+  color:rgba(200,215,255,0.72);
   padding:10px 14px 5px;
 }
 .md-last-stats{
@@ -740,7 +742,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .md-last-stat label{
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.6rem;
   letter-spacing:.08em;text-transform:uppercase;
-  color:rgba(180,190,230,0.45);
+  color:rgba(200,215,255,0.72);
 }
 .md-last-word{
   display:flex;align-items:center;gap:8px;
@@ -748,7 +750,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-word-label{
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
-  color:rgba(180,190,230,0.45);letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(200,215,255,0.72);letter-spacing:.06em;text-transform:uppercase;
   flex-shrink:0;
 }
 .md-last-word-val{
@@ -769,7 +771,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .hdr-btn:active{background:rgba(124,92,252,0.25);}
 .tip-row{
-  font-family:'Space Mono',monospace;font-size:.38rem;
+  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);
   color:rgba(180,190,230,0.55);line-height:2.1;
 }
 .tip-row b{color:#7c5cfc;}
@@ -883,7 +885,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   <div class="lx-sub">spell to survive</div>
 
   <div class="lx-mode-list">
-    <button class="lx-mode-btn" onclick="openModeDialog('classic')">
+    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(124,92,252,0.45);" onclick="openModeDialog('classic')">
       <span class="lx-mode-icon">📖</span>
       <span class="lx-mode-text">
         <span class="lx-mode-name">Classic</span>
@@ -891,7 +893,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       </span>
       <span class="lx-mode-arrow">›</span>
     </button>
-    <button class="lx-mode-btn" onclick="openModeDialog('arcade')">
+    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(255,59,107,0.45);" onclick="openModeDialog('arcade')">
       <span class="lx-mode-icon">⚡</span>
       <span class="lx-mode-text">
         <span class="lx-mode-name">Arcade</span>
@@ -899,7 +901,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       </span>
       <span class="lx-mode-arrow">›</span>
     </button>
-    <button class="lx-mode-btn" onclick="openModeDialog('timed')">
+    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(245,166,35,0.45);" onclick="openModeDialog('timed')">
       <span class="lx-mode-icon">⏱</span>
       <span class="lx-mode-text">
         <span class="lx-mode-name">Timed</span>
@@ -907,7 +909,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       </span>
       <span class="lx-mode-arrow">›</span>
     </button>
-    <button class="lx-mode-btn" onclick="openModeDialog('zen')">
+    <button class="lx-mode-btn" style="box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06),0 0 35px rgba(0,229,204,0.45);" onclick="openModeDialog('zen')">
       <span class="lx-mode-icon">🧘</span>
       <span class="lx-mode-text">
         <span class="lx-mode-name">Zen</span>
@@ -917,7 +919,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </button>
   </div>
 
-  <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled>↩ Continue last game</button></div>
+</div>
 
 <!-- ═══ MODE DIALOG ══════════════════════════════════════════════════ -->
 <div id="mode-dialog-backdrop" class="lx-screen">
@@ -953,6 +955,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="md-play-btn" onclick="confirmPlayMode()">
         <span class="md-play-icon">▶</span> Play Now
       </button>
+      <button class="intro-btn secondary" id="intro-continue-btn" onclick="introContinue()" disabled style="width:100%;margin-top:0;">↩ Continue last game</button>
       <button class="md-back-btn" onclick="closeModeDialog()">← Back</button>
     </div>
   </div>
@@ -2073,11 +2076,7 @@ function showIntro(){
     document.getElementById('s-best').textContent=bestScore.toLocaleString();
   }
 
-  if(hasContinue&&(savedState||meta)){
-    document.getElementById('intro-continue-btn').disabled=false;
-  } else {
-    document.getElementById('intro-continue-btn').disabled=true;
-  }
+  // Continue button visibility handled in openModeDialog (zen only)
 
   document.getElementById('intro-screen').classList.add('open');
 }
@@ -2268,6 +2267,12 @@ function openModeDialog(mode){
   } else {
     lastEl.style.display='none';
   }
+  // Continue button — only for zen with a saved state
+  const contBtn = document.getElementById('intro-continue-btn');
+  const zenHasSave = mode === 'zen' && (savedState !== null || (typeof modeLastGame !== 'undefined' && modeLastGame['zen'] && modeLastGame['zen'].score > 0));
+  contBtn.style.display = zenHasSave ? 'block' : 'none';
+  contBtn.disabled = !zenHasSave;
+
   document.getElementById('mode-dialog-backdrop').classList.add('open');
   hapticLight();
 }
