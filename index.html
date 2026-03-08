@@ -67,8 +67,8 @@ body{
 }
 #lb-overlay.open{display:flex;}
 #lb-panel{
-  width:min(340px,94vw);
-  max-height:88vh;
+  width:min(380px,96vw);
+  max-height:92vh;
   overflow-y:auto;
   background:#0d0f20;
   border:1px solid rgba(124,92,252,0.25);
@@ -345,6 +345,75 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(10,12,28,0.9);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
+
+/* Level-up banner */
+#level-up-banner{
+  position:fixed;left:0;right:0;top:50%;transform:translateY(-50%);
+  z-index:450;pointer-events:none;
+  display:none;
+  text-align:center;
+  padding:16px 0;
+  background:linear-gradient(90deg,transparent,rgba(124,92,252,0.15) 20%,rgba(124,92,252,0.25) 50%,rgba(124,92,252,0.15) 80%,transparent);
+}
+#level-up-banner.show{
+  display:block;
+  animation:lvlBannerIn .3s cubic-bezier(.22,.68,0,1.2) forwards, lvlBannerOut .4s ease 1.2s forwards;
+}
+#level-up-banner .lvl-text{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:1.4rem;letter-spacing:.15em;
+  background:linear-gradient(135deg,#a78bfa,#00e5cc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 16px rgba(124,92,252,0.8));
+}
+@keyframes lvlBannerIn{0%{opacity:0;transform:translateY(-50%) scaleX(0.3);}100%{opacity:1;transform:translateY(-50%) scaleX(1);}}
+@keyframes lvlBannerOut{0%{opacity:1;}100%{opacity:0;transform:translateY(-60%);}}
+
+/* Danger pulsing glow on board */
+#cw.danger-pulse canvas:first-child{
+  animation:dangerPulse .8s ease-in-out infinite alternate;
+}
+@keyframes dangerPulse{
+  0%{box-shadow:0 0 30px rgba(255,50,80,0.15),0 8px 32px rgba(0,0,0,0.5),inset 0 0 20px rgba(255,50,80,0.05);}
+  100%{box-shadow:0 0 50px rgba(255,50,80,0.4),0 8px 32px rgba(0,0,0,0.5),inset 0 0 30px rgba(255,50,80,0.12);}
+}
+
+/* Next letter animation */
+.next-box.pop{
+  animation:nextPop .3s cubic-bezier(.22,.68,0,1.3);
+}
+@keyframes nextPop{
+  0%{transform:scale(0.5);opacity:0.3;}
+  60%{transform:scale(1.15);}
+  100%{transform:scale(1);opacity:1;}
+}
+
+/* Combo badge on board */
+#combo-badge{
+  position:absolute;top:6px;right:6px;
+  z-index:10;pointer-events:none;
+  display:none;
+  padding:3px 8px;
+  border-radius:8px;
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.7rem;letter-spacing:.06em;
+  color:#fff;
+  background:linear-gradient(135deg,#ff3b6b,#ff6b3b);
+  box-shadow:0 0 16px rgba(255,59,107,0.6),0 2px 4px rgba(0,0,0,0.3);
+  animation:comboPulse .6s ease-in-out infinite alternate;
+}
+#combo-badge.show{display:block;}
+@keyframes comboPulse{0%{transform:scale(1);}100%{transform:scale(1.08);box-shadow:0 0 24px rgba(255,59,107,0.8),0 2px 4px rgba(0,0,0,0.3);}}
+
+/* Word found cell glow */
+.word-glow{
+  position:absolute;pointer-events:none;border-radius:6px;
+  background:rgba(74,222,128,0.25);
+  border:2px solid rgba(74,222,128,0.6);
+  box-shadow:0 0 14px rgba(74,222,128,0.5);
+  animation:wordGlowFade .5s ease forwards;
+}
+@keyframes wordGlowFade{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.1);}}
 .tbtn{
   flex:1;height:58px;
   background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:14px;
@@ -699,7 +768,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* ── Settings / Pause panel ── */
 #settings-backdrop{
   position:fixed;inset:0;background:rgba(0,0,0,0.7);
-  display:none;z-index:200;align-items:center;justify-content:center;
+  display:none;z-index:400;align-items:center;justify-content:center;
   backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
 #settings-backdrop.open{display:flex;}
@@ -1200,7 +1269,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div class="panel"><label>Next</label><div class="next-box" id="next-box">?</div></div>
     <div class="panel" style="flex:1"><label>Words</label><div id="word-log"></div></div>
   </div>
-  <div id="cw"><div id="danger-bar"></div><canvas id="cv"></canvas><canvas id="particle-cv"></canvas></div>
+  <div id="cw"><div id="danger-bar"></div><div id="combo-badge">×2</div><canvas id="cv"></canvas><canvas id="particle-cv"></canvas></div>
+
+<!-- Level-up banner -->
+<div id="level-up-banner"><div class="lvl-text">LEVEL UP!</div></div>
   <div class="side">
     <div class="panel">
       <label>Dirs</label>
@@ -1268,12 +1340,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
     <!-- Mini leaderboard -->
     <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
-      <!-- Title row -->
-      <div style="text-align:center;padding-bottom:10px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:10px;">
+      <!-- Title -->
+      <div style="text-align:center;margin-bottom:10px;">
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
       </div>
-      <!-- Mode tabs -->
-      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:10px;">
+      <!-- Mode tabs — centered -->
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;">
         <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.56rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.56rem;padding:3px 7px;">Timed</button>
         <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.56rem;padding:3px 7px;">Zen</button>
@@ -1286,9 +1358,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
     <!-- Bottom nav -->
     <div style="display:flex;gap:10px;width:100%;">
-      <button onclick="document.getElementById('settings-backdrop').classList.add('open')" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
+      <button onclick="openHomeSettings()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
       <button onclick="document.getElementById('help-overlay').classList.add('open')" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">❓ How to Play</button>
-      <button onclick="document.getElementById('stats-overlay').classList.add('open');buildStats()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
+      <button onclick="openStats()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
     </div>
 
   </div>
@@ -1413,49 +1485,47 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ HOW TO PLAY ══════════════════════════════════════════════════ -->
 <div id="help-overlay" class="lx-screen" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="lx-modal" style="max-width:340px;">
-    <div class="lx-modal-title">❓ How to Play</div>
+  <div style="width:min(360px,94vw);display:flex;flex-direction:column;align-items:center;gap:12px;">
 
-    <div style="display:flex;flex-direction:column;gap:14px;width:100%;margin:10px 0 16px;">
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">How to Play</div>
 
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div style="font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;">🔤</div>
-        <div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;margin-bottom:2px;">Letters fall from the top</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.68rem;color:rgba(200,210,240,0.7);line-height:1.5;">One letter at a time drops into the grid. Use ◀ ▶ to move and ▼ to drop it into place.</div>
-        </div>
+    <!-- 2x3 grid of tip cards -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
+
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">🔤</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Move & Drop</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Use ◀ ▶ to move letters, ▼ to drop into place</div>
       </div>
 
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div style="font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;">📝</div>
-        <div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;margin-bottom:2px;">Spell words to clear rows</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.68rem;color:rgba(200,210,240,0.7);line-height:1.5;">Form valid words in any row — horizontal, vertical, or diagonal. Classic and Timed require 4+ letters. Zen allows 3+. Complete rows clear automatically.</div>
-        </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">📝</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Spell Words</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Form words in any direction — →  ↓  ↘  ↗</div>
       </div>
 
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div style="font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;">⚡</div>
-        <div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;margin-bottom:2px;">Combos & scoring</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.68rem;color:rgba(200,210,240,0.7);line-height:1.5;">Longer words score more. Clear multiple rows at once or chain clears to build combos for big bonus points.</div>
-        </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">✨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Clear Rows</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Complete rows with valid words to clear them</div>
       </div>
 
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div style="font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;">🎨</div>
-        <div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;margin-bottom:2px;">Letter colors</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.68rem;color:rgba(200,210,240,0.7);line-height:1.5;"><span style="color:#0077cc">■</span> Vowels &nbsp; <span style="color:#8822cc">■</span> Consonants &nbsp; <span style="color:#cc5500">■</span> Rare letters (high points!)</div>
-        </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">⚡</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Combos</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Chain clears for combo multipliers up to ×8</div>
       </div>
 
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div style="font-size:1.4rem;flex-shrink:0;width:36px;text-align:center;">💀</div>
-        <div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;margin-bottom:2px;">Don't let it stack up!</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.68rem;color:rgba(200,210,240,0.7);line-height:1.5;">If letters reach the top, it's game over. Clear rows faster to survive longer.</div>
-        </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">🎨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Letter Types</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;"><span style="color:#60bbff">■</span> Vowel <span style="color:#b09aff">■</span> Cons <span style="color:#ffaa44">■</span> Rare</div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:6px;">📏</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Word Length</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Classic & Timed: 4+ letters. Zen: 3+ letters</div>
       </div>
 
     </div>
@@ -1465,15 +1535,27 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ STATS SCREEN ════════════════════════════════════════════════ -->
-<div id="stats-overlay" class="lx-screen">
-  <div class="lx-modal">
-    <div class="lx-modal-title">📊 Stats</div>
-    <div class="lx-stat-grid" id="stats-grid"></div>
-    <div class="lx-section">Per Mode Best</div>
-    <table class="lx-table" id="mode-table"></table>
-    <div class="lx-section">🏆 Best Words</div>
-    <div id="hall-of-fame" style="width:100%"></div>
-    <button class="lx-btn lx-btn-ghost" style="width:100%;margin-top:6px;margin-bottom:0" onclick="closeStats()">Close</button>
+<div id="stats-overlay" class="lx-screen" onclick="if(event.target===this)closeStats()">
+  <div style="width:min(360px,94vw);display:flex;flex-direction:column;align-items:center;gap:10px;">
+
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Stats</div>
+
+    <!-- 2x4 stat cards -->
+    <div id="stats-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;"></div>
+
+    <!-- Mode bests -->
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:8px;">Best Per Mode</div>
+      <div id="mode-bests-row" style="display:flex;gap:8px;justify-content:center;"></div>
+    </div>
+
+    <!-- Best words -->
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:8px;">🏆 Best Words</div>
+      <div id="hall-of-fame" style="display:flex;flex-direction:column;gap:4px;"></div>
+    </div>
+
+    <button class="lx-btn lx-btn-ghost" style="width:100%" onclick="closeStats()">Close</button>
   </div>
 </div>
 
@@ -1583,7 +1665,16 @@ function initGrid(){grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));}
 function spawnFalling(){
   const l=nextLetter||drawL();
   nextLetter=drawL();
-  document.getElementById('next-box').textContent=nextLetter;
+  const nb=document.getElementById('next-box');
+  nb.textContent=nextLetter;
+  // Color-code the next letter preview
+  const nc=lc(nextLetter);
+  nb.style.borderColor=nc.stroke;
+  nb.style.color=nc.text;
+  nb.style.background=nc.fill;
+  nb.classList.remove('pop');
+  void nb.offsetWidth;
+  nb.classList.add('pop');
   falling={l,col:Math.floor(COLS/2),row:0};
   if(grid[0][falling.col]){
     if(gameMode==='zen'){
@@ -1731,6 +1822,7 @@ function checkWords(){
     playWord(res.word.length);hapticStrong();
     logWord(res.word,pts,res.dr,res.dc);
     showPopup(pts,res.cx,res.cy);
+    glowWordCells(res.cells);
     // Every scored word clears the entire row of every cell it touches
     res.cells.forEach(({r})=>rowsToClear.add(r));
   }
@@ -1759,7 +1851,10 @@ function checkWords(){
       lifetimeStats.totalLines+=rowsToClear.size;
       const prevLevel=level;
       level=Math.floor(lines/5)+1;
-      if(level>prevLevel) setTimeout(playLevelUp,150);
+      if(level>prevLevel){
+        setTimeout(playLevelUp,150);
+        showLevelUpBanner(level);
+      }
       updateSpeed();
       paused=false;
     },300);
@@ -1772,6 +1867,8 @@ function updateHUD(){
   document.getElementById('s-level').textContent=level;
   document.getElementById('s-lines').textContent=lines;
   document.getElementById('s-combo').textContent='×'+combo;
+  updateComboBadge();
+  updateDangerBar();
 }
 
 function dirArrow(dr,dc){
@@ -1855,6 +1952,45 @@ function flashCells(cells){
     el.style.width=CELL+'px';el.style.height=CELL+'px';
     cw.appendChild(el);setTimeout(()=>el.remove(),460);
   });
+}
+
+// Word found cell glow — highlights cells that formed a word
+function glowWordCells(cells){
+  const cw=document.getElementById('cw');
+  cells.forEach(({r,c},i)=>{
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='word-glow';
+      el.style.top=(r*CELL+2)+'px';el.style.left=(c*CELL+2)+'px';
+      el.style.width=(CELL-4)+'px';el.style.height=(CELL-4)+'px';
+      cw.appendChild(el);
+      setTimeout(()=>el.remove(),550);
+    },i*30);
+  });
+}
+
+// Level-up banner
+function showLevelUpBanner(lvl){
+  const el=document.getElementById('level-up-banner');
+  el.querySelector('.lvl-text').textContent='⚡ LEVEL '+lvl+' ⚡';
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+// Combo badge on board
+function updateComboBadge(){
+  const badge=document.getElementById('combo-badge');
+  if(combo>=2){
+    badge.textContent='×'+combo;
+    badge.classList.add('show');
+    // Scale up glow for higher combos
+    const intensity=Math.min(1,(combo-2)/6);
+    badge.style.boxShadow=`0 0 ${16+intensity*20}px rgba(255,59,107,${0.6+intensity*0.4}),0 2px 4px rgba(0,0,0,0.3)`;
+  } else {
+    badge.classList.remove('show');
+  }
 }
 
 // ── Particle System ────────────────────────────────────────────────────────
@@ -1995,6 +2131,12 @@ function draw(){
     let gr=falling.row;
     while(gr+1<ROWS&&!grid[gr+1][falling.col])gr++;
     if(gr!==falling.row)drawCell(falling.col*CELL,gr*CELL,falling.l,0.3,true);
+    // Drop trail effect — show fading afterimages above the piece
+    const trailLen=Math.min(falling.row, 3);
+    for(let t=1;t<=trailLen;t++){
+      const trailAlpha=0.12*(1-t/4);
+      drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,trailAlpha,true);
+    }
     drawCell(falling.col*CELL,falling.row*CELL,falling.l);
   }
 }
@@ -2026,12 +2168,19 @@ function updateDangerBar(){
   const h=getStackHeight();
   const pct=h/ROWS;
   const bar=document.getElementById('danger-bar');
+  const cw=document.getElementById('cw');
   if(pct>0.5){
     const intensity=Math.min(1,(pct-0.5)/0.4);
     const r=Math.round(85+170*intensity),g=Math.round(51-51*intensity),b=Math.round(238-238*intensity);
     bar.style.background=`rgba(${r},${g},${b},${0.4+intensity*0.6})`;
   } else {
     bar.style.background='transparent';
+  }
+  // Pulse the board border when stack is dangerously high
+  if(pct>0.7){
+    cw.classList.add('danger-pulse');
+  } else {
+    cw.classList.remove('danger-pulse');
   }
 }
 
@@ -2477,24 +2626,20 @@ function hapticMed(){haptic(30);}
 function hapticStrong(){haptic([20,10,20]);}
 
 // ── Toggle sound/haptic ────────────────────────────────────────────────────
-function toggleSound(){
-  soundOn=!soundOn;
-  const on=soundOn;
-  document.getElementById('btn-sound').textContent=on?'🔊':'🔇';
-  document.getElementById('btn-sound').classList.toggle('on',on);
-  document.getElementById('p-sound-btn').textContent=(on?'🔊':'🔇')+' Sound: '+(on?'ON':'OFF');
-  if(on)beep(440,0.1);
-}
-function toggleHaptic(){
-  hapticOn=!hapticOn;
-  const on=hapticOn;
-  document.getElementById('btn-haptic').textContent=on?'📳':'📴';
-  document.getElementById('btn-haptic').classList.toggle('on',on);
-  document.getElementById('p-haptic-btn').textContent=(on?'📳':'📴')+' Haptic: '+(on?'ON':'OFF');
-  if(on)haptic(25);
-}
+// (driven by checkbox in settings panel)
 
 // ── Pause / Settings ──────────────────────────────────────────────────────
+function openHomeSettings(){
+  // Show settings from home screen with adapted UI
+  document.getElementById('settings-panel').querySelector('h2').textContent='⚙️ SETTINGS';
+  document.getElementById('settings-panel').querySelector('.s-badge').style.display='none';
+  document.getElementById('settings-panel').querySelector('.s-btn.primary').style.display='none';
+  document.getElementById('settings-panel').querySelector('.s-btn.secondary').style.display='none';
+  // Show the stats button from settings
+  const statsBtn=document.getElementById('settings-panel').querySelectorAll('.s-btn.secondary');
+  statsBtn.forEach(b=>{if(b.textContent.includes('STATS'))b.style.display='';});
+  document.getElementById('settings-backdrop').classList.add('open');
+}
 function openSettings(){
   if(gameOver)return;
   paused=true;
@@ -2502,6 +2647,11 @@ function openSettings(){
   document.getElementById('p-level').textContent=level;
   document.getElementById('p-score').textContent=score.toLocaleString();
   document.getElementById('p-lines').textContent=lines;
+  // Restore game-mode panel state
+  document.getElementById('settings-panel').querySelector('h2').textContent='⏸ PAUSED';
+  document.getElementById('settings-panel').querySelector('.s-badge').style.display='';
+  document.getElementById('settings-panel').querySelector('.s-btn.primary').style.display='';
+  document.getElementById('settings-panel').querySelectorAll('.s-btn.secondary').forEach(b=>b.style.display='');
   document.getElementById('settings-backdrop').classList.add('open');
   playPause();hapticLight();
 }
@@ -2525,7 +2675,10 @@ function newGameFromSettings(){
 
 // Close backdrop on outside tap
 document.getElementById('settings-backdrop').addEventListener('click',function(e){
-  if(e.target===this)resumeGame();
+  if(e.target===this){
+    document.getElementById('settings-backdrop').classList.remove('open');
+    if(paused&&!gameOver)resumeGame();
+  }
 });
 
 // Toggle sound/haptic (now driven by checkbox)
@@ -2937,6 +3090,8 @@ function startGame(){
   document.getElementById('settings-backdrop').classList.remove('open');
   document.getElementById('btn-pause').textContent='⏸';
   document.getElementById('danger-bar').style.background='transparent';
+  document.getElementById('cw').classList.remove('danger-pulse');
+  document.getElementById('combo-badge').classList.remove('show');
   fillBag();initGrid();
   nextLetter=drawL();
   spawnFalling();
@@ -2992,25 +3147,42 @@ function openStats(){
   const sg=document.getElementById('stats-grid');
   const avgScore=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalScore/lifetimeStats.gamesPlayed):0;
   const avgWords=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalWords/lifetimeStats.gamesPlayed):0;
-  sg.innerHTML=`
-    <div class="stat-box gold"><label>Games played</label><b>${lifetimeStats.gamesPlayed}</b></div>
-    <div class="stat-box"><label>Total score</label><b>${lifetimeStats.totalScore.toLocaleString()}</b></div>
-    <div class="stat-box green"><label>Total words</label><b>${lifetimeStats.totalWords}</b></div>
-    <div class="stat-box"><label>Total lines</label><b>${lifetimeStats.totalLines}</b></div>
-    <div class="stat-box"><label>Avg score/game</label><b>${avgScore.toLocaleString()}</b></div>
-    <div class="stat-box"><label>Avg words/game</label><b>${avgWords}</b></div>
-    <div class="stat-box gold"><label>Best combo</label><b>×${lifetimeStats.bestCombo}</b></div>
-    <div class="stat-box green"><label>Day streak</label><b>${lifetimeStats.streak} 🔥</b></div>
-  `;
-  const mt=document.getElementById('mode-table');
-  mt.innerHTML='<tr><th>Mode</th><th>Best Score</th></tr>'+
-    Object.entries(modeBests).map(([m,s])=>{
-      const cfg=MODE_CONFIG[m];
-      return '<tr><td>'+(cfg?cfg.icon+' '+cfg.label:m)+'</td><td>'+s.toLocaleString()+'</td></tr>';
-    }).join('');
+  const cardStyle='background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 10px;text-align:center;';
+  const labelStyle="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;color:rgba(200,215,255,0.55);text-transform:uppercase;margin-bottom:4px;";
+  const valBase="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;";
+  sg.innerHTML=
+    `<div style="${cardStyle}"><div style="${labelStyle}">Games</div><div style="${valBase}color:#f5a623;">${lifetimeStats.gamesPlayed}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Total Score</div><div style="${valBase}color:#a78bfa;">${lifetimeStats.totalScore.toLocaleString()}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Words Found</div><div style="${valBase}color:#4ade80;">${lifetimeStats.totalWords}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Lines Cleared</div><div style="${valBase}color:#60bbff;">${lifetimeStats.totalLines}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Avg Score</div><div style="${valBase}color:#a78bfa;">${avgScore.toLocaleString()}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Avg Words</div><div style="${valBase}color:#4ade80;">${avgWords}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Best Combo</div><div style="${valBase}color:#ff3b6b;">×${lifetimeStats.bestCombo}</div></div>`+
+    `<div style="${cardStyle}"><div style="${labelStyle}">Day Streak</div><div style="${valBase}color:#f5a623;">${lifetimeStats.streak} 🔥</div></div>`;
+
+  // Mode bests row
+  const mbr=document.getElementById('mode-bests-row');
+  mbr.innerHTML=Object.entries(modeBests).map(([m,s])=>{
+    const cfg=MODE_CONFIG[m];
+    return `<div style="flex:1;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.15);border-radius:10px;padding:8px 6px;">
+      <div style="font-size:1rem;margin-bottom:2px;">${cfg?cfg.icon:'🎮'}</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#a78bfa;">${s.toLocaleString()}</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,215,255,0.5);">${cfg?cfg.label:m}</div>
+    </div>`;
+  }).join('');
+
+  // Hall of fame
   const hof=document.getElementById('hall-of-fame');
-  if(!hallOfFame.length){hof.innerHTML='<div style="font-family:Space Mono,monospace;font-size:.48rem;color:#aabbdd;text-align:center;padding:10px">No words yet — play some games!</div>';}
-  else{hof.innerHTML=hallOfFame.map(e=>'<div class="hall-entry"><span class="hall-word">'+e.word+'</span><span class="hall-pts">+'+e.pts+'</span><span class="hall-date">'+(e.date||'')+'</span></div>').join('');}
+  if(!hallOfFame.length){
+    hof.innerHTML='<div style="font-family:Nunito,sans-serif;font-size:.6rem;color:rgba(180,190,230,0.4);text-align:center;padding:6px;">No words yet — play some games!</div>';
+  } else {
+    hof.innerHTML=hallOfFame.map(e=>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.12);border-radius:8px;">
+        <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;color:#a78bfa;">${e.word}</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.5rem;color:#f5a623;font-weight:700;">+${e.pts}</span>
+      </div>`
+    ).join('');
+  }
   document.getElementById('stats-overlay').classList.add('open');
 }
 function closeStats(e){
