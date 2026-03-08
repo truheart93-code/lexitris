@@ -461,7 +461,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-sub{
   font-family:'Space Mono',monospace;
   font-size:.52rem;letter-spacing:.32em;
-  color:rgba(200,215,255,0.7);margin-bottom:28px;text-transform:uppercase;
+  color:rgba(200,215,255,0.7);margin-bottom:0;text-transform:uppercase;
 }
 
 /* Card — frosted dark glass */
@@ -1212,69 +1212,67 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:20px 20px 32px;">
-  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:12px;align-items:center;padding-top:8px;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:center;overflow:hidden;padding:0 20px;">
+  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:10px;align-items:center;">
 
     <!-- Logo -->
-    <div style="text-align:center;margin-bottom:4px;">
-      <div class="lx-logo">LEXITRIS</div>
-      <div class="lx-sub">spell to survive</div>
+    <div style="text-align:center;">
+      <div class="lx-logo" style="font-size:clamp(1.8rem,8vw,3rem);margin-bottom:2px;">LEXITRIS</div>
+      <div class="lx-sub" style="margin-bottom:0;font-size:.45rem;letter-spacing:.28em;">spell to survive</div>
     </div>
 
-    <!-- Stats card -->
-    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
-      <!-- Best score — full width top row -->
-      <div style="text-align:center;padding-bottom:12px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:12px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.6rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Best Score</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:#f5a623;" id="home-stat-best">0</div>
-      </div>
-      <!-- Three stats below -->
-      <div style="display:flex;justify-content:space-around;">
-        <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#a78bfa;" id="home-stat-games">0</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Games</div>
+    <!-- Stats card — compact horizontal strip -->
+    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.2rem;color:#f5a623;" id="home-stat-best">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best</div>
         </div>
-        <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
-        <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#00e5cc;" id="home-stat-words">0</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Words</div>
+        <div style="width:1px;height:28px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:#a78bfa;" id="home-stat-games">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Games</div>
         </div>
-        <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
-        <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#4ade80;" id="home-stat-combo">×1</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best Combo</div>
+        <div style="width:1px;height:28px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:#00e5cc;" id="home-stat-words">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Words</div>
+        </div>
+        <div style="width:1px;height:28px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:#4ade80;" id="home-stat-combo">×1</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Combo</div>
         </div>
       </div>
     </div>
 
     <!-- Play button -->
-    <button onclick="showModeSelect()" style="width:100%;padding:18px;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
+    <button onclick="showModeSelect()" style="width:100%;padding:15px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
       ▶ &nbsp;Play
     </button>
 
-    <!-- Mini leaderboard -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
-      <!-- Title row -->
-      <div style="text-align:center;padding-bottom:10px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:10px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
+    <!-- Mini leaderboard — compact -->
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+      <!-- Title + tabs in one row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.62rem;letter-spacing:.08em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
+        <div style="display:flex;gap:4px;">
+          <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.48rem;padding:2px 6px;">Classic</button>
+          <button class="lb-tab" id="home-lb-tab-arcade" onclick="switchHomeLb('arcade')" style="font-size:.48rem;padding:2px 6px;">Arcade</button>
+          <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.48rem;padding:2px 6px;">Timed</button>
+          <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.48rem;padding:2px 6px;">Zen</button>
+        </div>
       </div>
-      <!-- Mode tabs -->
-      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:10px;">
-        <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.56rem;padding:3px 7px;">Classic</button>
-        <button class="lb-tab" id="home-lb-tab-arcade" onclick="switchHomeLb('arcade')" style="font-size:.56rem;padding:3px 7px;">Arcade</button>
-        <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.56rem;padding:3px 7px;">Timed</button>
-        <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.56rem;padding:3px 7px;">Zen</button>
+      <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
+        <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
       </div>
-      <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:12px;overflow:hidden;">
-        <div style="text-align:center;padding:14px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">Loading...</div>
-      </div>
-      <button onclick="openLeaderboard(0)" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;color:rgba(160,170,210,0.65);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
+      <button onclick="openLeaderboard(0)" style="width:100%;margin-top:8px;padding:8px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.6rem;color:rgba(160,170,210,0.55);background:transparent;border:1px solid rgba(124,92,252,0.12);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
     </div>
 
     <!-- Bottom nav -->
-    <div style="display:flex;gap:10px;width:100%;">
-      <button onclick="document.getElementById('settings-backdrop').classList.add('open')" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
-      <button onclick="document.getElementById('stats-overlay').classList.add('open');buildStats()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
+    <div style="display:flex;gap:8px;width:100%;">
+      <button onclick="document.getElementById('settings-backdrop').classList.add('open')" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
+      <button onclick="document.getElementById('stats-overlay').classList.add('open');buildStats()" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
     </div>
 
   </div>
@@ -3105,19 +3103,19 @@ function switchHomeLb(mode){
 async function loadHomeLb(mode){
   const list = document.getElementById('home-lb-list');
   if(!list) return;
-  list.innerHTML = '<div style="text-align:center;padding:16px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">Loading...</div>';
+  list.innerHTML = '<div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>';
   const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
   if(scores.length === 0){
-    list.innerHTML = '<div style="text-align:center;padding:16px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">No scores yet!</div>';
+    list.innerHTML = '<div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">No scores yet!</div>';
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
-  list.innerHTML = scores.slice(0,5).map((s,i) => {
+  list.innerHTML = scores.slice(0,3).map((s,i) => {
     const rank = rankIcons[i] || (i+1);
-    return '<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(124,92,252,0.08);">'
-      + '<span style="font-size:.8rem;width:20px;text-align:center;">' + rank + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.78rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.82rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
+    return '<div style="display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid rgba(124,92,252,0.08);">'
+      + '<span style="font-size:.7rem;width:18px;text-align:center;">' + rank + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.68rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.72rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
       + '</div>';
   }).join('');
 }
