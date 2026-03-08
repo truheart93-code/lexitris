@@ -3,3 +3,7 @@
   [headers.values]
     Content-Type = "application/json"
     Access-Control-Allow-Origin = "*"
+
+[build.environment]
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyC6oIR2S9qfgPOVpcviTfm23J8PI1AhBnY"
+  
