@@ -1010,48 +1010,63 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   75%{transform:translateX(-2px)}
 }
 </style>
-<!-- Firebase -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+<!-- Firebase via REST API (no external SDK needed) -->
+<script>
+(function(){
+  const PROJECT = "lexitris-84d9f";
+  const API_KEY = "AIzaSyC6oIR2S9qfgPOVpcviTfm23J8PI1AhBnY";
+  const BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT + "/databases/(default)/documents";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyC6oIR2S9qfgPOVpcviTfm23J8PI1AhBnY",
-    authDomain: "lexitris-84d9f.firebaseapp.com",
-    projectId: "lexitris-84d9f",
-    storageBucket: "lexitris-84d9f.firebasestorage.app",
-    messagingSenderId: "37849492936",
-    appId: "1:37849492936:web:13564e8c290f88c84764fd"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // Submit score to leaderboard
   window.submitLeaderboardScore = async function(name, score, mode) {
     try {
-      await addDoc(collection(db, "scores"), {
-        name: name.trim().substring(0,16),
-        score,
-        mode,
-        date: new Date().toISOString()
+      const body = {
+        fields: {
+          name:  { stringValue: name.trim().substring(0,16) },
+          score: { integerValue: String(score) },
+          mode:  { stringValue: mode },
+          date:  { stringValue: new Date().toISOString() }
+        }
+      };
+      await fetch(BASE + "/scores?key=" + API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
       });
     } catch(e) { console.error("Score submit failed:", e); }
   };
 
-  // Fetch top scores
   window.fetchLeaderboard = async function(mode) {
     try {
-      const q = query(
-        collection(db, "scores"),
-        where("mode", "==", mode),
-        orderBy("score", "desc"),
-        limit(10)
-      );
-      const snap = await getDocs(q);
-      return snap.docs.map(d => d.data());
+      const body = {
+        structuredQuery: {
+          from: [{ collectionId: "scores" }],
+          where: {
+            fieldFilter: {
+              field: { fieldPath: "mode" },
+              op: "EQUAL",
+              value: { stringValue: mode }
+            }
+          },
+          orderBy: [{ field: { fieldPath: "score" }, direction: "DESCENDING" }],
+          limit: 10
+        }
+      };
+      const res = await fetch(BASE + ":runQuery?key=" + API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const rows = await res.json();
+      return rows
+        .filter(r => r.document)
+        .map(r => ({
+          name:  r.document.fields.name.stringValue,
+          score: parseInt(r.document.fields.score.integerValue),
+          mode:  r.document.fields.mode.stringValue
+        }));
     } catch(e) { console.error("Fetch failed:", e); return []; }
   };
+})();
 </script>
 </head>
 <body>
