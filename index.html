@@ -1088,16 +1088,27 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
   // Resilient fetch that works in WebView — uses XMLHttpRequest fallback
   function apiFetch(url, options) {
-    const timeout = 8000;
+    const timeout = 10000;
+    options = options || {};
     return new Promise((resolve, reject) => {
       let done = false;
       const timer = setTimeout(() => {
         if (!done) { done = true; reject(new Error("Timeout")); }
       }, timeout);
 
-      fetch(url, options).then(res => {
-        if (!done) { done = true; clearTimeout(timer); resolve(res); }
-      }).catch(() => {
+      const makeResponse = (status, text) => ({
+        ok: status >= 200 && status < 300,
+        status: status,
+        json: () => { try { return Promise.resolve(JSON.parse(text)); } catch(e) { return Promise.reject(e); } },
+        text: () => Promise.resolve(text)
+      });
+
+      // Try fetch first
+      (typeof fetch !== 'undefined' ? fetch(url, options) : Promise.reject(new Error('no fetch')))
+        .then(res => {
+          if (!done) { done = true; clearTimeout(timer); resolve(res); }
+        }).catch(() => {
+        // Fallback to XHR
         try {
           const xhr = new XMLHttpRequest();
           xhr.open(options.method || "GET", url, true);
@@ -1107,12 +1118,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
           xhr.onload = function() {
             if (!done) {
               done = true; clearTimeout(timer);
-              resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status,
-                json: () => Promise.resolve(JSON.parse(xhr.responseText)) });
+              resolve(makeResponse(xhr.status, xhr.responseText));
             }
           };
           xhr.onerror = function() {
-            if (!done) { done = true; clearTimeout(timer); reject(new Error("XHR failed")); }
+            if (!done) { done = true; clearTimeout(timer); reject(new Error("Network error")); }
           };
           xhr.send(options.body || null);
         } catch(e) {
@@ -1169,7 +1179,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
           score: parseInt(r.document.fields.score.integerValue),
           mode:  r.document.fields.mode.stringValue
         }));
-    } catch(e) { console.error("Fetch failed:", e); return []; }
+    } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
   };
 })();
 </script>
@@ -3397,7 +3407,7 @@ async function loadLeaderboard(mode){
   list.innerHTML = '<div id="lb-loading">Loading...</div>';
   const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
   if(scores.length === 0){
-    list.innerHTML = '<div class="lb-empty">No scores yet — be the first!</div>';
+    list.innerHTML = '<div class="lb-empty">No scores yet — play and submit your score!</div>';
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
