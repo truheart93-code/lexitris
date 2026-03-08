@@ -1017,6 +1017,45 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   const API_KEY = "AIzaSyC6oIR2S9qfgPOVpcviTfm23J8PI1AhBnY";
   const BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT + "/databases/(default)/documents";
 
+  // Resilient fetch that works in WebView — uses XMLHttpRequest fallback
+  function apiFetch(url, options) {
+    const timeout = 8000;
+    // Try fetch first, fall back to XHR if it fails
+    return new Promise((resolve, reject) => {
+      let done = false;
+      const timer = setTimeout(() => {
+        if (!done) { done = true; reject(new Error("Timeout")); }
+      }, timeout);
+
+      // Attempt 1: fetch API
+      fetch(url, options).then(res => {
+        if (!done) { done = true; clearTimeout(timer); resolve(res); }
+      }).catch(() => {
+        // Attempt 2: XMLHttpRequest fallback (better WebView compat)
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open(options.method || "GET", url, true);
+          if (options.headers) {
+            Object.entries(options.headers).forEach(([k,v]) => xhr.setRequestHeader(k, v));
+          }
+          xhr.onload = function() {
+            if (!done) {
+              done = true; clearTimeout(timer);
+              resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status,
+                json: () => Promise.resolve(JSON.parse(xhr.responseText)) });
+            }
+          };
+          xhr.onerror = function() {
+            if (!done) { done = true; clearTimeout(timer); reject(new Error("XHR failed")); }
+          };
+          xhr.send(options.body || null);
+        } catch(e) {
+          if (!done) { done = true; clearTimeout(timer); reject(e); }
+        }
+      });
+    });
+  }
+
   window.submitLeaderboardScore = async function(name, score, mode) {
     try {
       const body = {
@@ -1027,7 +1066,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
           date:  { stringValue: new Date().toISOString() }
         }
       };
-      await fetch(BASE + "/scores?key=" + API_KEY, {
+      await apiFetch(BASE + "/scores?key=" + API_KEY, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -1051,7 +1090,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
           limit: 10
         }
       };
-      const res = await fetch(BASE + ":runQuery?key=" + API_KEY, {
+      const res = await apiFetch(BASE + ":runQuery?key=" + API_KEY, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -3305,7 +3344,7 @@ window.addEventListener('load',()=>{
 if('serviceWorker' in navigator){
   // Inline service worker as a blob so no separate sw.js file is needed
   const swCode = `
-    const CACHE = 'lexitris-v1';
+    const CACHE = 'lexitris-v2';
     const ASSETS = [location.href];
     self.addEventListener('install', e => {
       e.waitUntil(
@@ -3320,6 +3359,11 @@ if('serviceWorker' in navigator){
       );
     });
     self.addEventListener('fetch', e => {
+      const url = e.request.url;
+      // Never cache API calls (Firebase, analytics, etc.)
+      if (url.includes('googleapis.com') || url.includes('firestore') || url.includes('firebaseio') || e.request.method !== 'GET') {
+        return; // Let the browser handle it normally
+      }
       e.respondWith(
         caches.match(e.request).then(r => r || fetch(e.request).then(res => {
           const clone = res.clone();
