@@ -283,7 +283,7 @@ body{
 .red{color:#ff3b6b;}
 
 /* Main */
-#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:4px;overflow:hidden;min-height:0;}
+#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:4px;overflow:hidden;min-height:0;max-height:calc(100vh - var(--hdr-h,106px));}
 
 /* Side panels */
 .side{width:62px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
@@ -317,7 +317,7 @@ body{
 .wle .p{color:#f5a623;font-weight:700;}
 
 /* Canvas wrap */
-#cw{position:relative;flex-shrink:0;}
+#cw{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;align-self:stretch;}
 canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;box-shadow:0 0 30px rgba(124,92,252,0.12),0 8px 32px rgba(0,0,0,0.5);}
 #particle-cv{position:absolute;top:0;left:0;pointer-events:none;border:none;box-shadow:none;background:transparent;border-radius:8px;}
 
@@ -765,65 +765,106 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .hsr.top{color:#a78bfa;font-weight:700;}
 .hsr .hs{color:#f5a623;font-weight:700;}
 
-/* ── Settings / Pause panel ── */
+/* ── Settings / Pause overlay ── */
 #settings-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,0.7);
-  display:none;z-index:400;align-items:center;justify-content:center;
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  position:fixed;inset:0;
+  display:none;
+  z-index:400;
+  align-items:center;justify-content:center;
+  background:rgba(8,6,20,0.96);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:24px 20px;
 }
 #settings-backdrop.open{display:flex;}
 #settings-panel{
-  background:rgba(15,18,40,0.96);border:1px solid rgba(124,92,252,0.25);
-  border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.06);
-  padding:14px 14px 14px;width:min(300px,92vw);
-  max-height:92vh;overflow-y:auto;
-  display:flex;flex-direction:column;
-  animation:slideUp .22s ease;
+  width:min(340px,92vw);
+  max-height:calc(100vh - 48px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  animation:mdSlideUp .25s cubic-bezier(.22,.68,0,1.2);
 }
-@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 #settings-panel h2{
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.15rem;
-  background:linear-gradient(90deg,#a78bfa,#7c5cfc);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:.12em;text-align:center;margin-bottom:2px;
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.82rem;letter-spacing:.12em;
+  color:rgba(200,210,255,0.8);
+  text-transform:uppercase;
+  margin:0;
 }
-.s-badge{font-family:'Space Mono',monospace;font-size:.5rem;color:rgba(200,215,255,0.7);text-align:center;margin-bottom:8px;}
-.s-section{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:900;
-  letter-spacing:.18em;color:rgba(200,215,255,0.65);text-transform:uppercase;margin:7px 0 4px;}
-.s-row{display:flex;align-items:center;justify-content:space-between;
-  padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.12);
-  border-radius:10px;margin-bottom:5px;}
-.s-row-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;color:#d0d0f0;
-  display:flex;align-items:center;gap:8px;}
-.s-row-label span{font-size:1.1rem;}
-.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
-.toggle input{opacity:0;width:0;height:0;position:absolute;}
-.toggle-track{position:absolute;inset:0;background:rgba(255,255,255,0.1);border-radius:12px;cursor:pointer;transition:background .2s;}
-.toggle input:checked+.toggle-track{background:#7c5cfc;}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;
-  background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.4);pointer-events:none;}
-.toggle input:checked~.toggle-thumb{transform:translateX(20px);}
-.s-btn{width:100%;padding:10px;border:none;border-radius:10px;
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;
-  letter-spacing:.1em;cursor:pointer;margin-top:8px;
-  -webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;}
-.s-btn.primary{background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;box-shadow:0 4px 0 rgba(40,20,120,0.8);}
-.s-btn.primary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(40,20,120,0.8);}
-.s-btn.secondary{background:rgba(124,92,252,0.12);color:#a78bfa;border:1px solid rgba(124,92,252,0.2);box-shadow:0 4px 0 rgba(0,0,0,0.3);}
-.s-btn.secondary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
-.s-btn.danger{background:rgba(255,59,107,0.15);color:#ff3b6b;border:1px solid rgba(255,59,107,0.3);box-shadow:0 4px 0 rgba(0,0,0,0.3);}
-.s-btn.danger:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
-.s-btn.s-btn-remove-ads{
-  background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(255,59,107,0.15));
-  color:#f5a623;border:1px solid rgba(245,166,35,0.35);
+#settings-panel .s-badge{
+  font-family:'Space Mono',monospace;
+  font-size:.5rem;
+  color:rgba(200,215,255,0.72);
+  text-align:center;
+  margin:0 0 2px;
+}
+.s-card-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  width:100%;
+}
+.s-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(124,92,252,0.2);
+  border-radius:12px;
+  padding:11px 8px;
+  text-align:center;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.05);
+  transition:transform .08s,border-color .1s,background .1s;
+}
+.s-card:active{transform:translateY(2px);}
+.s-card-icon{font-size:1.15rem;margin-bottom:3px;}
+.s-card-title{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.62rem;line-height:1.15;
+  color:#a78bfa;margin-bottom:2px;
+}
+.s-card-sub{
+  font-family:'Nunito',sans-serif;font-weight:600;
+  font-size:.5rem;line-height:1.35;
+  color:rgba(200,210,240,0.65);
+}
+.s-card.gold{
+  border-color:rgba(245,166,35,0.25);
+}
+.s-card.gold .s-card-title{color:#f5a623;}
+.s-action-btn{
+  width:100%;
+  padding:10px 12px;
+  border:none;
+  border-radius:10px;
+  font-family:'Nunito',sans-serif;
+  font-weight:900;
+  font-size:.82rem;
+  letter-spacing:.08em;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s,box-shadow .08s;
+}
+.s-action-btn:active{transform:translateY(3px);}
+.s-action-btn.primary{
+  background:linear-gradient(135deg,#7c5cfc,#5533cc);
+  color:#fff;
+  box-shadow:0 4px 0 rgba(40,20,120,0.8);
+}
+.s-action-btn.secondary{
+  background:rgba(255,255,255,0.04);
+  color:#a78bfa;
+  border:1px solid rgba(124,92,252,0.22);
   box-shadow:0 4px 0 rgba(0,0,0,0.3);
 }
-.s-btn.s-btn-remove-ads:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
-.s-btn.s-btn-remove-ads.owned{
-  background:rgba(74,222,128,0.08);color:#4ade80;
-  border-color:rgba(74,222,128,0.25);pointer-events:none;
+.s-action-btn.danger{
+  background:rgba(255,59,107,0.14);
+  color:#ff3b6b;
+  border:1px solid rgba(255,59,107,0.28);
+  box-shadow:0 4px 0 rgba(0,0,0,0.3);
 }
+
 
 /* Keep old intro-btn alias for continue button */
 .intro-btn{
@@ -841,6 +882,177 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .intro-btn.secondary:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
 .intro-btn:disabled{opacity:.2;pointer-events:none;}
+
+/* Home quick actions */
+.home-quick-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.home-quick-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(124,92,252,0.2);
+  border-radius:14px;
+  padding:12px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:92px;
+  color:#d0d8f0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 6px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition:transform .08s,box-shadow .08s,border-color .1s,background .1s;
+}
+.home-quick-card:active{
+  transform:translateY(3px);
+  box-shadow:0 2px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.04);
+  background:rgba(124,92,252,0.1);
+  border-color:rgba(124,92,252,0.32);
+}
+.home-quick-icon{
+  font-size:1.15rem;
+  line-height:1;
+  filter:drop-shadow(0 0 10px rgba(124,92,252,0.24));
+}
+.home-quick-title{
+  font-family:'Nunito',sans-serif;
+  font-weight:900;
+  font-size:.58rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#e5e9ff;
+  text-align:center;
+}
+.home-quick-sub{
+  font-family:'Space Mono',monospace;
+  font-size:.4rem;
+  line-height:1.35;
+  color:rgba(180,190,230,0.62);
+  text-align:center;
+}
+@media(max-width:360px){
+  .home-quick-card{min-height:84px;padding:10px 8px;}
+  .home-quick-title{font-size:.54rem;}
+  .home-quick-sub{font-size:.38rem;}
+}
+
+/* Revised mode dialog */
+.md-card{
+  justify-content:flex-start;
+  padding:clamp(18px,4vh,34px) 0 max(18px, env(safe-area-inset-bottom));
+}
+.md-hero{
+  padding:10px 24px 14px;
+}
+.md-hero-icon{
+  font-size:2.3rem;
+  margin-bottom:8px;
+}
+.md-hero-name{
+  margin-bottom:6px;
+}
+.md-hero-tagline{
+  max-width:280px;
+  line-height:1.45;
+}
+.md-chips{
+  gap:10px;
+  padding:0 16px 18px;
+  max-width:380px;
+}
+.md-chip{
+  padding:10px 8px;
+  min-height:66px;
+  justify-content:center;
+}
+.md-chip-val{
+  font-size:.98rem;
+}
+.md-chip-label{
+  font-size:.48rem;
+  text-align:center;
+  line-height:1.25;
+}
+.md-last{
+  margin:0 16px 18px;
+  width:min(360px,calc(100% - 32px));
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.025));
+  box-shadow:0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.md-last-label{
+  padding:12px 16px 8px;
+  font-size:.56rem;
+  letter-spacing:.16em;
+}
+.md-last-hero{
+  text-align:center;
+  padding:2px 16px 12px;
+  border-bottom:1px solid rgba(124,92,252,0.1);
+}
+.md-last-kicker{
+  font-family:'Nunito',sans-serif;
+  font-weight:700;
+  font-size:.5rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(200,215,255,0.65);
+  margin-bottom:4px;
+}
+.md-last-main{
+  font-family:'Nunito',sans-serif;
+  font-weight:900;
+  font-size:1.28rem;
+  color:#f5a623;
+  letter-spacing:.04em;
+}
+.md-last-stats{
+  min-height:78px;
+}
+.md-last-stat{
+  padding:12px 8px 14px;
+}
+.md-last-stat span{
+  font-size:1rem;
+}
+.md-last-stat label{
+  font-size:.52rem;
+  text-align:center;
+  line-height:1.25;
+}
+.md-last-summary{
+  padding:12px 14px 14px;
+  border-top:1px solid rgba(124,92,252,0.08);
+  font-family:'Space Mono',monospace;
+  font-size:.44rem;
+  line-height:1.55;
+  text-align:center;
+  color:rgba(200,215,255,0.72);
+}
+.md-last-word{
+  padding:11px 14px 12px;
+  border-top:1px solid rgba(124,92,252,0.08);
+}
+.md-features{
+  display:none !important;
+}
+.md-actions{
+  gap:8px;
+  padding:0 16px 0;
+  width:min(360px,calc(100% - 32px));
+}
+.md-play-btn{
+  min-height:58px;
+}
+.md-back-btn,
+#intro-continue-btn{
+  min-height:50px;
+}
+
 /* ══ PREMIUM MODE DIALOG ═══════════════════════════════════════════ */
 .md-card{
   width:100%;
@@ -852,8 +1064,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   border:none;
   box-shadow:none;
   display:flex;flex-direction:column;
-  justify-content:flex-start;
-  padding:14px 0 max(14px, env(safe-area-inset-bottom));
+  justify-content:center;
 }
 @keyframes mdSlideUp{
   from{opacity:0;transform:translateY(28px) scale(.97)}
@@ -862,7 +1073,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Hero section */
 .md-hero{
-  position:relative;padding:16px 22px 12px;
+  position:relative;padding:20px 24px 16px;
   display:flex;flex-direction:column;align-items:center;
   overflow:hidden;
 }
@@ -900,7 +1111,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Stat chips */
 .md-chips{
   display:flex;gap:6px;justify-content:center;
-  padding:0 16px 10px;flex-wrap:wrap;
+  padding:0 16px 12px;flex-wrap:wrap;
   max-width:400px;align-self:center;width:100%;
 }
 .md-chip{
@@ -922,32 +1133,24 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   color:rgba(180,190,230,0.5);text-transform:uppercase;
 }
 
-/* Compact feature list to fill mode screen without scrolling */
+/* Feature list — hidden by default, kept for compatibility */
 .md-features{
-  display:block;
-  width:calc(100% - 32px);
-  max-width:400px;
-  margin:0 auto 10px;
-  border:1px solid rgba(124,92,252,0.15);
-  border-radius:14px;
-  overflow:hidden;
-  background:rgba(255,255,255,0.03);
-  box-shadow:0 8px 24px rgba(0,0,0,0.18);
+  display:none;
 }
 .md-feature{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;
-  background:rgba(255,255,255,0.02);
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  background:rgba(255,255,255,0.025);
   border-bottom:1px solid rgba(124,92,252,0.08);
-  font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.68rem;
-  color:rgba(200,210,240,0.88);
-  line-height:1.3;
+  font-family:'Nunito',sans-serif;font-weight:600;
+  font-size:.78rem;
+  color:rgba(200,210,240,0.85);
+  line-height:1.4;
 }
 .md-feature:last-child{border-bottom:none;}
 .md-feature-icon{
-  font-size:.95rem;flex-shrink:0;
-  width:28px;height:28px;
+  font-size:1rem;flex-shrink:0;
+  width:30px;height:30px;
   display:flex;align-items:center;justify-content:center;
   background:rgba(124,92,252,0.12);
   border-radius:8px;
@@ -958,7 +1161,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .md-actions{
   display:flex;flex-direction:column;gap:6px;
   padding:0 16px 16px;
-  margin-top:4px;
+  margin-top:auto;
   max-width:400px;
   width:100%;
   align-self:center;
@@ -1002,7 +1205,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Last game section inside mode dialog */
 .md-last{
-  margin:0 16px 10px;
+  margin:0 16px 14px;
   border-radius:14px;overflow:hidden;
   border:1px solid rgba(124,92,252,0.15);
   background:rgba(255,255,255,0.025);
@@ -1246,36 +1449,40 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- Settings / Pause backdrop -->
-<div id="settings-backdrop">
+<div id="settings-backdrop" onclick="if(event.target===this)resumeGame()">
   <div id="settings-panel">
-    <h2>⏸ PAUSED</h2>
+    <h2>⏸ Paused</h2>
     <div class="s-badge">Level <span id="p-level">1</span> &nbsp;·&nbsp; Score <span id="p-score">0</span> &nbsp;·&nbsp; Lines <span id="p-lines">0</span></div>
 
-    <div class="s-section">Settings</div>
+    <div class="s-card-grid">
+      <button class="s-card" id="game-sound-card" onclick="toggleSound()">
+        <div class="s-card-icon" id="game-sound-icon">🔊</div>
+        <div class="s-card-title">Sound</div>
+        <div class="s-card-sub" id="game-sound-text">On</div>
+      </button>
 
-    <div class="s-row">
-      <div class="s-row-label"><span>🔊</span> Sound</div>
-      <label class="toggle">
-        <input type="checkbox" id="tog-sound" checked onchange="toggleSound()">
-        <div class="toggle-track"></div>
-        <div class="toggle-thumb"></div>
-      </label>
+      <button class="s-card" id="game-haptic-card" onclick="toggleHaptic()">
+        <div class="s-card-icon" id="game-haptic-icon">📳</div>
+        <div class="s-card-title">Haptics</div>
+        <div class="s-card-sub" id="game-haptic-text">On</div>
+      </button>
+
+      <button class="s-card" onclick="openStatsFromSettings()">
+        <div class="s-card-icon">📊</div>
+        <div class="s-card-title">Stats</div>
+        <div class="s-card-sub">Lifetime progress</div>
+      </button>
+
+      <button class="s-card gold" id="btn-remove-ads" onclick="purchaseRemoveAds()">
+        <div class="s-card-icon">✨</div>
+        <div class="s-card-title">Remove Ads</div>
+        <div class="s-card-sub" id="game-remove-ads-text">$0.99 one-time</div>
+      </button>
     </div>
 
-    <div class="s-row">
-      <div class="s-row-label"><span>📳</span> Haptics</div>
-      <label class="toggle">
-        <input type="checkbox" id="tog-haptic" checked onchange="toggleHaptic()">
-        <div class="toggle-track"></div>
-        <div class="toggle-thumb"></div>
-      </label>
-    </div>
-
-    <hr class="s-divider">
-    <button class="s-btn primary" onclick="resumeGame()">▶ RESUME</button>
-    <button class="s-btn secondary" onclick="newGameFromSettings()">↺ NEW GAME</button>
-    <button class="s-btn secondary" onclick="openStats()">📊 STATS</button>
-    <button class="s-btn s-btn-remove-ads" id="btn-remove-ads" onclick="purchaseRemoveAds()">✨ Remove Ads</button>
+    <button class="s-action-btn primary" onclick="resumeGame()">▶ Resume</button>
+    <button class="s-action-btn danger" onclick="newGameFromSettings()">↺ New Game</button>
+    <button class="s-action-btn secondary" onclick="resumeGame()">Close</button>
   </div>
 </div>
 
@@ -1367,11 +1574,23 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button onclick="openLeaderboard(0)" style="width:100%;margin-top:8px;padding:8px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.65);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
     </div>
 
-    <!-- Bottom nav -->
-    <div style="display:flex;gap:8px;width:100%;">
-      <button onclick="openHomeSettings()" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
-      <button onclick="document.getElementById('help-overlay').classList.add('open')" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">❓ How to Play</button>
-      <button onclick="openStats()" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
+    <!-- Quick action cards -->
+    <div class="home-quick-grid">
+      <button class="home-quick-card" onclick="openHomeSettings()">
+        <div class="home-quick-icon">⚙️</div>
+        <div class="home-quick-title">Settings</div>
+        <div class="home-quick-sub">Sound, haptics, ads</div>
+      </button>
+      <button class="home-quick-card" onclick="document.getElementById('help-overlay').classList.add('open')">
+        <div class="home-quick-icon">❓</div>
+        <div class="home-quick-title">How to Play</div>
+        <div class="home-quick-sub">Learn the rules</div>
+      </button>
+      <button class="home-quick-card" onclick="openStats()">
+        <div class="home-quick-icon">📊</div>
+        <div class="home-quick-title">Stats</div>
+        <div class="home-quick-sub">Lifetime progress</div>
+      </button>
     </div>
 
   </div>
@@ -1414,22 +1633,21 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
     <!-- Stat chips -->
     <div class="md-chips" id="md-chips"></div>
-    <!-- Last game for this mode -->
-    <div class="md-last" id="md-last" style="display:none">
-      <div class="md-last-label" id="md-last-label">Last Game</div>
-      <!-- Best score — own row -->
-      <div style="text-align:center;padding:6px 14px 8px;border-bottom:1px solid rgba(124,92,252,0.1);">
-        <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,215,255,0.65);">Best</span><br>
-        <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;color:#f5a623;" id="md-last-best">0</span>
+    <!-- Last game / mode preview -->
+    <div class="md-last" id="md-last">
+      <div class="md-last-label" id="md-last-label">Mode Preview</div>
+      <div class="md-last-hero">
+        <div class="md-last-kicker" id="md-last-kicker">Pace</div>
+        <div class="md-last-main" id="md-last-best">∞</div>
       </div>
-      <!-- Score / Level / Lines row -->
       <div class="md-last-stats">
-        <div class="md-last-stat"><span id="md-last-score">0</span><label id="md-last-score-label">Score</label></div>
-        <div class="md-last-stat"><span id="md-last-level">1</span><label id="md-last-level-label">Level</label></div>
-        <div class="md-last-stat"><span id="md-last-lines">0</span><label id="md-last-lines-label">Lines</label></div>
+        <div class="md-last-stat"><span id="md-last-score">4+</span><label id="md-last-score-label">Min Letters</label></div>
+        <div class="md-last-stat"><span id="md-last-level">4</span><label id="md-last-level-label">Directions</label></div>
+        <div class="md-last-stat"><span id="md-last-lines">∞</span><label id="md-last-lines-label">Run Length</label></div>
       </div>
+      <div class="md-last-summary" id="md-last-summary">Find words, clear lines, and keep the board alive.</div>
       <div class="md-last-word" id="md-last-word" style="display:none">
-        <span class="md-last-word-label" id="md-last-word-label">Best word</span>
+        <span class="md-last-word-label">Best word</span>
         <span class="md-last-word-val" id="md-last-word-val"></span>
         <span class="md-last-word-pts" id="md-last-word-pts"></span>
       </div>
@@ -1491,6 +1709,39 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="lx-share-btn p" onclick="doShare()">📤 Share</button>
       <button class="lx-share-btn g" onclick="closeShare()">Close</button>
     </div>
+  </div>
+</div>
+
+
+<!-- ═══ HOME SETTINGS ═══════════════════════════════════════════════ -->
+<div id="home-settings-overlay" class="lx-screen" onclick="if(event.target===this)closeHomeSettings()">
+  <div style="width:min(340px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
+
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Settings</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
+
+      <button id="home-sound-card" onclick="toggleSoundFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-sound-icon">🔊</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Sound</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-sound-text">On</div>
+      </button>
+
+      <button id="home-haptic-card" onclick="toggleHapticFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-haptic-icon">📳</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Haptics</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-haptic-text">On</div>
+      </button>
+
+      <button onclick="purchaseRemoveAds();syncHomeSettingsUI();" style="background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#f5a623;margin-bottom:2px;">Remove Ads</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-remove-ads-text">$0.99 one-time</div>
+      </button>
+
+    </div>
+
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeHomeSettings()">Close</button>
   </div>
 </div>
 
@@ -1614,22 +1865,18 @@ const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
 
 function calcCell(){
-  // Use exact measured heights of chrome elements
   const hdrH=document.getElementById('hdr').offsetHeight||48;
   const tbarH=document.getElementById('tbar').offsetHeight||58;
   const timerEl=document.getElementById('timer-bar-wrap');
   const timerH=(timerEl&&timerEl.style.display!=='none')?timerEl.offsetHeight:0;
-  // Available height: fill everything between header and touch bar
-  const adBannerH=60; // reserve space for ad banner at bottom
+  // Only reserve ad space if ads are actually showing
+  const adBannerH=0;
   const avH=window.innerHeight-hdrH-tbarH-timerH-adBannerH-8;
-  // Cell size driven by height first
   const cellByH=Math.floor(avH/ROWS);
-  // Available width: screen minus both side panels
   const sideEls=[...document.querySelectorAll('#main .side')].filter(s=>s.offsetParent!==null);
   const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
   const avW=window.innerWidth-sideW-8;
   const cellByW=Math.floor(avW/COLS);
-  // Take height-driven size, but don't exceed width constraint
   return Math.max(28,Math.min(cellByH,cellByW));
 }
 let CELL=calcCell();
@@ -2639,17 +2886,82 @@ function hapticStrong(){haptic([20,10,20]);}
 // (driven by checkbox in settings panel)
 
 // ── Pause / Settings ──────────────────────────────────────────────────────
-function openHomeSettings(){
-  // Show settings from home screen with adapted UI
-  document.getElementById('settings-panel').querySelector('h2').textContent='⚙️ SETTINGS';
-  document.getElementById('settings-panel').querySelector('.s-badge').style.display='none';
-  document.getElementById('settings-panel').querySelector('.s-btn.primary').style.display='none';
-  document.getElementById('settings-panel').querySelector('.s-btn.secondary').style.display='none';
-  // Show the stats button from settings
-  const statsBtn=document.getElementById('settings-panel').querySelectorAll('.s-btn.secondary');
-  statsBtn.forEach(b=>{if(b.textContent.includes('STATS'))b.style.display='';});
-  document.getElementById('settings-backdrop').classList.add('open');
+function syncHomeSettingsUI(){
+  const soundText=document.getElementById('home-sound-text');
+  const soundIcon=document.getElementById('home-sound-icon');
+  const soundCard=document.getElementById('home-sound-card');
+  const hapticText=document.getElementById('home-haptic-text');
+  const hapticIcon=document.getElementById('home-haptic-icon');
+  const hapticCard=document.getElementById('home-haptic-card');
+  const adsText=document.getElementById('home-remove-ads-text');
+
+  if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
+  if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
+  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+
+  if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
+  if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
+  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+
+  if(adsText){
+    adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
+    adsText.style.color = adsRemoved ? '#4ade80' : 'rgba(200,210,240,0.65)';
+  }
 }
+function syncGameSettingsUI(){
+  const soundText=document.getElementById('game-sound-text');
+  const soundIcon=document.getElementById('game-sound-icon');
+  const soundCard=document.getElementById('game-sound-card');
+  const hapticText=document.getElementById('game-haptic-text');
+  const hapticIcon=document.getElementById('game-haptic-icon');
+  const hapticCard=document.getElementById('game-haptic-card');
+  const adsText=document.getElementById('game-remove-ads-text');
+  const adsBtn=document.getElementById('btn-remove-ads');
+
+  if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
+  if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
+  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+
+  if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
+  if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
+  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+
+  if(adsText){
+    adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
+    adsText.style.color = adsRemoved ? '#4ade80' : 'rgba(200,210,240,0.65)';
+  }
+  if(adsBtn){
+    adsBtn.style.borderColor = adsRemoved ? 'rgba(74,222,128,0.25)' : 'rgba(245,166,35,0.25)';
+  }
+}
+function syncAllSettingsUI(){
+  syncGameSettingsUI();
+}
+function openHomeSettings(){
+  syncAllSettingsUI();
+  document.getElementById('home-settings-overlay').classList.add('open');
+}
+function closeHomeSettings(){
+  document.getElementById('home-settings-overlay').classList.remove('open');
+}
+function setSoundEnabled(enabled){
+  soundOn=!!enabled;
+  if(soundOn)beep(440,0.1);
+  syncAllSettingsUI();
+}
+function setHapticEnabled(enabled){
+  hapticOn=!!enabled;
+  if(hapticOn)haptic(25);
+  syncAllSettingsUI();
+}
+function toggleSound(force){
+  setSoundEnabled(typeof force==='boolean' ? force : !soundOn);
+}
+function toggleHaptic(force){
+  setHapticEnabled(typeof force==='boolean' ? force : !hapticOn);
+}
+function toggleSoundFromHome(){ toggleSound(); }
+function toggleHapticFromHome(){ toggleHaptic(); }
 function openSettings(){
   if(gameOver)return;
   paused=true;
@@ -2657,11 +2969,7 @@ function openSettings(){
   document.getElementById('p-level').textContent=level;
   document.getElementById('p-score').textContent=score.toLocaleString();
   document.getElementById('p-lines').textContent=lines;
-  // Restore game-mode panel state
-  document.getElementById('settings-panel').querySelector('h2').textContent='⏸ PAUSED';
-  document.getElementById('settings-panel').querySelector('.s-badge').style.display='';
-  document.getElementById('settings-panel').querySelector('.s-btn.primary').style.display='';
-  document.getElementById('settings-panel').querySelectorAll('.s-btn.secondary').forEach(b=>b.style.display='');
+  syncGameSettingsUI();
   document.getElementById('settings-backdrop').classList.add('open');
   playPause();hapticLight();
 }
@@ -2673,6 +2981,10 @@ function resumeGame(){
   playPause();
 }
 function togglePause(){if(paused)resumeGame();else openSettings();}
+function openStatsFromSettings(){
+  document.getElementById('settings-backdrop').classList.remove('open');
+  document.getElementById('stats-overlay').classList.add('open');
+}
 function newGameFromSettings(){
   document.getElementById('settings-backdrop').classList.remove('open');
   stopMusic();
@@ -2691,16 +3003,6 @@ document.getElementById('settings-backdrop').addEventListener('click',function(e
   }
 });
 
-// Toggle sound/haptic (now driven by checkbox)
-function toggleSound(){
-  soundOn=document.getElementById('tog-sound').checked;
-  if(soundOn)beep(440,0.1);
-}
-function toggleHaptic(){
-  hapticOn=document.getElementById('tog-haptic').checked;
-  if(hapticOn)haptic(25);
-}
-
 // Wire pause button
 document.getElementById('btn-pause').addEventListener('click',togglePause);
 // Keyboard pause
@@ -2708,6 +3010,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key=
 
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
+  // ads removed
   gameOver=true;cancelAnimationFrame(animId);
   screenShake();
   savedState=null;
@@ -2994,11 +3297,45 @@ const MODE_META={
   }
 };
 
+const MODE_PREVIEW={
+  classic:{
+    kicker:'Run Length',
+    big:'∞',
+    stats:[
+      {val:'4+',label:'Min Letters'},
+      {val:'4',label:'Directions'},
+      {val:'↑',label:'Speed Curve'}
+    ],
+    summary:'The original climb: clear lines, build combos, and survive as the pace ramps up.'
+  },
+  timed:{
+    kicker:'Clock',
+    big:'3:00',
+    stats:[
+      {val:'4+',label:'Min Letters'},
+      {val:'⚡',label:'Score Race'},
+      {val:'Lv↑',label:'Speed Up'}
+    ],
+    summary:'Three minutes to score big. Push quick words, chain clears, and squeeze in one more drop.'
+  },
+  zen:{
+    kicker:'Mood',
+    big:'Calm',
+    stats:[
+      {val:'3+',label:'Min Letters'},
+      {val:'Slow',label:'Drop Speed'},
+      {val:'∞',label:'No KO'}
+    ],
+    summary:'Relaxed play with no game over. Take your time, explore the board, and hunt longer words.'
+  }
+};
+
 let pendingMode='classic';
 
 function openModeDialog(mode){
   pendingMode=mode;
   const m=MODE_META[mode];
+  const preview=MODE_PREVIEW[mode];
   // Hero
   const hero=document.getElementById('md-hero');
   hero.setAttribute('data-mode',mode);
@@ -3008,35 +3345,39 @@ function openModeDialog(mode){
   // Chips
   document.getElementById('md-chips').innerHTML=
     m.chips.map(c=>`<div class="md-chip"><div class="md-chip-val">${c.val}</div><div class="md-chip-label">${c.label}</div></div>`).join('');
-  // Features
-  document.getElementById('md-features').innerHTML=
-    m.features.map(f=>`<div class="md-feature"><div class="md-feature-icon">${f.icon}</div>${f.text}</div>`).join('');
+  // Feature list intentionally hidden for cleaner mobile layout
+  document.getElementById('md-features').innerHTML='';
   // Play button mode color
   const btn=document.querySelector('.md-play-btn');
   btn.setAttribute('data-mode',mode);
 
-  // Last game for this mode, or a compact preview when no run exists yet
+  // Shared preview / last-game card
   const last=modeLastGame[mode];
-  const lastEl=document.getElementById('md-last');
-  const lastLabel=document.getElementById('md-last-label');
-  const scoreLabel=document.getElementById('md-last-score-label');
-  const levelLabel=document.getElementById('md-last-level-label');
-  const linesLabel=document.getElementById('md-last-lines-label');
+  document.getElementById('md-last').style.display='block';
+
+  const labelEl=document.getElementById('md-last-label');
+  const kickerEl=document.getElementById('md-last-kicker');
+  const mainEl=document.getElementById('md-last-best');
+  const summaryEl=document.getElementById('md-last-summary');
+  const scoreEl=document.getElementById('md-last-score');
+  const levelEl=document.getElementById('md-last-level');
+  const linesEl=document.getElementById('md-last-lines');
+  const scoreLabelEl=document.getElementById('md-last-score-label');
+  const levelLabelEl=document.getElementById('md-last-level-label');
+  const linesLabelEl=document.getElementById('md-last-lines-label');
   const wordEl=document.getElementById('md-last-word');
-  const wordLabel=document.getElementById('md-last-word-label');
 
   if(last && last.score>0){
-    lastLabel.textContent='Last Game';
-    scoreLabel.textContent='Score';
-    levelLabel.textContent='Level';
-    linesLabel.textContent='Lines';
-    wordLabel.textContent='Best word';
-
-    document.getElementById('md-last-score').textContent=last.score.toLocaleString();
-    document.getElementById('md-last-level').textContent=last.level;
-    document.getElementById('md-last-lines').textContent=last.lines;
-    document.getElementById('md-last-best').textContent=(modeBests[mode]||0).toLocaleString();
-
+    labelEl.textContent='Last Game';
+    kickerEl.textContent='Best';
+    mainEl.textContent=(modeBests[mode]||0).toLocaleString();
+    scoreEl.textContent=last.score.toLocaleString();
+    levelEl.textContent=last.level;
+    linesEl.textContent=last.lines;
+    scoreLabelEl.textContent='Score';
+    levelLabelEl.textContent='Level';
+    linesLabelEl.textContent='Lines';
+    summaryEl.textContent='Jump back in with your latest run for '+m.name.toLowerCase()+' mode.';
     if(last.bestWord){
       document.getElementById('md-last-word-val').textContent=last.bestWord;
       document.getElementById('md-last-word-pts').textContent='+'+last.bestWordPts;
@@ -3044,30 +3385,20 @@ function openModeDialog(mode){
     } else {
       wordEl.style.display='none';
     }
-    lastEl.style.display='block';
   } else {
-    const previewByMode = {
-      classic: { best:'∞', score:'Endless', level:'4+', lines:'4', scoreLabel:'Play', levelLabel:'Min', linesLabel:'Dirs', word:'Speed scales', pts:'', wordLabel:'Flow' },
-      timed:   { best:'3:00', score:'Sprint',  level:'4+', lines:'Fast', scoreLabel:'Style', levelLabel:'Min', linesLabel:'Pace', word:'Beat the clock', pts:'', wordLabel:'Goal' },
-      zen:     { best:'Calm', score:'Relax',   level:'3+', lines:'Slow', scoreLabel:'Style', levelLabel:'Min', linesLabel:'Pace', word:'No game over', pts:'', wordLabel:'Vibe' }
-    };
-    const preview = previewByMode[mode] || previewByMode.classic;
-
-    lastLabel.textContent='Mode Preview';
-    scoreLabel.textContent=preview.scoreLabel;
-    levelLabel.textContent=preview.levelLabel;
-    linesLabel.textContent=preview.linesLabel;
-    wordLabel.textContent=preview.wordLabel;
-
-    document.getElementById('md-last-best').textContent=preview.best;
-    document.getElementById('md-last-score').textContent=preview.score;
-    document.getElementById('md-last-level').textContent=preview.level;
-    document.getElementById('md-last-lines').textContent=preview.lines;
-    document.getElementById('md-last-word-val').textContent=preview.word;
-    document.getElementById('md-last-word-pts').textContent=preview.pts;
-    wordEl.style.display='flex';
-    lastEl.style.display='block';
+    labelEl.textContent='Mode Preview';
+    kickerEl.textContent=preview.kicker;
+    mainEl.textContent=preview.big;
+    scoreEl.textContent=preview.stats[0].val;
+    levelEl.textContent=preview.stats[1].val;
+    linesEl.textContent=preview.stats[2].val;
+    scoreLabelEl.textContent=preview.stats[0].label;
+    levelLabelEl.textContent=preview.stats[1].label;
+    linesLabelEl.textContent=preview.stats[2].label;
+    summaryEl.textContent=preview.summary;
+    wordEl.style.display='none';
   }
+
   // Continue button — only for zen with a saved state
   const contBtn = document.getElementById('intro-continue-btn');
   const zenHasSave = mode === 'zen' && (savedState !== null || (typeof modeLastGame !== 'undefined' && modeLastGame['zen'] && modeLastGame['zen'].score > 0));
@@ -3280,14 +3611,16 @@ function loadAdsRemovedState(){
 
 function applyAdsRemovedUI(){
   const btn=document.getElementById('btn-remove-ads');
-  if(!btn)return;
-  if(adsRemoved){
-    btn.textContent='✅ Ads Removed';
-    btn.classList.add('owned');
-  } else {
-    btn.textContent='✨ Remove Ads';
-    btn.classList.remove('owned');
+  if(btn){
+    if(adsRemoved){
+      btn.textContent='✅ Ads Removed';
+      btn.classList.add('owned');
+    } else {
+      btn.textContent='✨ Remove Ads';
+      btn.classList.remove('owned');
+    }
   }
+  syncAllSettingsUI();
 }
 
 function purchaseRemoveAds(){
@@ -3568,42 +3901,27 @@ function showToast(msg){
   el._t=setTimeout(()=>el.style.opacity='0',2800);
 }
 
-// ── Game lifecycle hooks ──────────────────────────────────────────────────
-const _origEndGame=endGame;
-window.endGame=function(){
-  _origEndGame();
-  AdMob.hideBanner();
-  if(!adsRemoved){
-    AdMob._gamesBetweenInterstitials++;
-    if(AdMob._gamesBetweenInterstitials>=AdMob.INTERSTITIAL_EVERY){
-      AdMob._gamesBetweenInterstitials=0;
-      setTimeout(()=>AdMob.showInterstitial(),800);
-    }
-  }
-};
-
-const _origStartGame=startGame;
-window.startGame=function(){
-  _origStartGame();
-  AdMob.showBanner();
-};
-
-const _origShowIntro=showIntro;
-window.showIntro=function(){
-  _origShowIntro();
-  AdMob.hideBanner();
-};
+// ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
+// AdMob calls are inlined directly into endGame/startGame/showIntro below
 
 window.addEventListener('load',()=>{
-  document.getElementById('intro-screen').classList.remove('open');
-  fillBag();initGrid();draw();
-  loadAdsRemovedState();
-  // Ask native to re-check owned purchases (handles reinstalls / new devices)
-  try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
-  showIntro();
-  // Dismiss loading screen
-  const ls=document.getElementById('loading-screen');
-  if(ls) ls.style.display='none';
+  try {
+    document.getElementById('intro-screen').classList.remove('open');
+    fillBag();initGrid();draw();
+    loadAdsRemovedState();
+    try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
+    showIntro();
+    const ls=document.getElementById('loading-screen');
+    if(ls) ls.style.display='none';
+  } catch(err) {
+    // Show error on loading screen for debugging
+    const ls=document.getElementById('loading-screen');
+    if(ls){
+      ls.style.display='flex';
+      ls.innerHTML='<div style="color:#ff6b6b;font-family:monospace;padding:20px;font-size:.8rem;white-space:pre-wrap;max-width:90vw;">INIT ERROR:\n'+err.message+'\n\n'+err.stack+'</div>';
+    }
+    console.error('Init error:', err);
+  }
 });
 </script>
 <script>
