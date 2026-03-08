@@ -847,12 +847,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   height:100%;
   max-height:100vh;
   border-radius:0;
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow:hidden;
   background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
   border:none;
   box-shadow:none;
   display:flex;flex-direction:column;
+  justify-content:flex-start;
+  padding:14px 0 max(14px, env(safe-area-inset-bottom));
 }
 @keyframes mdSlideUp{
   from{opacity:0;transform:translateY(28px) scale(.97)}
@@ -861,7 +862,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Hero section */
 .md-hero{
-  position:relative;padding:36px 24px 24px;
+  position:relative;padding:16px 22px 12px;
   display:flex;flex-direction:column;align-items:center;
   overflow:hidden;
 }
@@ -871,9 +872,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   transition:background .4s;
 }
 .md-hero-icon{
-  font-size:2.8rem;
+  font-size:2.2rem;
   position:relative;z-index:1;
-  margin-bottom:10px;
+  margin-bottom:6px;
   filter:drop-shadow(0 0 16px currentColor);
   animation:iconFloat 3s ease-in-out infinite;
 }
@@ -883,14 +884,14 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-hero-name{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.6rem;letter-spacing:.12em;
+  font-size:1.4rem;letter-spacing:.12em;
   color:#fff;
   position:relative;z-index:1;
-  margin-bottom:6px;
+  margin-bottom:4px;
 }
 .md-hero-tagline{
   font-family:'Nunito',sans-serif;font-weight:600;
-  font-size:.78rem;letter-spacing:.05em;
+  font-size:.7rem;letter-spacing:.05em;
   color:rgba(255,255,255,0.5);
   text-align:center;
   position:relative;z-index:1;
@@ -898,51 +899,55 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Stat chips */
 .md-chips{
-  display:flex;gap:8px;justify-content:center;
-  padding:0 16px 16px;flex-wrap:wrap;
+  display:flex;gap:6px;justify-content:center;
+  padding:0 16px 10px;flex-wrap:wrap;
   max-width:400px;align-self:center;width:100%;
 }
 .md-chip{
   display:flex;flex-direction:column;align-items:center;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(124,92,252,0.18);
-  border-radius:12px;
-  padding:10px 14px;min-width:64px;
+  border-radius:10px;
+  padding:7px 10px;min-width:56px;
   flex:1;
 }
 .md-chip-val{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.05rem;color:#a78bfa;
-  line-height:1;margin-bottom:4px;
+  font-size:.9rem;color:#a78bfa;
+  line-height:1;margin-bottom:2px;
 }
 .md-chip-label{
   font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.62rem;letter-spacing:.08em;
+  font-size:.52rem;letter-spacing:.08em;
   color:rgba(180,190,230,0.5);text-transform:uppercase;
 }
 
-/* Feature list */
+/* Compact feature list to fill mode screen without scrolling */
 .md-features{
-  display:flex;flex-direction:column;gap:0;
-  margin:0 16px 16px;
-  border-radius:14px;overflow:hidden;
-  border:1px solid rgba(124,92,252,0.12);
-  max-width:400px;align-self:center;width:calc(100% - 32px);
+  display:block;
+  width:calc(100% - 32px);
+  max-width:400px;
+  margin:0 auto 10px;
+  border:1px solid rgba(124,92,252,0.15);
+  border-radius:14px;
+  overflow:hidden;
+  background:rgba(255,255,255,0.03);
+  box-shadow:0 8px 24px rgba(0,0,0,0.18);
 }
 .md-feature{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 14px;
-  background:rgba(255,255,255,0.025);
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;
+  background:rgba(255,255,255,0.02);
   border-bottom:1px solid rgba(124,92,252,0.08);
-  font-family:'Nunito',sans-serif;font-weight:600;
-  font-size:.78rem;
-  color:rgba(200,210,240,0.85);
-  line-height:1.4;
+  font-family:'Nunito',sans-serif;font-weight:700;
+  font-size:.68rem;
+  color:rgba(200,210,240,0.88);
+  line-height:1.3;
 }
 .md-feature:last-child{border-bottom:none;}
 .md-feature-icon{
-  font-size:1rem;flex-shrink:0;
-  width:30px;height:30px;
+  font-size:.95rem;flex-shrink:0;
+  width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
   background:rgba(124,92,252,0.12);
   border-radius:8px;
@@ -951,9 +956,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Action buttons */
 .md-actions{
-  display:flex;flex-direction:column;gap:8px;
-  padding:0 16px 20px;
-  margin-top:auto;
+  display:flex;flex-direction:column;gap:6px;
+  padding:0 16px 16px;
+  margin-top:4px;
   max-width:400px;
   width:100%;
   align-self:center;
@@ -997,7 +1002,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Last game section inside mode dialog */
 .md-last{
-  margin:0 16px 14px;
+  margin:0 16px 10px;
   border-radius:14px;overflow:hidden;
   border:1px solid rgba(124,92,252,0.15);
   background:rgba(255,255,255,0.025);
@@ -1308,69 +1313,65 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:20px 20px 32px;">
-  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:12px;align-items:center;padding-top:8px;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:12px 20px 20px;">
+  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:8px;align-items:center;padding-top:4px;">
 
     <!-- Logo -->
-    <div style="text-align:center;margin-bottom:4px;">
+    <div style="text-align:center;margin-bottom:0;">
       <div class="lx-logo">LEXITRIS</div>
       <div class="lx-sub">spell to survive</div>
     </div>
 
     <!-- Stats card -->
-    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
-      <!-- Best score — full width top row -->
-      <div style="text-align:center;padding-bottom:12px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:12px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.6rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Best Score</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:#f5a623;" id="home-stat-best">0</div>
+    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+      <div style="text-align:center;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;">Best Score</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;color:#f5a623;" id="home-stat-best">0</div>
       </div>
-      <!-- Three stats below -->
       <div style="display:flex;justify-content:space-around;">
         <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#a78bfa;" id="home-stat-games">0</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Games</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#a78bfa;" id="home-stat-games">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Games</div>
         </div>
         <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
         <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#00e5cc;" id="home-stat-words">0</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Words</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#00e5cc;" id="home-stat-words">0</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Words</div>
         </div>
         <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
         <div style="text-align:center;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.05rem;color:#4ade80;" id="home-stat-combo">×1</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best Combo</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#4ade80;" id="home-stat-combo">×1</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best Combo</div>
         </div>
       </div>
     </div>
 
     <!-- Play button -->
-    <button onclick="showModeSelect()" style="width:100%;padding:18px;border:none;border-radius:16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 6px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
+    <button onclick="showModeSelect()" style="width:100%;padding:16px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
       ▶ &nbsp;Play
     </button>
 
     <!-- Mini leaderboard -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:16px;padding:14px 16px;">
-      <!-- Title -->
-      <div style="text-align:center;margin-bottom:10px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+      <div style="text-align:center;margin-bottom:8px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
       </div>
-      <!-- Mode tabs — centered -->
-      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;">
-        <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.56rem;padding:3px 7px;">Classic</button>
-        <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.56rem;padding:3px 7px;">Timed</button>
-        <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.56rem;padding:3px 7px;">Zen</button>
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
+        <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
+        <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
+        <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.52rem;padding:3px 7px;">Zen</button>
       </div>
-      <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:12px;overflow:hidden;">
-        <div style="text-align:center;padding:14px;font-family:Nunito,sans-serif;font-size:.72rem;color:rgba(180,190,230,0.4);">Loading...</div>
+      <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
+        <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
       </div>
-      <button onclick="openLeaderboard(0)" style="width:100%;margin-top:10px;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;color:rgba(160,170,210,0.65);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
+      <button onclick="openLeaderboard(0)" style="width:100%;margin-top:8px;padding:8px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.65);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">View Full Leaderboard →</button>
     </div>
 
     <!-- Bottom nav -->
-    <div style="display:flex;gap:10px;width:100%;">
-      <button onclick="openHomeSettings()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
-      <button onclick="document.getElementById('help-overlay').classList.add('open')" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">❓ How to Play</button>
-      <button onclick="openStats()" style="flex:1;padding:12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
+    <div style="display:flex;gap:8px;width:100%;">
+      <button onclick="openHomeSettings()" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">⚙️ Settings</button>
+      <button onclick="document.getElementById('help-overlay').classList.add('open')" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">❓ How to Play</button>
+      <button onclick="openStats()" style="flex:1;padding:10px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(160,170,210,0.75);background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">📊 Stats</button>
     </div>
 
   </div>
@@ -1415,20 +1416,20 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div class="md-chips" id="md-chips"></div>
     <!-- Last game for this mode -->
     <div class="md-last" id="md-last" style="display:none">
-      <div class="md-last-label">Last Game</div>
+      <div class="md-last-label" id="md-last-label">Last Game</div>
       <!-- Best score — own row -->
-      <div style="text-align:center;padding:8px 14px 10px;border-bottom:1px solid rgba(124,92,252,0.1);">
-        <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,215,255,0.65);">Best</span><br>
-        <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;color:#f5a623;" id="md-last-best">0</span>
+      <div style="text-align:center;padding:6px 14px 8px;border-bottom:1px solid rgba(124,92,252,0.1);">
+        <span style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,215,255,0.65);">Best</span><br>
+        <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;color:#f5a623;" id="md-last-best">0</span>
       </div>
       <!-- Score / Level / Lines row -->
       <div class="md-last-stats">
-        <div class="md-last-stat"><span id="md-last-score">0</span><label>Score</label></div>
-        <div class="md-last-stat"><span id="md-last-level">1</span><label>Level</label></div>
-        <div class="md-last-stat"><span id="md-last-lines">0</span><label>Lines</label></div>
+        <div class="md-last-stat"><span id="md-last-score">0</span><label id="md-last-score-label">Score</label></div>
+        <div class="md-last-stat"><span id="md-last-level">1</span><label id="md-last-level-label">Level</label></div>
+        <div class="md-last-stat"><span id="md-last-lines">0</span><label id="md-last-lines-label">Lines</label></div>
       </div>
       <div class="md-last-word" id="md-last-word" style="display:none">
-        <span class="md-last-word-label">Best word</span>
+        <span class="md-last-word-label" id="md-last-word-label">Best word</span>
         <span class="md-last-word-val" id="md-last-word-val"></span>
         <span class="md-last-word-pts" id="md-last-word-pts"></span>
       </div>
@@ -1495,77 +1496,76 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ HOW TO PLAY ══════════════════════════════════════════════════ -->
 <div id="help-overlay" class="lx-screen" onclick="if(event.target===this)this.classList.remove('open')">
-  <div style="width:min(360px,94vw);display:flex;flex-direction:column;align-items:center;gap:12px;">
+  <div style="width:min(340px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
-    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">How to Play</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">How to Play</div>
 
-    <!-- 2x3 grid of tip cards -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">🔤</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Move & Drop</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Use ◀ ▶ to move letters, ▼ to drop into place</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">🔤</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Move & Drop</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;">◀ ▶ to move, ▼ to drop</div>
       </div>
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">📝</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Spell Words</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Form words in any direction — →  ↓  ↘  ↗</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">📝</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Spell Words</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;">Any direction: → ↓ ↘ ↗</div>
       </div>
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">✨</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Clear Rows</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Complete rows with valid words to clear them</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Clear Rows</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;">Words in a row clear it</div>
       </div>
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">⚡</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Combos</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Chain clears for combo multipliers up to ×8</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">⚡</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Combos</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;">Chain clears for up to ×8</div>
       </div>
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">🎨</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Letter Types</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;"><span style="color:#60bbff">■</span> Vowel <span style="color:#b09aff">■</span> Cons <span style="color:#ffaa44">■</span> Rare</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">🎨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Letter Types</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;"><span style="color:#60bbff">■</span> Vowel <span style="color:#b09aff">■</span> Cons <span style="color:#ffaa44">■</span> Rare</div>
       </div>
 
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:14px 12px;text-align:center;">
-        <div style="font-size:1.3rem;margin-bottom:6px;">📏</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;color:#a78bfa;margin-bottom:4px;">Word Length</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,240,0.65);line-height:1.5;">Classic & Timed: 4+ letters. Zen: 3+ letters</div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">📏</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Word Length</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;">Classic/Timed: 4+ · Zen: 3+</div>
       </div>
 
     </div>
 
-    <button class="lx-btn lx-btn-ghost" style="width:100%" onclick="document.getElementById('help-overlay').classList.remove('open')">Got it!</button>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="document.getElementById('help-overlay').classList.remove('open')">Got it!</button>
   </div>
 </div>
 
 <!-- ═══ STATS SCREEN ════════════════════════════════════════════════ -->
 <div id="stats-overlay" class="lx-screen" onclick="if(event.target===this)closeStats()">
-  <div style="width:min(360px,94vw);display:flex;flex-direction:column;align-items:center;gap:10px;">
+  <div style="width:min(340px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
-    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Stats</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Stats</div>
 
     <!-- 2x4 stat cards -->
-    <div id="stats-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;"></div>
+    <div id="stats-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5px;width:100%;"></div>
 
     <!-- Mode bests -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px;">
-      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:8px;">Best Per Mode</div>
-      <div id="mode-bests-row" style="display:flex;gap:8px;justify-content:center;"></div>
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:8px;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:6px;">Best Per Mode</div>
+      <div id="mode-bests-row" style="display:flex;gap:6px;justify-content:center;"></div>
     </div>
 
     <!-- Best words -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px;">
-      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:8px;">🏆 Best Words</div>
-      <div id="hall-of-fame" style="display:flex;flex-direction:column;gap:4px;"></div>
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:8px;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;letter-spacing:.12em;color:rgba(200,215,255,0.55);text-transform:uppercase;text-align:center;margin-bottom:6px;">🏆 Best Words</div>
+      <div id="hall-of-fame" style="display:flex;flex-direction:column;gap:3px;"></div>
     </div>
 
-    <button class="lx-btn lx-btn-ghost" style="width:100%" onclick="closeStats()">Close</button>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeStats()">Close</button>
   </div>
 </div>
 
@@ -3015,15 +3015,28 @@ function openModeDialog(mode){
   const btn=document.querySelector('.md-play-btn');
   btn.setAttribute('data-mode',mode);
 
-  // Last game for this mode
+  // Last game for this mode, or a compact preview when no run exists yet
   const last=modeLastGame[mode];
   const lastEl=document.getElementById('md-last');
+  const lastLabel=document.getElementById('md-last-label');
+  const scoreLabel=document.getElementById('md-last-score-label');
+  const levelLabel=document.getElementById('md-last-level-label');
+  const linesLabel=document.getElementById('md-last-lines-label');
+  const wordEl=document.getElementById('md-last-word');
+  const wordLabel=document.getElementById('md-last-word-label');
+
   if(last && last.score>0){
+    lastLabel.textContent='Last Game';
+    scoreLabel.textContent='Score';
+    levelLabel.textContent='Level';
+    linesLabel.textContent='Lines';
+    wordLabel.textContent='Best word';
+
     document.getElementById('md-last-score').textContent=last.score.toLocaleString();
     document.getElementById('md-last-level').textContent=last.level;
     document.getElementById('md-last-lines').textContent=last.lines;
     document.getElementById('md-last-best').textContent=(modeBests[mode]||0).toLocaleString();
-    const wordEl=document.getElementById('md-last-word');
+
     if(last.bestWord){
       document.getElementById('md-last-word-val').textContent=last.bestWord;
       document.getElementById('md-last-word-pts').textContent='+'+last.bestWordPts;
@@ -3033,7 +3046,27 @@ function openModeDialog(mode){
     }
     lastEl.style.display='block';
   } else {
-    lastEl.style.display='none';
+    const previewByMode = {
+      classic: { best:'∞', score:'Endless', level:'4+', lines:'4', scoreLabel:'Play', levelLabel:'Min', linesLabel:'Dirs', word:'Speed scales', pts:'', wordLabel:'Flow' },
+      timed:   { best:'3:00', score:'Sprint',  level:'4+', lines:'Fast', scoreLabel:'Style', levelLabel:'Min', linesLabel:'Pace', word:'Beat the clock', pts:'', wordLabel:'Goal' },
+      zen:     { best:'Calm', score:'Relax',   level:'3+', lines:'Slow', scoreLabel:'Style', levelLabel:'Min', linesLabel:'Pace', word:'No game over', pts:'', wordLabel:'Vibe' }
+    };
+    const preview = previewByMode[mode] || previewByMode.classic;
+
+    lastLabel.textContent='Mode Preview';
+    scoreLabel.textContent=preview.scoreLabel;
+    levelLabel.textContent=preview.levelLabel;
+    linesLabel.textContent=preview.linesLabel;
+    wordLabel.textContent=preview.wordLabel;
+
+    document.getElementById('md-last-best').textContent=preview.best;
+    document.getElementById('md-last-score').textContent=preview.score;
+    document.getElementById('md-last-level').textContent=preview.level;
+    document.getElementById('md-last-lines').textContent=preview.lines;
+    document.getElementById('md-last-word-val').textContent=preview.word;
+    document.getElementById('md-last-word-pts').textContent=preview.pts;
+    wordEl.style.display='flex';
+    lastEl.style.display='block';
   }
   // Continue button — only for zen with a saved state
   const contBtn = document.getElementById('intro-continue-btn');
@@ -3157,9 +3190,9 @@ function openStats(){
   const sg=document.getElementById('stats-grid');
   const avgScore=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalScore/lifetimeStats.gamesPlayed):0;
   const avgWords=lifetimeStats.gamesPlayed>0?Math.round(lifetimeStats.totalWords/lifetimeStats.gamesPlayed):0;
-  const cardStyle='background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 10px;text-align:center;';
-  const labelStyle="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;color:rgba(200,215,255,0.55);text-transform:uppercase;margin-bottom:4px;";
-  const valBase="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;";
+  const cardStyle='background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:10px;padding:8px 6px;text-align:center;';
+  const labelStyle="font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;color:rgba(200,215,255,0.55);text-transform:uppercase;margin-bottom:2px;";
+  const valBase="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;";
   sg.innerHTML=
     `<div style="${cardStyle}"><div style="${labelStyle}">Games</div><div style="${valBase}color:#f5a623;">${lifetimeStats.gamesPlayed}</div></div>`+
     `<div style="${cardStyle}"><div style="${labelStyle}">Total Score</div><div style="${valBase}color:#a78bfa;">${lifetimeStats.totalScore.toLocaleString()}</div></div>`+
@@ -3174,10 +3207,10 @@ function openStats(){
   const mbr=document.getElementById('mode-bests-row');
   mbr.innerHTML=Object.entries(modeBests).map(([m,s])=>{
     const cfg=MODE_CONFIG[m];
-    return `<div style="flex:1;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.15);border-radius:10px;padding:8px 6px;">
-      <div style="font-size:1rem;margin-bottom:2px;">${cfg?cfg.icon:'🎮'}</div>
-      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#a78bfa;">${s.toLocaleString()}</div>
-      <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,215,255,0.5);">${cfg?cfg.label:m}</div>
+    return `<div style="flex:1;text-align:center;background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.15);border-radius:10px;padding:6px 4px;">
+      <div style="font-size:.85rem;margin-bottom:1px;">${cfg?cfg.icon:'🎮'}</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;color:#a78bfa;">${s.toLocaleString()}</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.42rem;color:rgba(200,215,255,0.5);">${cfg?cfg.label:m}</div>
     </div>`;
   }).join('');
 
