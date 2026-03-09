@@ -2519,6 +2519,66 @@ document.addEventListener('keydown',e=>{
   else if(e.key.toLowerCase()==='r')startGame();
 });
 
+
+// ── Gamepad / Controller Support ─────────────────────────────────────────
+// Works for Xbox, PlayStation, and generic controllers
+// Buttons: A(0)=drop, B(1)=pause, Left(14)=left, Right(15)=right, Down(13)=softdrop
+// Left stick also works for movement
+let gpLastLeft=false, gpLastRight=false, gpLastDrop=false, gpLastPause=false;
+let gpRepeatLeft=null, gpRepeatRight=null;
+const GP_REPEAT_DELAY=180, GP_REPEAT_INTERVAL=90;
+
+function pollGamepad(){
+  const gpList=navigator.getGamepads?navigator.getGamepads():[];
+  const gp=Array.from(gpList).find(g=>g&&g.connected);
+  if(!gp){requestAnimationFrame(pollGamepad);return;}
+
+  const left  = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
+  const right = gp.buttons[15]?.pressed || gp.axes[0] >  0.5;
+  const down  = gp.buttons[13]?.pressed || gp.axes[1] >  0.5;
+  const dropBtn  = gp.buttons[0]?.pressed; // A
+  const pauseBtn = gp.buttons[1]?.pressed || gp.buttons[9]?.pressed; // B or Start
+
+  // Pause — on press only
+  if(pauseBtn && !gpLastPause) togglePause();
+  gpLastPause = pauseBtn;
+
+  // Drop (A button) — on press only
+  if(dropBtn && !gpLastDrop && !paused && !gameOver) drop();
+  gpLastDrop = dropBtn;
+
+  // Soft drop (down) — continuous
+  if(down && !paused && !gameOver) softDrop();
+
+  // Left — press + repeat
+  if(left && !gpLastLeft){
+    goLeft();
+    gpRepeatLeft=setTimeout(function rep(){goLeft();gpRepeatLeft=setTimeout(rep,GP_REPEAT_INTERVAL);},GP_REPEAT_DELAY);
+  } else if(!left){
+    clearTimeout(gpRepeatLeft); gpRepeatLeft=null;
+  }
+  gpLastLeft=left;
+
+  // Right — press + repeat
+  if(right && !gpLastRight){
+    goRight();
+    gpRepeatRight=setTimeout(function rep(){goRight();gpRepeatRight=setTimeout(rep,GP_REPEAT_INTERVAL);},GP_REPEAT_DELAY);
+  } else if(!right){
+    clearTimeout(gpRepeatRight); gpRepeatRight=null;
+  }
+  gpLastRight=right;
+
+  requestAnimationFrame(pollGamepad);
+}
+
+window.addEventListener('gamepadconnected', e=>{
+  console.log('Controller connected:', e.gamepad.id);
+  showToast('🎮 Controller connected!');
+  pollGamepad();
+});
+window.addEventListener('gamepaddisconnected', e=>{
+  showToast('🎮 Controller disconnected');
+});
 document.getElementById('btn-left').addEventListener('click',goLeft);
 document.getElementById('btn-right').addEventListener('click',goRight);
 document.getElementById('btn-drop').addEventListener('click',drop);
@@ -2657,185 +2717,104 @@ function makeHat(ac,t,master,vol=0.08){
   src.start(t);
 }
 
-// ── Lo-fi chord pads ──────────────────────────────────────────────────────
-// Detuned twin oscillators for that warm cassette chord sound
-function makeChordPad(ac,freqs,t,dur,master){
-  freqs.forEach(f=>{
-    [0,-4,4].forEach((detune,di)=>{  // 3 slightly detuned voices
-      const o=ac.createOscillator(),g=ac.createGain();
-      o.type='triangle';
-      o.frequency.value=f;
-      o.detune.value=detune;
-      const vol=di===0?0.18:0.07;
-      g.gain.setValueAtTime(0,t);
-      g.gain.linearRampToValueAtTime(vol,t+0.3);
-      g.gain.setValueAtTime(vol,t+dur-0.5);
-      g.gain.exponentialRampToValueAtTime(0.001,t+dur);
-      o.connect(g);g.connect(master);
-      o.start(t);o.stop(t+dur+0.05);
-    });
-  });
-}
+// ── Dark Tension Music ───────────────────────────────────────────────────
+// Minor key drone, slow pulse, creeping bassline. One style only.
+let musicOn = true, musicStarted = false;
 
-// ── Lo-fi bassline ────────────────────────────────────────────────────────
-function makeBass(ac,freq,t,dur,master){
-  const o=ac.createOscillator(),g=ac.createGain();
-  const filt=ac.createBiquadFilter();filt.type='lowpass';filt.frequency.value=280;
-  o.type='sawtooth';o.frequency.value=freq;
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.4,t+0.02);
-  g.gain.setValueAtTime(0.35,t+dur-0.05);g.gain.exponentialRampToValueAtTime(0.001,t+dur);
-  o.connect(filt);filt.connect(g);g.connect(master);
-  o.start(t);o.stop(t+dur+0.05);
-}
-
-// ── Main loop ─────────────────────────────────────────────────────────────
-// 4/4 at ~72bpm. Each bar = 4 beats. One bar = ~3.33s
-let musicNodes=[], musicOn=true, musicStarted=false, musicStyle='chill';
-let loopTimer=null;
-
-const LOFI_CHORDS=[
-  {freqs:[110,138.6,165,220],   bass:55},   // Am7
-  {freqs:[87.3,110,130.8,174.6],bass:43.7}, // Fmaj7
-  {freqs:[130.8,164.8,196,261.6],bass:65.4},// Cmaj7
-  {freqs:[98,123.5,146.8,196],  bass:49},   // G
+const DARK_CHORDS = [
+  [55.0, 65.4, 82.4],   // Am — A2 E3 B3
+  [49.0, 58.3, 73.4],   // Em — E2 B2 D3
+  [51.9, 61.7, 77.8],   // Fm — F2 C3 Ab3
+  [49.0, 58.3, 69.3],   // Em — E2 B2 G3
 ];
-let lofiChord=0;
+let darkChord = 0, darkTimer = null;
 
-function scheduleLofiBar(startT){
-  if(!musicStarted)return;
-  try{
-    const ac=getAC(); const master=getMaster();
-    const bpm=72; const beat=60/bpm; const bar=beat*4;
-    const ch=LOFI_CHORDS[lofiChord%LOFI_CHORDS.length];
+function scheduleDarkBar(startT) {
+  if (!musicStarted) return;
+  try {
+    const ac = getAC(); const master = getMaster();
+    const bpm = 58; const beat = 60 / bpm; const bar = beat * 4;
+    const ch = DARK_CHORDS[darkChord % DARK_CHORDS.length];
 
-    // Chord pad — whole bar
-    makeChordPad(ac,ch.freqs,startT,bar*0.95,master);
-    // Bass — hits on beat 1 and beat 3
-    makeBass(ac,ch.bass,startT,beat*0.9,master);
-    makeBass(ac,ch.bass*1.003,startT+beat*2,beat*0.9,master);
-    // Kick: beats 1 & 3
-    makeKick(ac,startT,master);
-    makeKick(ac,startT+beat*2,master);
-    // Snare: beats 2 & 4
-    makeSnare(ac,startT+beat,master);
-    makeSnare(ac,startT+beat*3,master);
-    // Hi-hat: every half beat, quieter on offbeats
-    for(let i=0;i<8;i++){
-      makeHat(ac,startT+i*beat*0.5,master,i%2===0?0.07:0.04);
-    }
-
-    lofiChord++;
-    // Schedule next bar
-    const nextT=(startT+bar)-ac.currentTime;
-    loopTimer=setTimeout(()=>{
-      if(musicStarted)scheduleLofiBar(getAC().currentTime+0.05);
-    }, Math.max(0,(nextT-0.1)*1000));
-  }catch(e){}
-}
-
-// ── Style: Chill — sparse slow piano notes, no drums, dreamy ─────────────
-const CHILL_NOTES=[
-  {freqs:[130.8,164.8,196],    bass:65.4},  // C
-  {freqs:[110,138.6,165],      bass:55},    // Am
-  {freqs:[174.6,220,261.6],    bass:87.3},  // F
-  {freqs:[196,246.9,293.7],    bass:98},    // G
-];
-let chillChord=0, chillTimer=null;
-function scheduleChillBar(startT){
-  if(!musicStarted)return;
-  try{
-    const ac=getAC(); const master=getMaster();
-    const ch=CHILL_NOTES[chillChord%CHILL_NOTES.length];
-    const dur=4.8;
-    // Soft pad chord — sine, slow attack
-    ch.freqs.forEach((f,i)=>{
-      const o=ac.createOscillator(),g=ac.createGain();
-      o.type='sine'; o.frequency.value=f;
-      const delay=i*0.12;
-      g.gain.setValueAtTime(0,startT+delay);
-      g.gain.linearRampToValueAtTime(0.12,startT+delay+0.6);
-      g.gain.setValueAtTime(0.10,startT+dur-0.8);
-      g.gain.exponentialRampToValueAtTime(0.001,startT+dur);
-      o.connect(g);g.connect(master);
-      o.start(startT+delay);o.stop(startT+dur+0.1);
+    // Deep drone pad — slow attack, long sustain
+    ch.forEach((f, i) => {
+      [0, 1, -1].forEach((detune, di) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        const filt = ac.createBiquadFilter();
+        filt.type = 'lowpass'; filt.frequency.value = 600 + i * 80;
+        o.type = i === 0 ? 'sawtooth' : 'triangle';
+        o.frequency.value = f;
+        o.detune.value = detune * 6;
+        const vol = di === 0 ? (i === 0 ? 0.22 : 0.12) : 0.05;
+        g.gain.setValueAtTime(0, startT);
+        g.gain.linearRampToValueAtTime(vol, startT + 1.2);
+        g.gain.setValueAtTime(vol, startT + bar - 0.8);
+        g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.3);
+        o.connect(filt); filt.connect(g); g.connect(master);
+        o.start(startT); o.stop(startT + bar + 0.4);
+      });
     });
-    // Gentle bass note, very soft
-    const ob=ac.createOscillator(),gb=ac.createGain();
-    const fb=ac.createBiquadFilter();fb.type='lowpass';fb.frequency.value=200;
-    ob.type='sine'; ob.frequency.value=ch.bass;
-    gb.gain.setValueAtTime(0,startT);
-    gb.gain.linearRampToValueAtTime(0.22,startT+0.08);
-    gb.gain.exponentialRampToValueAtTime(0.001,startT+dur*0.6);
-    ob.connect(fb);fb.connect(gb);gb.connect(master);
-    ob.start(startT);ob.stop(startT+dur);
-    chillChord++;
-    const nextT=(startT+dur)-ac.currentTime;
-    chillTimer=setTimeout(()=>{
-      if(musicStarted)scheduleChillBar(getAC().currentTime+0.05);
-    },Math.max(0,(nextT-0.1)*1000));
-  }catch(e){}
-}
 
-// ── Style: Retro — bouncy square wave arpeggio, no crackle ───────────────
-const RETRO_ARP=[261.6,329.6,392,523.3,659.3,523.3,392,329.6];
-const RETRO_BASS=[130.8,130.8,196,196,174.6,174.6,196,196];
-let retroStep=0, retroTimer=null;
-function scheduleRetroTick(){
-  if(!musicStarted)return;
-  try{
-    const ac=getAC(); const master=getMaster();
-    const t=ac.currentTime;
-    const bpm=140; const beat=60/bpm;
-    // High arp voice
-    const o1=ac.createOscillator(),g1=ac.createGain();
-    o1.type='square'; o1.frequency.value=RETRO_ARP[retroStep%RETRO_ARP.length];
-    g1.gain.setValueAtTime(0.22,t); g1.gain.exponentialRampToValueAtTime(0.001,t+beat*0.7);
-    o1.connect(g1);g1.connect(master);o1.start(t);o1.stop(t+beat);
-    // Low bass every 2 steps
-    if(retroStep%2===0){
-      const o2=ac.createOscillator(),g2=ac.createGain();
-      const f2=ac.createBiquadFilter();f2.type='lowpass';f2.frequency.value=400;
-      o2.type='square'; o2.frequency.value=RETRO_BASS[Math.floor(retroStep/2)%RETRO_BASS.length];
-      g2.gain.setValueAtTime(0.18,t); g2.gain.exponentialRampToValueAtTime(0.001,t+beat*1.4);
-      o2.connect(f2);f2.connect(g2);g2.connect(master);o2.start(t);o2.stop(t+beat*1.5);
-    }
-    // Tiny noise snare on beat 3 of every 4
-    if(retroStep%4===2){
-      const buf=ac.createBuffer(1,ac.sampleRate*0.04,ac.sampleRate);
-      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
-      const src=ac.createBufferSource();src.buffer=buf;
-      const filt=ac.createBiquadFilter();filt.type='bandpass';filt.frequency.value=3000;
-      const g3=ac.createGain();g3.gain.setValueAtTime(0.12,t);g3.gain.exponentialRampToValueAtTime(0.001,t+0.05);
-      src.connect(filt);filt.connect(g3);g3.connect(master);src.start(t);
-    }
-    retroStep++;
-    retroTimer=setTimeout(scheduleRetroTick, beat*1000);
-  }catch(e){}
+    // Slow heartbeat kick — beat 1 and beat 3, heavy sub
+    [0, beat * 2].forEach(offset => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      const t = startT + offset;
+      o.type = 'sine'; o.frequency.setValueAtTime(80, t);
+      o.frequency.exponentialRampToValueAtTime(30, t + 0.25);
+      g.gain.setValueAtTime(0.7, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.4);
+    });
+
+    // Sparse hi-hat tick on beat 2 only — barely there
+    (() => {
+      const buf = ac.createBuffer(1, ac.sampleRate * 0.06, ac.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const filt = ac.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 6000;
+      const g = ac.createGain(); g.gain.setValueAtTime(0.04, startT + beat);
+      src.connect(filt); filt.connect(g); g.connect(master);
+      src.start(startT + beat);
+    })();
+
+    // Creeping bass note — slides up slightly mid-bar
+    (() => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      const filt = ac.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 220;
+      o.type = 'sawtooth'; o.frequency.value = ch[0];
+      o.frequency.setValueAtTime(ch[0], startT);
+      o.frequency.linearRampToValueAtTime(ch[0] * 1.015, startT + bar * 0.6);
+      g.gain.setValueAtTime(0, startT + 0.02);
+      g.gain.linearRampToValueAtTime(0.35, startT + 0.06);
+      g.gain.setValueAtTime(0.28, startT + bar - 0.3);
+      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.1);
+      o.connect(filt); filt.connect(g); g.connect(master);
+      o.start(startT); o.stop(startT + bar + 0.2);
+    })();
+
+    darkChord++;
+    const nextT = (startT + bar) - ac.currentTime;
+    darkTimer = setTimeout(() => {
+      if (musicStarted) scheduleDarkBar(getAC().currentTime + 0.05);
+    }, Math.max(0, (nextT - 0.15) * 1000));
+  } catch(e) {}
 }
 
 function stopMusic(){
-  if(loopTimer)clearTimeout(loopTimer);loopTimer=null;
-  if(chillTimer)clearTimeout(chillTimer);chillTimer=null;
-  if(retroTimer)clearTimeout(retroTimer);retroTimer=null;
-  stopCrackle();
-  masterOut=null;masterFilter=null;
-  musicStarted=false;
+  if(darkTimer) clearTimeout(darkTimer); darkTimer = null;
+  masterOut = null; masterFilter = null;
+  musicStarted = false;
 }
 
 function startMusic(){
-  if(!musicOn||musicStarted)return;
-  musicStarted=true;
-  try{
-    const ac=getAC();getMaster();
-    if(musicStyle==='lofi'){
-      startCrackle();
-      scheduleLofiBar(ac.currentTime+0.1);
-    } else if(musicStyle==='chill'){
-      scheduleChillBar(ac.currentTime+0.1);
-    } else if(musicStyle==='retro'){
-      scheduleRetroTick();
-    }
-  }catch(e){}
+  if(!musicOn || musicStarted) return;
+  musicStarted = true;
+  try {
+    const ac = getAC(); getMaster();
+    scheduleDarkBar(ac.currentTime + 0.1);
+  } catch(e) {}
 }
 
 function setMusicOn(on){
@@ -2947,11 +2926,11 @@ function syncHomeSettingsUI(){
 
   if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
   if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
 
   if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
   if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
 
   if(adsText){
     adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
@@ -2970,11 +2949,11 @@ function syncGameSettingsUI(){
 
   if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
   if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
 
   if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
   if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
+  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
 
   if(adsText){
     adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
@@ -3127,22 +3106,8 @@ function goToIntro(){
 }
 
 function setMusicStyle(style){
-  const wasPlaying=musicStarted;
-  stopMusic();
-  musicStyle=style;
-  musicOn=(style!=='off');
-  const tog=document.getElementById('tog-music');
-  if(tog)tog.checked=musicOn;
-  // Update button highlights
-  ['chill','retro','lofi'].forEach(s=>{
-    const btn=document.getElementById('ms-'+s);
-    if(!btn)return;
-    const active=(s===style);
-    btn.style.background=active?'#5533ee':'#f0eeff';
-    btn.style.color=active?'#fff':'#5533ee';
-    btn.style.borderColor=active?'#5533ee':'#dde3f8';
-  });
-  if(wasPlaying&&musicOn)startMusic();
+  // Only one style now — treat as on/off toggle
+  setMusicOn(style !== 'off');
   hapticLight();
 }
 
@@ -3285,13 +3250,11 @@ function restoreState(){
   playStart();
 }
 
-// ── Inject music controls into settings panel ────────────────────────────
+// ── Inject music toggle into settings panel ──────────────────────────────
 function injectMusicToggle(){
   const soundRow=document.querySelector('#settings-panel .s-row');
   if(!soundRow||document.getElementById('music-style-row'))return;
   const container=soundRow.parentNode;
-
-  // Music on/off toggle row
   const toggleRow=document.createElement('div');
   toggleRow.className='s-row';
   toggleRow.id='music-style-row';
@@ -3303,27 +3266,6 @@ function injectMusicToggle(){
       <div class="toggle-thumb"></div>
     </label>`;
   container.insertBefore(toggleRow, soundRow);
-
-  // Style picker row
-  const styleRow=document.createElement('div');
-  styleRow.className='s-row';
-  styleRow.style.flexDirection='column';
-  styleRow.style.alignItems='stretch';
-  styleRow.style.gap='8px';
-  styleRow.innerHTML=`
-    <div class="s-row-label" style="font-size:.75rem"><span>🎼</span> Style</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      ${['chill','retro','lofi'].map(s=>`
-        <button onclick="setMusicStyle('${s}')" id="ms-${s}"
-          style="flex:1;padding:7px 4px;border-radius:8px;border:2px solid #dde3f8;
-          background:${s==='chill'?'#5533ee':'#f0eeff'};
-          color:${s==='chill'?'#fff':'#5533ee'};
-          font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;
-          cursor:pointer;-webkit-tap-highlight-color:transparent;
-          letter-spacing:.05em;text-transform:capitalize">${s}</button>
-      `).join('')}
-    </div>`;
-  container.insertBefore(styleRow, soundRow);
 }
 setTimeout(injectMusicToggle,0);
 
