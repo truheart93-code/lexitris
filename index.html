@@ -47,7 +47,7 @@ body{
 #hdr{
   width:100%;box-sizing:border-box;
   display:flex;flex-direction:column;
-  padding:6px 12px;
+  padding:3px 10px;
   flex-shrink:0;
   background:rgba(10,12,28,0.9);border-bottom:1px solid rgba(124,92,252,0.2);
   box-shadow:0 1px 20px rgba(0,0,0,0.5);
@@ -274,7 +274,7 @@ body{
   background:linear-gradient(90deg,#a78bfa,#7c5cfc,#00e5cc);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.stats{display:flex;gap:12px;}
+.stats{display:flex;gap:8px;}
 .stat{text-align:center;}
 .stat span{display:block;font-size:.38rem;letter-spacing:.15em;color:rgba(200,210,255,0.7);text-transform:uppercase;}
 .stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(.75rem,2.5vw,1rem);}
@@ -283,7 +283,7 @@ body{
 .red{color:#ff3b6b;}
 
 /* Main */
-#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:4px;overflow:hidden;min-height:0;max-height:calc(100vh - var(--hdr-h,106px));}
+#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:2px;overflow:hidden;min-height:0;max-height:calc(100vh - var(--hdr-h,100px));}
 
 /* Side panels */
 .side{width:62px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
@@ -340,7 +340,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Touch bar */
 #tbar{
-  display:flex;width:100%;gap:8px;padding:8px 10px;
+  display:flex;width:100%;gap:6px;padding:6px 10px;
   border-top:1px solid rgba(124,92,252,0.2);flex-shrink:0;
   background:rgba(10,12,28,0.9);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -415,7 +415,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 @keyframes wordGlowFade{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.1);}}
 .tbtn{
-  flex:1;height:58px;
+  flex:1;height:52px;
   background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:14px;
   font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;
   color:#a78bfa;cursor:pointer;
@@ -432,7 +432,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 #btn-drop:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(180,20,60,0.7);}
 @media(max-width:400px){
-  .tbtn{height:52px;}
+  .tbtn{height:48px;}
 }
 
 /* Overlay */
@@ -1869,15 +1869,15 @@ function calcCell(){
   const tbarH=document.getElementById('tbar').offsetHeight||58;
   const timerEl=document.getElementById('timer-bar-wrap');
   const timerH=(timerEl&&timerEl.style.display!=='none')?timerEl.offsetHeight:0;
-  // Only reserve ad space if ads are actually showing
-  const adBannerH=0;
-  const avH=window.innerHeight-hdrH-tbarH-timerH-adBannerH-8;
+  // Use visualViewport if available (accounts for Android system bars correctly)
+  const viewH = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  const avH=viewH-hdrH-tbarH-timerH-4;
   const cellByH=Math.floor(avH/ROWS);
   const sideEls=[...document.querySelectorAll('#main .side')].filter(s=>s.offsetParent!==null);
   const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
-  const avW=window.innerWidth-sideW-8;
+  const avW=window.innerWidth-sideW-4;
   const cellByW=Math.floor(avW/COLS);
-  return Math.max(28,Math.min(cellByH,cellByW));
+  return Math.max(26,Math.floor(Math.min(cellByH,cellByW)*0.99));
 }
 let CELL=calcCell();
 function resizeCv(){
