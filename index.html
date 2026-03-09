@@ -1847,13 +1847,11 @@ const LDIST={A:12,B:2,C:3,D:4,E:16,F:2,G:3,H:3,I:11,J:1,K:1,L:6,M:3,N:8,O:10,P:3
 
 let bag=[];
 function fillBag(){
-  if(gameMode==='daily'){
-    // Use seeded random so everyone gets same letters
-    window._dailyRand=seededRand(dailySeed+(lines*1000));
-  }
   bag=[];
   for(const[l,n]of Object.entries(LDIST))for(let i=0;i<n;i++)bag.push(l);
-  for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+  // Use seeded RNG for daily so everyone gets identical letter sequence
+  const rng = (gameMode==='daily') ? window._dailyRand : Math.random.bind(Math);
+  for(let i=bag.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
 }
 const VOWELS=new Set(['A','E','I','O','U']);
 let consecutiveVowels=0;
@@ -3544,6 +3542,7 @@ function startGame(){
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
   score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
+  if(gameMode==='daily') window._dailyRand=seededRand(dailySeed);
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
   consecutiveVowels=0;
 
