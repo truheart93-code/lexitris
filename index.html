@@ -513,7 +513,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Logo */
 .lx-logo{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:clamp(2.2rem,9vw,3.8rem);
+  font-size:clamp(1.8rem,7vw,3rem);
   letter-spacing:.1em;
   background:linear-gradient(135deg,#a78bfa 0%,#7c5cfc 50%,#00e5cc 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -527,7 +527,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-sub{
   font-family:'Space Mono',monospace;
   font-size:.52rem;letter-spacing:.32em;
-  color:rgba(200,215,255,0.7);margin-bottom:28px;text-transform:uppercase;
+  color:rgba(200,215,255,0.7);margin-bottom:4px;text-transform:uppercase;
 }
 
 /* Card — frosted dark glass */
@@ -818,15 +818,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   transition:transform .08s,border-color .1s,background .1s;
 }
 .s-card:active{transform:translateY(2px);}
-.s-card-icon{font-size:1.15rem;margin-bottom:3px;}
+.s-card-icon{font-size:1rem;margin-bottom:2px;}
 .s-card-title{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.62rem;line-height:1.15;
+  font-size:.56rem;line-height:1.15;
   color:#a78bfa;margin-bottom:2px;
 }
 .s-card-sub{
   font-family:'Nunito',sans-serif;font-weight:600;
-  font-size:.5rem;line-height:1.35;
+  font-size:.46rem;line-height:1.35;
   color:rgba(200,210,240,0.65);
 }
 .s-card.gold{
@@ -991,7 +991,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-hero{
   text-align:center;
-  padding:2px 16px 12px;
+  padding:2px 16px 8px;
   border-bottom:1px solid rgba(124,92,252,0.1);
 }
 .md-last-kicker{
@@ -1011,10 +1011,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   letter-spacing:.04em;
 }
 .md-last-stats{
-  min-height:78px;
+  min-height:60px;
 }
 .md-last-stat{
-  padding:12px 8px 14px;
+  padding:7px 8px 9px;
 }
 .md-last-stat span{
   font-size:1rem;
@@ -1432,7 +1432,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="hdr">
   <div class="hdr-top">
     <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
-    <button class="hdr-btn" id="btn-lb" title="Leaderboard" onclick="openLeaderboard(0)" style="font-size:1.1rem;width:36px;height:36px">🏆</button>
     <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;margin-left:8px">⏸</button>
   </div>
   <div class="stats">
@@ -1489,7 +1488,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="main">
   <div class="side">
     <div class="panel"><label>Next</label><div class="next-box" id="next-box">?</div></div>
-    <div class="panel" style="flex:1"><label>Words</label><div id="word-log"></div></div>
+    <div class="panel" style="flex:1"><label>Words</label><div id="last-word-display" style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:#4ade80;letter-spacing:.08em;min-height:1.2em;text-align:center;margin-bottom:4px;text-transform:uppercase;transition:opacity .3s;opacity:0;"></div><div id="word-log"></div></div>
   </div>
   <div id="cw"><div id="danger-bar"></div><div id="combo-badge">×2</div><canvas id="cv"></canvas><canvas id="particle-cv"></canvas></div>
 
@@ -1520,8 +1519,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:12px 20px 20px;">
-  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:8px;align-items:center;padding-top:4px;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 16px 16px;">
+  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -1614,6 +1613,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);" onclick="closeModeSelectSheet();openModeDialog('zen')">
         <span class="lx-mode-icon">🧘</span>
         <span class="lx-mode-text"><span class="lx-mode-name">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
+      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 20px rgba(74,222,128,0.3);" onclick="closeModeSelectSheet();openModeDialog('daily')">
+        <span class="lx-mode-icon">📅</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Daily Challenge</span><span class="lx-mode-desc" id="daily-mode-desc">Same puzzle · everyone · every day</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
     </div>
@@ -1836,6 +1840,10 @@ const LDIST={A:12,B:2,C:3,D:4,E:16,F:2,G:3,H:3,I:11,J:1,K:1,L:6,M:3,N:8,O:10,P:3
 
 let bag=[];
 function fillBag(){
+  if(gameMode==='daily'){
+    // Use seeded random so everyone gets same letters
+    window._dailyRand=seededRand(dailySeed+(lines*1000));
+  }
   bag=[];
   for(const[l,n]of Object.entries(LDIST))for(let i=0;i<n;i++)bag.push(l);
   for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
@@ -1893,7 +1901,7 @@ window.addEventListener('resize',resizeCv);
 window.addEventListener('orientationchange',()=>setTimeout(resizeCv,150));
 
 // State
-let grid,falling,nextLetter;
+let grid,falling,nextLetter,lastCol=null;
 let score=0,bestScore=0,level=1,lines=0,combo=1;
 let gameOver=false,paused=false;
 let dropMs=1000,lastDropT=0,animId=null;
@@ -1932,7 +1940,8 @@ function spawnFalling(){
   nb.classList.remove('pop');
   void nb.offsetWidth;
   nb.classList.add('pop');
-  falling={l,col:Math.floor(COLS/2),row:0};
+  const spawnCol = (lastCol !== null) ? lastCol : Math.floor(COLS/2);
+  falling={l,col:spawnCol,row:0};
   if(grid[0][falling.col]){
     if(gameMode==='zen'){
       // Shift the entire grid down by clearing the top 2 rows to make space
@@ -2078,6 +2087,14 @@ function checkWords(){
     hallOfFame=hallOfFame.slice(0,5);
     playWord(res.word.length);hapticStrong();
     logWord(res.word,pts,res.dr,res.dc);
+    // Show last word found
+    const lwd=document.getElementById('last-word-display');
+    if(lwd){
+      lwd.textContent=res.word.toUpperCase()+' +'+pts;
+      lwd.style.opacity='1';
+      clearTimeout(lwd._t);
+      lwd._t=setTimeout(()=>lwd.style.opacity='0',1800);
+    }
     showPopup(pts,res.cx,res.cy);
     glowWordCells(res.cells);
     // Every scored word clears the entire row of every cell it touches
@@ -2192,13 +2209,11 @@ function flashRow(r){
   el.style.top=r*CELL+'px';el.style.left='0';
   el.style.width=cv.width+'px';el.style.height=CELL+'px';
   cw.appendChild(el);setTimeout(()=>el.remove(),460);
-  // Spawn particles for each cell in the row
-  for(let c=0;c<COLS;c++){
-    const cell=grid[r]&&grid[r][c];
-    const colors=['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'];
-    const color = cell ? lc(cell.letter).stroke : colors[Math.floor(Math.random()*colors.length)];
-    setTimeout(()=>spawnRowParticles(r, color), c*12);
-  }
+  // Spawn particles for the row (single call, no stagger)
+  const midCell = grid[r] && grid[r][Math.floor(COLS/2)];
+  const colors = ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'];
+  const pColor = midCell ? lc(midCell.letter).stroke : colors[Math.floor(Math.random()*colors.length)];
+  spawnRowParticles(r, pColor);
 }
 function flashCells(cells){
   const cw=document.getElementById('cw');
@@ -2262,24 +2277,22 @@ function initParticleCanvas(){
 
 function spawnRowParticles(r, color){
   if(!pcv) initParticleCanvas();
-  const count = 18;
-  for(let c=0;c<COLS;c++){
-    for(let p=0;p<3;p++){
-      const x = c*CELL + CELL/2 + (Math.random()-0.5)*CELL*0.6;
-      const y = r*CELL + CELL/2 + (Math.random()-0.5)*CELL*0.4;
-      const angle = Math.random()*Math.PI*2;
-      const speed = 1.5 + Math.random()*3.5;
-      particles.push({
-        x, y,
-        vx: Math.cos(angle)*speed,
-        vy: Math.sin(angle)*speed - 2,
-        size: 2 + Math.random()*4,
-        color: color || ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'][Math.floor(Math.random()*6)],
-        alpha: 1,
-        decay: 0.02 + Math.random()*0.03,
-        gravity: 0.12,
-      });
-    }
+  // Only spawn from every other cell, 1 particle each — keeps it light
+  for(let c=0;c<COLS;c+=2){
+    const x = c*CELL + CELL/2;
+    const y = r*CELL + CELL/2;
+    const angle = Math.random()*Math.PI*2;
+    const speed = 1.5 + Math.random()*2.5;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - 1.5,
+      size: 2 + Math.random()*3,
+      color: color || ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'][Math.floor(Math.random()*6)],
+      alpha: 1,
+      decay: 0.03 + Math.random()*0.03,
+      gravity: 0.1,
+    });
   }
   if(!particleAnimId) animateParticles();
 }
@@ -2407,6 +2420,7 @@ function lock(){
     // Not actually at bottom yet, keep falling
     return;
   }
+  lastCol=falling.col;
   grid[falling.row][falling.col]=falling.l;
   playLand();
   falling=null;
@@ -2512,14 +2526,39 @@ let holdId=null;
 document.getElementById('btn-drop').addEventListener('touchstart',e=>{e.preventDefault();drop();},{passive:false});
 
 // Swipe
-let sx=0,sy=0,st=0;
-cv.addEventListener('touchstart',e=>{e.preventDefault();sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();},{passive:false});
+// ── Swipe & touch on canvas ──────────────────────────────────────────────
+let sx=0,sy=0,st=0,lastSwipeX=0,swipeLocked=null;
+cv.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  sx=e.touches[0].clientX;sy=e.touches[0].clientY;
+  lastSwipeX=sx;st=Date.now();swipeLocked=null;
+},{passive:false});
+cv.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  if(gameOver||paused)return;
+  const cx=e.touches[0].clientX,cy=e.touches[0].clientY;
+  const dx=cx-sx,dy=cy-sy;
+  // Lock direction on first significant move
+  if(!swipeLocked){
+    if(Math.abs(dx)>8||Math.abs(dy)>8)
+      swipeLocked=Math.abs(dx)>Math.abs(dy)?'h':'v';
+  }
+  if(swipeLocked==='h'){
+    // Move every CELL pixels of horizontal drag
+    const moved=cx-lastSwipeX;
+    if(Math.abs(moved)>CELL*0.7){
+      if(moved<0)goLeft();else goRight();
+      lastSwipeX=cx;
+    }
+  }
+},{passive:false});
 cv.addEventListener('touchend',e=>{
   e.preventDefault();
   const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;
-  if(Math.abs(dx)<15&&Math.abs(dy)<15&&dt<250){drop();return;}
-  if(Math.abs(dx)>Math.abs(dy)){if(dx<-20)goLeft();else if(dx>20)goRight();}
-  else if(dy>20)drop();
+  // Tap = drop
+  if(Math.abs(dx)<12&&Math.abs(dy)<12&&dt<200){drop();return;}
+  // Swipe down = drop
+  if(swipeLocked==='v'&&dy>30)drop();
 },{passive:false});
 
 
@@ -2946,7 +2985,7 @@ function closeHomeSettings(){
 }
 function setSoundEnabled(enabled){
   soundOn=!!enabled;
-  if(soundOn)beep(440,0.1);
+  if(soundOn)sfx(440,0.1,0.1);
   syncAllSettingsUI();
 }
 function setHapticEnabled(enabled){
@@ -3027,6 +3066,14 @@ function endGame(){
   if(isNewBest && score > 0) setTimeout(()=>showHighScoreCelebration(score), 600);
   // Store pending score for leaderboard button
   const _goScore = score, _goMode = gameMode;
+  if(_goMode==='daily'){
+    saveDailyResult(_goScore);
+    dailyCompleted=true;
+    const btn=document.getElementById('daily-mode-btn');
+    const desc=document.getElementById('daily-mode-desc');
+    if(desc) desc.textContent="Today's score: "+_goScore.toLocaleString();
+    if(btn) btn.style.opacity='0.7';
+  }
   // Update per-mode best
   if(score>=(modeBests[gameMode]||0))modeBests[gameMode]=score;
   // Save last game stats for this mode
@@ -3264,6 +3311,7 @@ const MODE_CONFIG={
   classic:{ startMs:1000, minMs:200,  levelStep:80,  label:'Classic', icon:'📖' },
   timed:  { startMs:800,  minMs:180,  levelStep:70,  label:'Timed',   icon:'⏱'  },
   zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
+  daily:  { startMs:900,  minMs:200,  levelStep:75,  label:'Daily',   icon:'📅'  },
 };
 
 // Mode metadata for dialog
@@ -3293,6 +3341,15 @@ const MODE_META={
       {icon:'☮️',text:'Board never triggers game over'},
       {icon:'🐢',text:'Slow, peaceful drop speed'},
       {icon:'✨',text:'Great for learning and finding long words'},
+    ]
+  },
+  daily:{
+    icon:'📅',name:'Daily Challenge',tagline:'One puzzle, everyone, every day',
+    chips:[{val:'1×',label:'Per day'},{val:'4+',label:'Min letters'},{val:'🌍',label:'Global'}],
+    features:[
+      {icon:'📅',text:'Same seed for all players every day'},
+      {icon:'🏆',text:'Compare your score with the world'},
+      {icon:'🔒',text:'One attempt only'},
     ]
   }
 };
@@ -3327,6 +3384,16 @@ const MODE_PREVIEW={
       {val:'∞',label:'No KO'}
     ],
     summary:'Relaxed play with no game over. Take your time, explore the board, and hunt longer words.'
+  },
+  daily:{
+    kicker:'Resets',
+    big:'24h',
+    stats:[
+      {val:'4+',label:'Min Letters'},
+      {val:'1×',label:'Attempts'},
+      {val:'🌍',label:'Global'}
+    ],
+    summary:'Same board for everyone today. One shot to set your best score and climb the daily rankings.'
   }
 };
 
@@ -3399,6 +3466,16 @@ function openModeDialog(mode){
     wordEl.style.display='none';
   }
 
+  // Daily challenge — show completed state
+  const playBtn = document.querySelector('.md-play-btn');
+  if(mode==='daily' && dailyCompleted){
+    playBtn.textContent = '✅ Completed Today';
+    playBtn.style.opacity = '0.6';
+  } else {
+    playBtn.innerHTML = '<span class="md-play-icon">▶</span> Play Now';
+    playBtn.style.opacity = '1';
+  }
+
   // Continue button — only for zen with a saved state
   const contBtn = document.getElementById('intro-continue-btn');
   const zenHasSave = mode === 'zen' && (savedState !== null || (typeof modeLastGame !== 'undefined' && modeLastGame['zen'] && modeLastGame['zen'].score > 0));
@@ -3415,6 +3492,11 @@ function closeModeDialog(e){
 }
 
 function confirmPlayMode(){
+  // Block daily if already played today
+  if(pendingMode==='daily' && dailyCompleted){
+    showToast("You've already played today's challenge! Come back tomorrow.");
+    return;
+  }
   document.getElementById('mode-dialog-backdrop').classList.remove('open');
   gameMode=pendingMode;
   hapticMed();
@@ -3433,7 +3515,7 @@ function updateSpeed(){
 function startGame(){
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
-  score=0;level=1;lines=0;combo=1;wordLog=[];
+  score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
   consecutiveVowels=0;
 
@@ -3687,6 +3769,48 @@ window.onAdEvent=function(event){
 };
 
 // ── Simple toast notification ─────────────────────────────────────────────
+// ── Daily Challenge ────────────────────────────────────────────────────────
+function getDailyDate(){
+  const d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+function getDailySeed(){
+  // Simple hash of date string for deterministic seed
+  const s=getDailyDate();
+  let h=0;
+  for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
+  return Math.abs(h);
+}
+function seededRand(seed){
+  // Simple LCG
+  let s=seed;
+  return function(){
+    s=(s*1664525+1013904223)&0xffffffff;
+    return (s>>>0)/0xffffffff;
+  };
+}
+let dailyCompleted=false;
+let dailySeed=0;
+function initDailyMode(){
+  dailySeed=getDailySeed();
+  const today=getDailyDate();
+  try{
+    const saved=JSON.parse(localStorage.getItem('lexitris_daily')||'{}');
+    if(saved.date===today){
+      dailyCompleted=true;
+      const btn=document.getElementById('daily-mode-btn');
+      const desc=document.getElementById('daily-mode-desc');
+      if(desc) desc.textContent="Today's score: "+saved.score.toLocaleString();
+      if(btn) btn.style.opacity='0.7';
+    }
+  }catch(e){}
+}
+function saveDailyResult(score){
+  try{
+    localStorage.setItem('lexitris_daily',JSON.stringify({date:getDailyDate(),score}));
+  }catch(e){}
+}
+
 // ── Home Leaderboard Preview ───────────────────────────────────────────────
 let currentHomeLbMode = 'classic';
 
@@ -3791,10 +3915,26 @@ function escLb(str){
   return String(str).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 }
 
+// Basic profanity filter
+function cleanName(n){
+  const bad=['fuck','shit','ass','dick','cock','cunt','bitch','nigger','nigga','fag','retard','whore','slut','bastard','piss','crap'];
+  let s=n.toLowerCase();
+  for(const w of bad){ if(s.includes(w)) return null; }
+  return n.trim();
+}
+
 async function submitScore(){
   const nameInput = document.getElementById('lb-name-input');
-  const name = nameInput.value.trim();
-  if(!name){ nameInput.focus(); return; }
+  const raw = nameInput.value.trim();
+  if(!raw){ nameInput.focus(); return; }
+  const name = cleanName(raw);
+  if(!name){
+    nameInput.style.borderColor='rgba(255,59,107,0.6)';
+    nameInput.placeholder='Please choose another name';
+    nameInput.value='';
+    setTimeout(()=>{ nameInput.style.borderColor=''; nameInput.placeholder='Enter your name...'; },2000);
+    return;
+  }
   playerName = name;
   try { localStorage.setItem('lexitris_player_name', name); } catch(e){}
   const btn = document.getElementById('lb-submit-btn');
@@ -3910,6 +4050,7 @@ window.addEventListener('load',()=>{
     fillBag();initGrid();draw();
     loadAdsRemovedState();
     try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
+    initDailyMode();
     showIntro();
     const ls=document.getElementById('loading-screen');
     if(ls) ls.style.display='none';
