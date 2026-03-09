@@ -2925,11 +2925,12 @@ function makeHat(ac,t,master,vol=0.08){
 // Minor key drone, slow pulse, creeping bassline. One style only.
 let musicOn = true, musicStarted = false;
 
+// Chords in two octaves — low for pads, high*2 for melody
 const DARK_CHORDS = [
-  [55.0, 65.4, 82.4],   // Am — A2 E3 B3
-  [49.0, 58.3, 73.4],   // Em — E2 B2 D3
-  [51.9, 61.7, 77.8],   // Fm — F2 C3 Ab3
-  [49.0, 58.3, 69.3],   // Em — E2 B2 G3
+  { low:[55.0,65.4,82.4],   mel:[220.0,261.6,329.6], bass:27.5  }, // Am
+  { low:[49.0,58.3,73.4],   mel:[196.0,246.9,293.7], bass:24.5  }, // Em
+  { low:[51.9,61.7,77.8],   mel:[207.7,261.6,311.1], bass:25.9  }, // Fm
+  { low:[49.0,58.3,69.3],   mel:[196.0,246.9,277.2], bass:24.5  }, // Em7
 ];
 let darkChord = 0, darkTimer = null;
 
@@ -2937,65 +2938,89 @@ function scheduleDarkBar(startT) {
   if (!musicStarted) return;
   try {
     const ac = getAC(); const master = getMaster();
-    const bpm = 58; const beat = 60 / bpm; const bar = beat * 4;
+    const bpm = 64; const beat = 60 / bpm; const bar = beat * 4;
     const ch = DARK_CHORDS[darkChord % DARK_CHORDS.length];
 
-    // Deep drone pad — slow attack, long sustain
-    ch.forEach((f, i) => {
-      [0, 1, -1].forEach((detune, di) => {
-        const o = ac.createOscillator(), g = ac.createGain();
-        const filt = ac.createBiquadFilter();
-        filt.type = 'lowpass'; filt.frequency.value = 600 + i * 80;
-        o.type = i === 0 ? 'sawtooth' : 'triangle';
-        o.frequency.value = f;
-        o.detune.value = detune * 6;
-        const vol = di === 0 ? (i === 0 ? 0.22 : 0.12) : 0.05;
-        g.gain.setValueAtTime(0, startT);
-        g.gain.linearRampToValueAtTime(vol, startT + 1.2);
-        g.gain.setValueAtTime(vol, startT + bar - 0.8);
-        g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.3);
-        o.connect(filt); filt.connect(g); g.connect(master);
-        o.start(startT); o.stop(startT + bar + 0.4);
-      });
+    // Low pad — warm drone foundation
+    ch.low.forEach((f, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      const filt = ac.createBiquadFilter();
+      filt.type = 'lowpass'; filt.frequency.value = 700;
+      o.type = 'triangle'; o.frequency.value = f;
+      o.detune.value = (i % 2 === 0 ? 4 : -4);
+      const vol = i === 0 ? 0.18 : 0.10;
+      g.gain.setValueAtTime(0, startT);
+      g.gain.linearRampToValueAtTime(vol, startT + 0.8);
+      g.gain.setValueAtTime(vol, startT + bar - 0.6);
+      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.2);
+      o.connect(filt); filt.connect(g); g.connect(master);
+      o.start(startT); o.stop(startT + bar + 0.3);
     });
 
-    // Slow heartbeat kick — beat 1 and beat 3, heavy sub
-    [0, beat * 2].forEach(offset => {
+    // High melody — plucked notes on beats 1, 2.5, 3, 4
+    const melOffsets = [0, beat*1.5, beat*2, beat*3];
+    const melFreqs   = [ch.mel[0], ch.mel[2], ch.mel[1], ch.mel[2]];
+    melOffsets.forEach((offset, i) => {
+      const o = ac.createOscillator(), g = ac.createGain();
+      const filt = ac.createBiquadFilter();
+      filt.type = 'bandpass'; filt.frequency.value = 1800; filt.Q.value = 1.2;
+      o.type = 'sine'; o.frequency.value = melFreqs[i];
+      const t = startT + offset;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.14, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + beat * 0.85);
+      o.connect(filt); filt.connect(g); g.connect(master);
+      o.start(t); o.stop(t + beat);
+    });
+
+    // Sub kick — beat 1 and 3
+    [0, beat*2].forEach(offset => {
       const o = ac.createOscillator(), g = ac.createGain();
       const t = startT + offset;
-      o.type = 'sine'; o.frequency.setValueAtTime(80, t);
-      o.frequency.exponentialRampToValueAtTime(30, t + 0.25);
-      g.gain.setValueAtTime(0.7, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(70, t);
+      o.frequency.exponentialRampToValueAtTime(28, t + 0.22);
+      g.gain.setValueAtTime(0.55, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
       o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + 0.4);
+      o.start(t); o.stop(t + 0.35);
     });
 
-    // Sparse hi-hat tick on beat 2 only — barely there
-    (() => {
-      const buf = ac.createBuffer(1, ac.sampleRate * 0.06, ac.sampleRate);
+    // Snare — beat 2 and 4, light
+    [beat, beat*3].forEach(offset => {
+      const buf = ac.createBuffer(1, ac.sampleRate * 0.12, ac.sampleRate);
       const d = buf.getChannelData(0);
-      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+      for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
       const src = ac.createBufferSource(); src.buffer = buf;
-      const filt = ac.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 6000;
-      const g = ac.createGain(); g.gain.setValueAtTime(0.04, startT + beat);
+      const filt = ac.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=1800; filt.Q.value=0.8;
+      const g = ac.createGain(); g.gain.setValueAtTime(0.09, startT+offset);
       src.connect(filt); filt.connect(g); g.connect(master);
-      src.start(startT + beat);
-    })();
+      src.start(startT + offset);
+    });
 
-    // Creeping bass note — slides up slightly mid-bar
+    // Hi-hat — every half beat, subtle
+    for(let i=0;i<8;i++){
+      const buf = ac.createBuffer(1, ac.sampleRate*0.04, ac.sampleRate);
+      const d = buf.getChannelData(0);
+      for(let j=0;j<d.length;j++) d[j]=(Math.random()*2-1)*(1-j/d.length);
+      const src = ac.createBufferSource(); src.buffer = buf;
+      const filt = ac.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=7000;
+      const g = ac.createGain(); g.gain.setValueAtTime(i%2===0?0.055:0.03, startT+i*beat*0.5);
+      src.connect(filt); filt.connect(g); g.connect(master);
+      src.start(startT + i*beat*0.5);
+    }
+
+    // Deep bass note
     (() => {
       const o = ac.createOscillator(), g = ac.createGain();
-      const filt = ac.createBiquadFilter(); filt.type = 'lowpass'; filt.frequency.value = 220;
-      o.type = 'sawtooth'; o.frequency.value = ch[0];
-      o.frequency.setValueAtTime(ch[0], startT);
-      o.frequency.linearRampToValueAtTime(ch[0] * 1.015, startT + bar * 0.6);
-      g.gain.setValueAtTime(0, startT + 0.02);
-      g.gain.linearRampToValueAtTime(0.35, startT + 0.06);
-      g.gain.setValueAtTime(0.28, startT + bar - 0.3);
-      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.1);
+      const filt = ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=180;
+      o.type='sawtooth'; o.frequency.value=ch.bass;
+      g.gain.setValueAtTime(0, startT+0.02);
+      g.gain.linearRampToValueAtTime(0.28, startT+0.05);
+      g.gain.setValueAtTime(0.22, startT+bar-0.3);
+      g.gain.exponentialRampToValueAtTime(0.001, startT+bar+0.1);
       o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(startT); o.stop(startT + bar + 0.2);
+      o.start(startT); o.stop(startT+bar+0.2);
     })();
 
     darkChord++;
