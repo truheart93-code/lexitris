@@ -3012,7 +3012,8 @@ function closeHomeSettings(){
 }
 function setSoundEnabled(enabled){
   soundOn=!!enabled;
-  if(soundOn)sfx(440,0.1,0.1);
+  if(soundOn){ sfx(440,0.1,0.1); setMusicOn(true); }
+  else setMusicOn(false);
   syncAllSettingsUI();
 }
 function setHapticEnabled(enabled){
