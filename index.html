@@ -83,7 +83,7 @@ body{
 }
 #lb-header h2{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.3rem;letter-spacing:.12em;
+  font-size:.85rem;letter-spacing:.12em;
   background:linear-gradient(135deg,#f5a623,#a78bfa);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:8px;
@@ -1339,22 +1339,54 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     });
   }
 
+  // Pending queue — saves locally if network fails, retries on next load
+  function getPendingQueue(){
+    try{ return JSON.parse(localStorage.getItem('lexitris_score_queue')||'[]'); }catch(e){ return []; }
+  }
+  function savePendingQueue(q){
+    try{ localStorage.setItem('lexitris_score_queue', JSON.stringify(q)); }catch(e){}
+  }
+  async function doSubmit(name, score, mode, date){
+    const body = {
+      fields: {
+        name:  { stringValue: name.trim().substring(0,16) },
+        score: { integerValue: String(score) },
+        mode:  { stringValue: mode },
+        date:  { stringValue: date }
+      }
+    };
+    const res = await apiFetch(BASE + "/scores?key=" + API_KEY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+  }
+  async function flushQueue(){
+    const q = getPendingQueue();
+    if(!q.length) return;
+    const remaining = [];
+    for(const item of q){
+      try{ await doSubmit(item.name, item.score, item.mode, item.date); }
+      catch(e){ remaining.push(item); }
+    }
+    savePendingQueue(remaining);
+  }
+  // Try to flush any queued scores on load
+  setTimeout(flushQueue, 3000);
+
   window.submitLeaderboardScore = async function(name, score, mode) {
+    const date = new Date().toISOString();
     try {
-      const body = {
-        fields: {
-          name:  { stringValue: name.trim().substring(0,16) },
-          score: { integerValue: String(score) },
-          mode:  { stringValue: mode },
-          date:  { stringValue: new Date().toISOString() }
-        }
-      };
-      await apiFetch(BASE + "/scores?key=" + API_KEY, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-    } catch(e) { console.error("Score submit failed:", e); }
+      await doSubmit(name, score, mode, date);
+    } catch(e) {
+      // Network failed — queue for retry
+      console.warn('Score submit failed, queuing for retry:', e.message);
+      const q = getPendingQueue();
+      q.push({name, score, mode, date});
+      savePendingQueue(q);
+      if(typeof showToast === 'function') showToast('Score saved — will submit when online');
+    }
   };
 
   window.fetchLeaderboard = async function(mode) {
@@ -1573,6 +1605,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
         <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.52rem;padding:3px 7px;">Zen</button>
+        <button class="lb-tab" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
       </div>
       <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
         <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
@@ -1685,6 +1718,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <button class="lb-tab active" onclick="switchLbTab('classic')">Classic</button>
         <button class="lb-tab" onclick="switchLbTab('timed')">Timed</button>
         <button class="lb-tab" onclick="switchLbTab('zen')">Zen</button>
+        <button class="lb-tab" onclick="switchLbTab('daily')">Daily</button>
       </div>
     </div>
     <div id="lb-list"><div id="lb-loading">Loading...</div></div>
@@ -2965,6 +2999,7 @@ function syncGameSettingsUI(){
 }
 function syncAllSettingsUI(){
   syncGameSettingsUI();
+  syncHomeSettingsUI();
 }
 function openHomeSettings(){
   syncAllSettingsUI();
@@ -3655,14 +3690,35 @@ function closeStats(e){
 // ── Remove Ads state ──────────────────────────────────────────────────────
 let adsRemoved=false;
 
+// Detect console/non-mobile platforms — no ads on Xbox, PlayStation, or desktop
+function isAdFreeplatform(){
+  const ua = navigator.userAgent || '';
+  if(/Xbox|XBOX/i.test(ua)) return true;           // Xbox PWA
+  if(/PlayStation|PSP|PS4|PS5/i.test(ua)) return true; // PlayStation
+  if(/Windows NT|Macintosh|Linux/i.test(ua) && !/Android/i.test(ua)) return true; // Desktop
+  if(window.location.search.includes('adfree=1')) return true; // Manual override
+  return false;
+}
+
 function loadAdsRemovedState(){
   try{ adsRemoved=localStorage.getItem('lexitris_no_ads')==='1'; }catch(e){}
+  if(isAdFreeplatform()) adsRemoved=true;
   applyAdsRemovedUI();
 }
 
 function applyAdsRemovedUI(){
+  const adFree = isAdFreeplatform();
+  // Hide purchase button entirely on ad-free platforms
+  ['btn-remove-ads'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display = adFree ? 'none' : '';
+  });
+  // Also hide the home settings remove-ads card
+  const homeAdsBtn = document.querySelector('[onclick*="purchaseRemoveAds"]');
+  if(homeAdsBtn) homeAdsBtn.style.display = adFree ? 'none' : '';
+
   const btn=document.getElementById('btn-remove-ads');
-  if(btn){
+  if(btn && !adFree){
     if(adsRemoved){
       btn.textContent='✅ Ads Removed';
       btn.classList.add('owned');
@@ -3785,7 +3841,7 @@ let currentHomeLbMode = 'classic';
 
 function switchHomeLb(mode){
   currentHomeLbMode = mode;
-  ['classic','timed','zen'].forEach(m => {
+  ['classic','timed','zen','daily'].forEach(m => {
     const tab = document.getElementById('home-lb-tab-'+m);
     if(tab) tab.classList.toggle('active', m === mode);
   });
@@ -3864,9 +3920,15 @@ function switchLbTab(mode){
 async function loadLeaderboard(mode){
   const list = document.getElementById('lb-list');
   list.innerHTML = '<div id="lb-loading">Loading...</div>';
-  const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
+  let scores = [];
+  try {
+    scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
+  } catch(e) {
+    list.innerHTML = '<div class="lb-empty">Could not load scores. Check your connection.</div>';
+    return;
+  }
   if(scores.length === 0){
-    list.innerHTML = '<div class="lb-empty">No scores yet — play and submit your score!</div>';
+    list.innerHTML = '<div class="lb-empty">No scores yet — be the first!</div>';
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
