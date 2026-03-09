@@ -27,7 +27,9 @@ html{
   font-size:26px;
 }
 @media(max-width:400px){html{font-size:23px;}}
-@media(min-width:600px){html{font-size:29px;}}
+@media(min-width:600px){html{font-size:22px;}}
+@media(min-width:1024px){html{font-size:18px;}}
+@media(min-width:1400px){html{font-size:16px;}}
 body{
   height:100vh;width:100vw;
   overflow:hidden;
@@ -940,6 +942,118 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   .home-quick-sub{font-size:.28rem;}
 }
 
+
+/* ══ LANDSCAPE / TV / XBOX ════════════════════════════════════════════════ */
+@media (min-width: 600px) {
+  html { font-size: 18px; }
+}
+@media (min-width: 900px) {
+  html { font-size: 16px; }
+}
+@media (min-width: 1200px) {
+  html { font-size: 14px; }
+}
+
+/* Landscape home screen — two column layout */
+@media (orientation: landscape) and (min-width: 600px) {
+  #intro-screen {
+    padding: 16px 24px !important;
+    overflow-y: auto;
+  }
+  #intro-screen > div {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  /* Left column: logo + daily + stats */
+  #intro-screen > div > div:first-child,
+  #home-stats-card {
+    flex: 1;
+  }
+  /* Right column: play button + leaderboard + quick actions */
+  .home-quick-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  /* Logo smaller in landscape */
+  .lx-logo { font-size: clamp(1.4rem, 4vw, 2.4rem) !important; }
+}
+
+/* TV / large screen home layout */
+@media (min-width: 1024px) {
+  #intro-screen > div {
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 24px !important;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+  }
+  #home-stats-card { flex: 1; }
+  .lx-logo { font-size: 2.8rem !important; }
+
+  /* Mode select sheet — horizontal on TV */
+  #mode-select-sheet > div > div:nth-child(2) {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px !important;
+  }
+  .lx-mode-btn {
+    flex: 0 1 calc(50% - 8px) !important;
+    max-width: 360px;
+  }
+
+  /* Mode dialog — wider card */
+  .md-card {
+    max-width: 560px !important;
+    margin: 0 auto;
+    height: 100vh;
+  }
+  #mode-dialog-backdrop {
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Game board — bigger side panels on TV */
+  .side { width: 90px !important; }
+  .panel label { font-size: .5rem !important; }
+}
+
+/* Controller focus ring — visible when using gamepad/keyboard */
+.gp-focus {
+  outline: 3px solid #a78bfa !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(124,92,252,0.25) !important;
+}
+
+/* Controller hint bar — shows when gamepad connected */
+#controller-hint {
+  position: fixed;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  background: rgba(10,12,28,0.9);
+  border: 1px solid rgba(124,92,252,0.3);
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: rgba(180,190,230,0.8);
+  display: none;
+  gap: 12px;
+  align-items: center;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: .04em;
+}
+#controller-hint.show { display: flex; }
+#controller-hint span { color: #a78bfa; }
+
 /* Revised mode dialog */
 .md-card{
   justify-content:flex-start;
@@ -1544,6 +1658,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   </div>
 </div>
 
+<div id="controller-hint">
+  <span>🎮</span>
+  <span style="color:rgba(180,190,230,0.6);">A</span> Drop &nbsp;
+  <span style="color:rgba(180,190,230,0.6);">←→</span> Move &nbsp;
+  <span style="color:rgba(180,190,230,0.6);">↓</span> Soft drop &nbsp;
+  <span style="color:rgba(180,190,230,0.6);">B</span> Pause
+</div>
 <div id="tbar">
   <button class="tbtn" id="btn-left">◀</button>
   <button class="tbtn" id="btn-drop">▼ DROP</button>
@@ -1924,7 +2045,8 @@ function calcCell(){
   const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
   const avW=window.innerWidth-sideW-4;
   const cellByW=Math.floor(avW/COLS);
-  return Math.max(26,Math.floor(Math.min(cellByH,cellByW)*0.99));
+  const minCell = window.innerWidth > 1024 ? 40 : 26;
+  return Math.max(minCell,Math.floor(Math.min(cellByH,cellByW)*0.99));
 }
 let CELL=calcCell();
 function resizeCv(){
@@ -2610,11 +2732,57 @@ function pollGamepad(){
 window.addEventListener('gamepadconnected', e=>{
   console.log('Controller connected:', e.gamepad.id);
   showToast('🎮 Controller connected!');
+  const hint = document.getElementById('controller-hint');
+  if(hint) hint.classList.add('show');
   pollGamepad();
 });
 window.addEventListener('gamepaddisconnected', e=>{
   showToast('🎮 Controller disconnected');
+  const hint = document.getElementById('controller-hint');
+  if(hint) hint.classList.remove('show');
 });
+
+// Also handle menu navigation with controller (for home/mode screens)
+let gpMenuLastA=false, gpMenuLastB=false, gpMenuLastStart=false;
+function pollGamepadMenus(){
+  const gpList=navigator.getGamepads?navigator.getGamepads():[];
+  const gp=Array.from(gpList).find(g=>g&&g.connected);
+  if(!gp){ requestAnimationFrame(pollGamepadMenus); return; }
+
+  const aBtn = gp.buttons[0]?.pressed;
+  const bBtn = gp.buttons[1]?.pressed;
+  const start = gp.buttons[9]?.pressed;
+
+  // On intro screen: A = Play, Start = Play
+  const introOpen = document.getElementById('intro-screen')?.classList.contains('open');
+  if(introOpen){
+    if((aBtn||start) && !(gpMenuLastA||gpMenuLastStart)) showModeSelect();
+  }
+
+  // On mode select: B = cancel
+  const modeSheetOpen = document.getElementById('mode-select-sheet')?.classList.contains('open');
+  if(modeSheetOpen){
+    if(bBtn && !gpMenuLastB) closeModeSelectSheet();
+  }
+
+  // On mode dialog: A = play, B = back
+  const modeDialogOpen = document.getElementById('mode-dialog-backdrop')?.classList.contains('open');
+  if(modeDialogOpen){
+    if(aBtn && !gpMenuLastA) confirmPlayMode();
+    if(bBtn && !gpMenuLastB) closeModeDialog();
+  }
+
+  // On leaderboard: B = close
+  const lbOpen = document.getElementById('lb-overlay')?.classList.contains('open');
+  if(lbOpen){
+    if(bBtn && !gpMenuLastB) closeLeaderboard();
+  }
+
+  gpMenuLastA=aBtn; gpMenuLastB=bBtn; gpMenuLastStart=start;
+  requestAnimationFrame(pollGamepadMenus);
+}
+// Start menu polling immediately
+requestAnimationFrame(pollGamepadMenus);
 document.getElementById('btn-left').addEventListener('click',goLeft);
 document.getElementById('btn-right').addEventListener('click',goRight);
 document.getElementById('btn-drop').addEventListener('click',drop);
