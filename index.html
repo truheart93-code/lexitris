@@ -1073,7 +1073,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Hero section */
 .md-hero{
-  position:relative;padding:20px 24px 16px;
+  position:relative;padding:12px 24px 10px;
   display:flex;flex-direction:column;align-items:center;
   overflow:hidden;
 }
@@ -1083,9 +1083,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   transition:background .4s;
 }
 .md-hero-icon{
-  font-size:2.2rem;
+  font-size:1.7rem;
   position:relative;z-index:1;
-  margin-bottom:6px;
+  margin-bottom:4px;
   filter:drop-shadow(0 0 16px currentColor);
   animation:iconFloat 3s ease-in-out infinite;
 }
@@ -1095,7 +1095,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-hero-name{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.4rem;letter-spacing:.12em;
+  font-size:1.15rem;letter-spacing:.12em;
   color:#fff;
   position:relative;z-index:1;
   margin-bottom:4px;
@@ -1111,7 +1111,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Stat chips */
 .md-chips{
   display:flex;gap:6px;justify-content:center;
-  padding:0 16px 12px;flex-wrap:wrap;
+  padding:0 16px 8px;flex-wrap:wrap;
   max-width:400px;align-self:center;width:100%;
 }
 .md-chip{
@@ -1119,12 +1119,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(124,92,252,0.18);
   border-radius:10px;
-  padding:7px 10px;min-width:56px;
+  padding:5px 8px;min-width:50px;
   flex:1;
 }
 .md-chip-val{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.9rem;color:#a78bfa;
+  font-size:.8rem;color:#a78bfa;
   line-height:1;margin-bottom:2px;
 }
 .md-chip-label{
@@ -1160,14 +1160,14 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Action buttons */
 .md-actions{
   display:flex;flex-direction:column;gap:6px;
-  padding:0 16px 16px;
+  padding:0 16px 12px;
   margin-top:auto;
   max-width:400px;
   width:100%;
   align-self:center;
 }
 .md-play-btn{
-  width:100%;padding:15px;border:none;border-radius:14px;
+  width:100%;padding:12px;border:none;border-radius:14px;
   font-family:'Nunito',sans-serif;font-weight:900;
   font-size:1rem;letter-spacing:.1em;
   color:#fff;cursor:pointer;
@@ -1203,9 +1203,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .md-hero[data-mode="zen"] .md-hero-name{background:linear-gradient(135deg,#6ee7b7,#00e5cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .md-play-btn[data-mode="zen"]{background:linear-gradient(135deg,#00e5cc 0%,#009e8e 100%);box-shadow:0 5px 0 rgba(0,60,55,0.8),0 0 30px rgba(0,229,204,0.25);}
 
+.md-hero[data-mode="daily"] .md-hero-glow{background:radial-gradient(ellipse at 50% 0%,#4ade80 0%,transparent 70%);}
+.md-hero[data-mode="daily"] .md-hero-name{background:linear-gradient(135deg,#86efac,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.md-play-btn[data-mode="daily"]{background:linear-gradient(135deg,#4ade80 0%,#16a34a 100%);box-shadow:0 5px 0 rgba(0,60,20,0.8),0 0 30px rgba(74,222,128,0.25);}
+
 /* Last game section inside mode dialog */
 .md-last{
-  margin:0 16px 14px;
+  margin:0 16px 8px;
   border-radius:14px;overflow:hidden;
   border:1px solid rgba(124,92,252,0.15);
   background:rgba(255,255,255,0.025);
@@ -1215,7 +1219,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
   letter-spacing:.12em;text-transform:uppercase;
   color:rgba(200,215,255,0.72);
-  padding:10px 14px 5px;
+  padding:7px 14px 4px;
 }
 .md-last-stats{
   display:flex;gap:0;
@@ -1223,13 +1227,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-stat{
   flex:1;display:flex;flex-direction:column;align-items:center;
-  padding:10px 6px 12px;
+  padding:7px 6px 8px;
   border-right:1px solid rgba(124,92,252,0.1);
 }
 .md-last-stat:last-child{border-right:none;}
 .md-last-stat span{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.05rem;color:#a78bfa;line-height:1;margin-bottom:4px;
+  font-size:.9rem;color:#a78bfa;line-height:1;margin-bottom:3px;
 }
 .md-last-stat.md-last-best span{color:#f5a623;}
 .md-last-stat label{
@@ -1586,17 +1590,17 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="home-quick-card" onclick="openHomeSettings()">
         <div class="home-quick-icon">⚙️</div>
         <div class="home-quick-title">Settings</div>
-        <div class="home-quick-sub">Sound, haptics, ads</div>
+        <div class="home-quick-sub">Sound<br>Haptics<br>Ads</div>
       </button>
       <button class="home-quick-card" onclick="document.getElementById('help-overlay').classList.add('open')">
         <div class="home-quick-icon">❓</div>
         <div class="home-quick-title">How to Play</div>
-        <div class="home-quick-sub">Learn&nbsp;the&nbsp;rules</div>
+        <div class="home-quick-sub">Learn<br>the rules</div>
       </button>
       <button class="home-quick-card" onclick="openStats()">
         <div class="home-quick-icon">📊</div>
         <div class="home-quick-title">Stats</div>
-        <div class="home-quick-sub">Lifetime progress</div>
+        <div class="home-quick-sub">Lifetime<br>progress</div>
       </button>
     </div>
 
