@@ -1059,12 +1059,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   height:100%;
   max-height:100vh;
   border-radius:0;
-  overflow:hidden;
+  overflow-y:auto;
   background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
   border:none;
   box-shadow:none;
   display:flex;flex-direction:column;
-  justify-content:center;
+  justify-content:space-between;
+  padding:8px 0;
 }
 @keyframes mdSlideUp{
   from{opacity:0;transform:translateY(28px) scale(.97)}
@@ -1073,7 +1074,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Hero section */
 .md-hero{
-  position:relative;padding:12px 24px 10px;
+  position:relative;padding:18px 24px 14px;
   display:flex;flex-direction:column;align-items:center;
   overflow:hidden;
 }
@@ -1111,7 +1112,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Stat chips */
 .md-chips{
   display:flex;gap:6px;justify-content:center;
-  padding:0 16px 8px;flex-wrap:wrap;
+  padding:0 16px 14px;flex-wrap:wrap;
   max-width:400px;align-self:center;width:100%;
 }
 .md-chip{
@@ -1119,7 +1120,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(124,92,252,0.18);
   border-radius:10px;
-  padding:5px 8px;min-width:50px;
+  padding:8px 10px;min-width:56px;
   flex:1;
 }
 .md-chip-val{
@@ -1160,14 +1161,14 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Action buttons */
 .md-actions{
   display:flex;flex-direction:column;gap:6px;
-  padding:0 16px 12px;
+  padding:0 16px 16px;
   margin-top:auto;
   max-width:400px;
   width:100%;
   align-self:center;
 }
 .md-play-btn{
-  width:100%;padding:12px;border:none;border-radius:14px;
+  width:100%;padding:14px;border:none;border-radius:14px;
   font-family:'Nunito',sans-serif;font-weight:900;
   font-size:1rem;letter-spacing:.1em;
   color:#fff;cursor:pointer;
@@ -1209,7 +1210,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Last game section inside mode dialog */
 .md-last{
-  margin:0 16px 8px;
+  margin:0 16px 14px;
   border-radius:14px;overflow:hidden;
   border:1px solid rgba(124,92,252,0.15);
   background:rgba(255,255,255,0.025);
@@ -1219,7 +1220,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
   letter-spacing:.12em;text-transform:uppercase;
   color:rgba(200,215,255,0.72);
-  padding:7px 14px 4px;
+  padding:10px 14px 6px;
 }
 .md-last-stats{
   display:flex;gap:0;
@@ -1227,13 +1228,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-stat{
   flex:1;display:flex;flex-direction:column;align-items:center;
-  padding:7px 6px 8px;
+  padding:10px 6px 12px;
   border-right:1px solid rgba(124,92,252,0.1);
 }
 .md-last-stat:last-child{border-right:none;}
 .md-last-stat span{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.9rem;color:#a78bfa;line-height:1;margin-bottom:3px;
+  font-size:.95rem;color:#a78bfa;line-height:1;margin-bottom:4px;
 }
 .md-last-stat.md-last-best span{color:#f5a623;}
 .md-last-stat label{
