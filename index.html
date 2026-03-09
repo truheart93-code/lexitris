@@ -921,7 +921,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .home-quick-title{
   font-family:'Nunito',sans-serif;
   font-weight:900;
-  font-size:.58rem;
+  font-size:.54rem;
   letter-spacing:.08em;
   text-transform:uppercase;
   color:#e5e9ff;
@@ -929,15 +929,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .home-quick-sub{
   font-family:'Space Mono',monospace;
-  font-size:.4rem;
+  font-size:.38rem;
   line-height:1.35;
   color:rgba(180,190,230,0.62);
   text-align:center;
 }
 @media(max-width:360px){
   .home-quick-card{min-height:84px;padding:10px 8px;}
-  .home-quick-title{font-size:.54rem;}
-  .home-quick-sub{font-size:.38rem;}
+  .home-quick-title{font-size:.48rem;}
+  .home-quick-sub{font-size:.34rem;}
 }
 
 /* Revised mode dialog */
@@ -1432,6 +1432,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="hdr">
   <div class="hdr-top">
     <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
+    <div id="timer-bar-wrap" style="display:none;flex:1;margin:0 8px;">
+      <div id="timer-box" style="position:relative;background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:8px;overflow:hidden;height:28px;">
+        <div id="timer-bar" style="position:absolute;inset:0;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:8px;opacity:0.25;"></div>
+        <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:#e0d0ff;text-shadow:0 0 12px rgba(124,92,252,0.8);pointer-events:none;">3:00</div>
+      </div>
+    </div>
     <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;margin-left:8px">⏸</button>
   </div>
   <div class="stats">
@@ -1441,10 +1447,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div class="stat"><span>Lines</span><b class="blue" id="s-lines">0</b></div>
     <div class="stat"><span>Combo</span><b class="red" id="s-combo">×1</b></div>
   </div>
-</div>
-<div id="timer-bar-wrap" style="width:100%;flex-shrink:0;display:none;position:relative;background:rgba(124,92,252,0.08);">
-  <div id="timer-bar" style="height:4px;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:0;"></div>
-  <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;letter-spacing:.1em;color:#a78bfa;pointer-events:none;">3:00</div>
 </div>
 
 <!-- Settings / Pause backdrop -->
@@ -1530,9 +1532,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
     <!-- Stats card -->
     <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
-      <div style="text-align:center;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;">Best Score</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;color:#f5a623;" id="home-stat-best">0</div>
+      <!-- Daily Challenge strip -->
+      <div id="home-daily-strip" onclick="closeModeSelectSheet();openModeDialog('daily')" style="display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.4rem;line-height:1;">📅</div>
+        <div style="flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.62rem;color:#4ade80;text-transform:uppercase;letter-spacing:.08em;">Daily Challenge</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.52rem;color:rgba(200,210,255,0.6);" id="home-daily-sub">Same puzzle · everyone · every day</div>
+        </div>
+        <div id="home-daily-score" style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;color:#f5a623;display:none;"></div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:rgba(160,170,210,0.5);">›</div>
       </div>
       <div style="display:flex;justify-content:space-around;">
         <div style="text-align:center;">
@@ -1583,7 +1591,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="home-quick-card" onclick="document.getElementById('help-overlay').classList.add('open')">
         <div class="home-quick-icon">❓</div>
         <div class="home-quick-title">How to Play</div>
-        <div class="home-quick-sub">Learn the rules</div>
+        <div class="home-quick-sub">Learn&nbsp;the&nbsp;rules</div>
       </button>
       <button class="home-quick-card" onclick="openStats()">
         <div class="home-quick-icon">📊</div>
@@ -1600,6 +1608,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.7);text-transform:uppercase;text-align:center;margin-bottom:20px;">Choose Mode</div>
     <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;">
+      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 20px rgba(74,222,128,0.3);" onclick="closeModeSelectSheet();openModeDialog('daily')">
+        <span class="lx-mode-icon">📅</span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Daily Challenge</span><span class="lx-mode-desc" id="daily-mode-desc">Same puzzle · everyone · every day</span></span>
+        <span class="lx-mode-arrow">›</span>
+      </button>
       <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);" onclick="closeModeSelectSheet();openModeDialog('classic')">
         <span class="lx-mode-icon">📖</span>
         <span class="lx-mode-text"><span class="lx-mode-name">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
@@ -1613,11 +1626,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);" onclick="closeModeSelectSheet();openModeDialog('zen')">
         <span class="lx-mode-icon">🧘</span>
         <span class="lx-mode-text"><span class="lx-mode-name">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
-        <span class="lx-mode-arrow">›</span>
-      </button>
-      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 20px rgba(74,222,128,0.3);" onclick="closeModeSelectSheet();openModeDialog('daily')">
-        <span class="lx-mode-icon">📅</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Daily Challenge</span><span class="lx-mode-desc" id="daily-mode-desc">Same puzzle · everyone · every day</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
     </div>
@@ -1875,11 +1883,9 @@ const ctx=cv.getContext('2d');
 function calcCell(){
   const hdrH=document.getElementById('hdr').offsetHeight||48;
   const tbarH=document.getElementById('tbar').offsetHeight||58;
-  const timerEl=document.getElementById('timer-bar-wrap');
-  const timerH=(timerEl&&timerEl.style.display!=='none')?timerEl.offsetHeight:0;
   // Use visualViewport if available (accounts for Android system bars correctly)
   const viewH = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-  const avH=viewH-hdrH-tbarH-timerH-4;
+  const avH=viewH-hdrH-tbarH-4;
   const cellByH=Math.floor(avH/ROWS);
   const sideEls=[...document.querySelectorAll('#main .side')].filter(s=>s.offsetParent!==null);
   const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
@@ -2471,14 +2477,22 @@ function loop(ts){
     const pct=remaining/timedDuration;
     const tb=document.getElementById('timer-bar');
     const tl=document.getElementById('timer-label');
+    const tbox=document.getElementById('timer-box');
     tb.style.width=(pct*100)+'%';
-    const color=pct<0.2?'#ee2266':pct<0.4?'#ff8800':'#5533ee';
-    tb.style.background=color;
-    document.getElementById('timer-bar-wrap').style.background=pct<0.2?'rgba(255,59,107,0.15)':pct<0.4?'rgba(245,166,35,0.1)':'rgba(124,92,252,0.08)';
+    const gradColor = pct<0.2
+      ? 'linear-gradient(90deg,#ff1144,#ff5500)'
+      : pct<0.4
+        ? 'linear-gradient(90deg,#ff6600,#ffaa00)'
+        : 'linear-gradient(90deg,#7c5cfc,#00e5cc)';
+    tb.style.background=gradColor;
+    if(tbox){
+      tbox.style.borderColor=pct<0.2?'rgba(255,30,80,0.7)':pct<0.4?'rgba(255,120,0,0.6)':'rgba(124,92,252,0.35)';
+      tbox.style.boxShadow=pct<0.2?'0 0 10px rgba(255,30,80,0.4)':pct<0.4?'0 0 8px rgba(255,120,0,0.3)':'none';
+    }
     const mins=Math.floor(remaining/60);
     const secs=Math.floor(remaining%60);
     tl.textContent=mins+':'+(secs<10?'0':'')+secs;
-    tl.style.color=pct<0.4?'#fff':'#fff';
+    tl.style.color='#fff';
     if(remaining<=0&&!gameOver){endGame();return;}
   }
   if(!paused&&falling&&ts-lastDropT>getEffectiveDropMs()){
@@ -3212,14 +3226,29 @@ function closeModeSelectSheet(){
 }
 
 function updateHomeStats(){
-  const best = document.getElementById('home-stat-best');
   const games = document.getElementById('home-stat-games');
   const words = document.getElementById('home-stat-words');
   const combo = document.getElementById('home-stat-combo');
-  if(best) best.textContent = (bestScore||0).toLocaleString();
   if(games) games.textContent = (lifetimeStats.gamesPlayed||0).toLocaleString();
   if(words) words.textContent = (lifetimeStats.totalWords||0).toLocaleString();
   if(combo) combo.textContent = '×'+(lifetimeStats.bestCombo||1);
+
+  // Daily challenge strip
+  const dailySub = document.getElementById('home-daily-sub');
+  const dailyScoreEl = document.getElementById('home-daily-score');
+  const strip = document.getElementById('home-daily-strip');
+  try {
+    const saved = JSON.parse(localStorage.getItem('lexitris_daily')||'{}');
+    if(saved.date === getDailyDate() && saved.score > 0){
+      if(dailySub) dailySub.textContent = 'Completed today ✅';
+      if(dailyScoreEl){ dailyScoreEl.textContent = saved.score.toLocaleString(); dailyScoreEl.style.display='block'; }
+      if(strip) strip.style.borderColor = 'rgba(74,222,128,0.3)';
+    } else {
+      if(dailySub) dailySub.textContent = 'Same puzzle · everyone · every day';
+      if(dailyScoreEl) dailyScoreEl.style.display='none';
+      if(strip) strip.style.borderColor = '';
+    }
+  } catch(e){}
 }
 
 function introContinue(){
@@ -3308,10 +3337,10 @@ let gameMode='classic';
 let timedStart=0, timedDuration=180; // 3 minutes
 
 const MODE_CONFIG={
-  classic:{ startMs:1000, minMs:200,  levelStep:80,  label:'Classic', icon:'📖' },
-  timed:  { startMs:800,  minMs:180,  levelStep:70,  label:'Timed',   icon:'⏱'  },
+  classic:{ startMs:850,  minMs:180,  levelStep:80,  label:'Classic', icon:'📖' },
+  timed:  { startMs:680,  minMs:160,  levelStep:70,  label:'Timed',   icon:'⏱'  },
   zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
-  daily:  { startMs:900,  minMs:200,  levelStep:75,  label:'Daily',   icon:'📅'  },
+  daily:  { startMs:780,  minMs:180,  levelStep:75,  label:'Daily',   icon:'📅'  },
 };
 
 // Mode metadata for dialog
