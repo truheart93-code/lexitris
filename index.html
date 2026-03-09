@@ -1398,6 +1398,57 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   60%{transform:translateX(4px)}
   75%{transform:translateX(-2px)}
 }
+
+/* Rate prompt */
+#rate-overlay{
+  position:fixed;inset:0;z-index:600;
+  display:none;align-items:flex-end;justify-content:center;
+  background:rgba(0,0,0,0.55);
+  padding-bottom:24px;
+}
+#rate-overlay.show{display:flex;}
+#rate-card{
+  width:calc(100% - 32px);max-width:400px;
+  background:linear-gradient(160deg,#111428,#0e0d1f);
+  border:1px solid rgba(124,92,252,0.35);
+  border-radius:20px;padding:22px 20px 18px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:slideUp .3s ease;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+#rate-stars{display:flex;gap:8px;font-size:2rem;cursor:pointer;}
+#rate-stars span{transition:transform .1s;}
+#rate-stars span:hover{transform:scale(1.25);}
+.rate-btn{
+  width:100%;padding:12px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;
+  letter-spacing:.08em;cursor:pointer;
+}
+
+/* Onboarding tutorial */
+#onboard-overlay{
+  position:fixed;inset:0;z-index:700;
+  display:none;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:0 16px 32px;
+  pointer-events:none;
+}
+#onboard-overlay.show{display:flex;pointer-events:all;}
+#onboard-card{
+  width:100%;max-width:420px;
+  background:linear-gradient(160deg,#151830,#0e0d1f);
+  border:1px solid rgba(124,92,252,0.4);
+  border-radius:20px;padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+  animation:slideUp .3s ease;
+}
+.onboard-step{display:none;}
+.onboard-step.active{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;}
+.onboard-emoji{font-size:2.4rem;line-height:1;}
+.onboard-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#fff;}
+.onboard-body{font-family:'Nunito',sans-serif;font-weight:600;font-size:.6rem;color:rgba(200,210,255,0.7);line-height:1.5;}
+.onboard-dots{display:flex;gap:6px;justify-content:center;}
+.onboard-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,92,252,0.3);}
+.onboard-dot.active{background:#7c5cfc;}
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -3301,6 +3352,7 @@ function endGame(){
   modeLastGame[gameMode]={score,level,lines,bestWord:sessionBestWord,bestWordPts:sessionBestWordPts};
   // Update lifetime stats
   lifetimeStats.gamesPlayed++;
+  maybeShowRate();
   const today=new Date().toDateString();
   if(lifetimeStats.lastPlayDate===today){/* same day */}
   else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
@@ -3392,6 +3444,7 @@ function showIntro(){
   document.getElementById('intro-screen').classList.add('open');
   updateHomeStats();
   loadHomeLb(currentHomeLbMode);
+  maybeShowOnboard();
 }
 
 function introNewGame(){
@@ -3512,8 +3565,8 @@ let gameMode='classic';
 let timedStart=0, timedDuration=180; // 3 minutes
 
 const MODE_CONFIG={
-  classic:{ startMs:850,  minMs:180,  levelStep:80,  label:'Classic', icon:'📖' },
-  timed:  { startMs:680,  minMs:160,  levelStep:70,  label:'Timed',   icon:'⏱'  },
+  classic:{ startMs:900,  minMs:160,  levelStep:75,  label:'Classic', icon:'📖' },
+  timed:  { startMs:720,  minMs:150,  levelStep:65,  label:'Timed',   icon:'⏱'  },
   zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
   daily:  { startMs:780,  minMs:180,  levelStep:75,  label:'Daily',   icon:'📅'  },
 };
@@ -4347,5 +4400,114 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
 </script>
+
+<script>
+// ══ RATE PROMPT ════════════════════════════════════════════════════════════
+let rateAsked = false;
+try { rateAsked = !!localStorage.getItem('lexitris_rated'); } catch(e){}
+
+function maybeShowRate(){
+  if(rateAsked) return;
+  if(lifetimeStats.gamesPlayed === 5 || lifetimeStats.gamesPlayed === 10){
+    setTimeout(()=> document.getElementById('rate-overlay').classList.add('show'), 1200);
+  }
+}
+
+function rateSelected(stars){
+  document.getElementById('rate-overlay').classList.remove('show');
+  try { localStorage.setItem('lexitris_rated','1'); } catch(e){}
+  rateAsked = true;
+  if(stars >= 4){
+    setTimeout(()=>{ window.open('https://play.google.com/store/apps/details?id=app.netlify.lexitris2.twa','_blank'); }, 300);
+    showToast('Thanks for the love! ⭐');
+  } else {
+    showToast('Thanks for the feedback!');
+  }
+}
+
+function dismissRate(){
+  document.getElementById('rate-overlay').classList.remove('show');
+  rateAsked = false;
+}
+
+// ══ ONBOARDING ══════════════════════════════════════════════════════════════
+let onboardStep = 0;
+let onboardSeen = false;
+try { onboardSeen = !!localStorage.getItem('lexitris_onboard'); } catch(e){}
+
+function maybeShowOnboard(){
+  if(onboardSeen) return;
+  onboardStep = 0;
+  showOnboardStep(0);
+  document.getElementById('onboard-overlay').classList.add('show');
+}
+
+function showOnboardStep(n){
+  document.querySelectorAll('.onboard-step').forEach((el,i)=>{
+    el.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.onboard-dot').forEach((el,i)=>{
+    el.classList.toggle('active', i===n);
+  });
+  const btn = document.getElementById('onboard-next-btn');
+  if(btn) btn.textContent = n >= 2 ? "Let's Play! ▶" : "Next →";
+}
+
+function onboardNext(){
+  if(onboardStep >= 2){ dismissOnboard(); }
+  else { onboardStep++; showOnboardStep(onboardStep); }
+}
+
+function dismissOnboard(){
+  document.getElementById('onboard-overlay').classList.remove('show');
+  try { localStorage.setItem('lexitris_onboard','1'); } catch(e){}
+  onboardSeen = true;
+}
+</script>
+
+<!-- ═══ RATE PROMPT ════════════════════════════════════════════════════════ -->
+<div id="rate-overlay">
+  <div id="rate-card">
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#fff;">Enjoying Lexitris?</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,255,0.65);">A quick rating helps others find the game ⭐</div>
+    <div id="rate-stars">
+      <span onclick="rateSelected(1)">⭐</span>
+      <span onclick="rateSelected(2)">⭐</span>
+      <span onclick="rateSelected(3)">⭐</span>
+      <span onclick="rateSelected(4)">⭐</span>
+      <span onclick="rateSelected(5)">⭐</span>
+    </div>
+    <button class="rate-btn" onclick="dismissRate()" style="background:rgba(255,255,255,0.05);color:rgba(200,210,255,0.5);margin-top:2px;">Not now</button>
+  </div>
+</div>
+
+<!-- ═══ ONBOARDING ══════════════════════════════════════════════════════════ -->
+<div id="onboard-overlay">
+  <div id="onboard-card">
+    <div class="onboard-step active" id="onboard-0">
+      <div class="onboard-emoji">🔤</div>
+      <div class="onboard-title">Letters Fall — You Spell</div>
+      <div class="onboard-body">Use ◀ ▶ to move the falling letter left and right.<br>Tap ▼ DROP or swipe down to drop it fast.</div>
+    </div>
+    <div class="onboard-step" id="onboard-1">
+      <div class="onboard-emoji">✨</div>
+      <div class="onboard-title">Spell Words to Clear Rows</div>
+      <div class="onboard-body">Words score points and clear the row they're in.<br>Words can go → horizontal, ↓ vertical, or ↘↗ diagonal.</div>
+    </div>
+    <div class="onboard-step" id="onboard-2">
+      <div class="onboard-emoji">⚡</div>
+      <div class="onboard-title">Chain Combos for Big Points</div>
+      <div class="onboard-body">Clear multiple rows in a row to build a combo multiplier up to ×8.<br>Longer words = more points. Don't let it stack to the top!</div>
+    </div>
+    <div class="onboard-dots">
+      <div class="onboard-dot active" id="odot-0"></div>
+      <div class="onboard-dot" id="odot-1"></div>
+      <div class="onboard-dot" id="odot-2"></div>
+    </div>
+    <button class="rate-btn" id="onboard-next-btn" onclick="onboardNext()" style="background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;">Next →</button>
+    <button class="rate-btn" onclick="dismissOnboard()" style="background:rgba(255,255,255,0.04);color:rgba(200,210,255,0.45);padding:8px;">Skip tutorial</button>
+  </div>
+</div>
+
 </body>
 </html>
