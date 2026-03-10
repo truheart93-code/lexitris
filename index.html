@@ -1868,11 +1868,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       console.log('[Lexitris] Leaderboard raw response:', JSON.stringify(rows).substring(0,500));
       const mapped = rows
         .filter(r => r.document)
-        .map(r => ({
-          name:  r.document.fields.name.stringValue,
-          score: parseInt(r.document.fields.score.integerValue),
-          mode:  r.document.fields.mode.stringValue
-        }));
+        .map(r => {
+          const sf = r.document.fields.score;
+          const score = parseInt(sf.integerValue || sf.doubleValue || sf.stringValue || 0);
+          return {
+            name:  r.document.fields.name.stringValue,
+            score: score,
+            mode:  r.document.fields.mode.stringValue
+          };
+        });
       console.log('[Lexitris] Mapped scores:', JSON.stringify(mapped));
       return mapped;
     } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
