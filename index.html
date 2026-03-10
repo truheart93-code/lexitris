@@ -614,6 +614,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-icon{font-size:1.5rem;flex-shrink:0;width:2rem;text-align:center;}
 .lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
 .lx-mode-name{
+  -webkit-text-fill-color:#ffffff !important;
+  background:none !important;
   font-family:'Nunito',sans-serif;font-weight:900;
   font-size:.8rem;color:#e0e0ff;letter-spacing:.02em;
   white-space:nowrap;
@@ -1835,24 +1837,25 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.7);text-transform:uppercase;text-align:center;margin-bottom:20px;">Choose Mode</div>
     <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;">
-      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 20px rgba(74,222,128,0.3);" onclick="closeModeSelectSheet();openModeDialog('daily')">
+      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 28px rgba(74,222,128,0.55),inset 0 0 20px rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.07);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('daily')">
         <span class="lx-mode-icon">📅</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Daily</span><span class="lx-mode-desc">Same puzzle · everyone · every day</span></span>
-        <span class="lx-mode-arrow">›</span>
+        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Daily</span><span class="lx-mode-desc">Same puzzle · everyone · every day</span></span>
+        <span id="daily-check" style="display:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#16a34a);box-shadow:0 0 10px rgba(74,222,128,0.5);flex-shrink:0;display:none;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:900;">✓</span>
+        <span class="lx-mode-arrow" id="daily-arrow">›</span>
       </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);" onclick="closeModeSelectSheet();openModeDialog('classic')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('classic')">
         <span class="lx-mode-icon">📖</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(245,166,35,0.3);" onclick="closeModeSelectSheet();openModeDialog('timed')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(245,166,35,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('timed')">
         <span class="lx-mode-icon">⏱</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Timed</span><span class="lx-mode-desc">3 minutes · score as much as you can</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Timed</span><span class="lx-mode-desc">3 minutes · score as much as you can</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);" onclick="closeModeSelectSheet();openModeDialog('zen')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('zen')">
         <span class="lx-mode-icon">🧘</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
     </div>
@@ -3368,7 +3371,16 @@ function endGame(){
     const btn=document.getElementById('daily-mode-btn');
     const desc=document.getElementById('daily-mode-desc');
     if(desc) desc.textContent="Today's score: "+_goScore.toLocaleString();
-    if(btn) btn.style.opacity='0.7';
+    if(btn){
+      btn.style.opacity='1';
+      btn.style.background='rgba(74,222,128,0.04)';
+      btn.style.borderColor='rgba(74,222,128,0.2)';
+      btn.style.boxShadow='none';
+    }
+    const chk2 = document.getElementById('daily-check');
+    const arr2 = document.getElementById('daily-arrow');
+    if(chk2){ chk2.style.display='flex'; }
+    if(arr2){ arr2.style.display='none'; }
   }
   // Update per-mode best
   if(score>=(modeBests[gameMode]||0))modeBests[gameMode]=score;
@@ -4108,7 +4120,16 @@ function initDailyMode(){
       const btn=document.getElementById('daily-mode-btn');
       const desc=document.getElementById('daily-mode-desc');
       if(desc) desc.textContent="Today's score: "+saved.score.toLocaleString();
-      if(btn) btn.style.opacity='0.7';
+      if(btn){
+        btn.style.opacity='1';
+        btn.style.background='rgba(74,222,128,0.04)';
+        btn.style.borderColor='rgba(74,222,128,0.2)';
+        btn.style.boxShadow='none';
+      }
+      const chk = document.getElementById('daily-check');
+      const arr = document.getElementById('daily-arrow');
+      if(chk){ chk.style.display='flex'; }
+      if(arr){ arr.style.display='none'; }
     }
   }catch(e){}
 }
@@ -4547,5 +4568,16 @@ function dismissOnboard(){
   </div>
 </div>
 
+<style>
+.lx-mode-btn .lx-mode-name,
+.lx-mode-btn .lx-mode-name *,
+#mode-select-sheet .lx-mode-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+</style>
 </body>
 </html>
