@@ -1276,29 +1276,29 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Action buttons */
 .md-actions{
-  display:flex;flex-direction:column;gap:10px;
-  padding:0 16px 20px;
+  display:flex;flex-direction:column;gap:6px;
+  padding:0 16px 12px;
   margin-top:auto;
   max-width:400px;
   width:100%;
   align-self:center;
 }
 .md-play-btn{
-  width:100%;padding:14px;border:none;border-radius:14px;
+  width:100%;padding:9px;border:none;border-radius:12px;
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1rem;letter-spacing:.1em;
+  font-size:.78rem;letter-spacing:.1em;
   color:#fff;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
   -webkit-tap-highlight-color:transparent;
   transition:transform .08s,box-shadow .08s,filter .08s;
   text-transform:uppercase;
 }
 .md-play-btn:active{transform:translateY(3px);filter:brightness(.9);}
-.md-play-icon{font-size:.8rem;}
+.md-play-icon{font-size:.7rem;}
 .md-back-btn{
-  width:100%;padding:12px;border-radius:12px;
+  width:100%;padding:8px;border-radius:10px;
   font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.88rem;letter-spacing:.05em;
+  font-size:.72rem;letter-spacing:.05em;
   color:rgba(160,170,210,0.7);cursor:pointer;
   background:transparent;border:1px solid rgba(124,92,252,0.15);
   -webkit-tap-highlight-color:transparent;
@@ -1789,21 +1789,17 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </button>
 
     <!-- Banner ad — only visible after first interstitial -->
-    <div id="home-banner-ad">
-      <!-- AdMob banner slot injected by Android bridge -->
-      <div id="admob-banner-slot" style="width:320px;height:50px;"></div>
-    </div>
-
+    
     <!-- Mini leaderboard -->
     <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
       <div style="text-align:center;margin-bottom:8px;">
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
       </div>
       <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
-        <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
+        <button class="lb-tab active" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
+        <button class="lb-tab" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
         <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.52rem;padding:3px 7px;">Zen</button>
-        <button class="lb-tab" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
       </div>
       <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
         <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
@@ -3448,6 +3444,7 @@ function saveState(){
     localStorage.setItem('lexitris_save',JSON.stringify({
       score,level,lines,
       bestScore,highScores,modeLastGame,
+      modeBests,lifetimeStats,hallOfFame,
       hasState:true,
     }));
   }catch(e){}
@@ -4141,7 +4138,7 @@ function saveDailyResult(score){
 }
 
 // ── Home Leaderboard Preview ───────────────────────────────────────────────
-let currentHomeLbMode = 'classic';
+let currentHomeLbMode = 'daily';
 
 function switchHomeLb(mode){
   if(currentHomeLbMode === mode) return;
@@ -4163,28 +4160,21 @@ async function loadHomeLb(mode){
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
-  list.innerHTML = scores.slice(0,5).map((s,i) => {
+  list.innerHTML = scores.slice(0,3).map((s,i) => {
     const rank = rankIcons[i] || (i+1);
     return '<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(124,92,252,0.08);">'
       + '<span style="font-size:.8rem;width:20px;text-align:center;">' + rank + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.66rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.70rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.78rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.82rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
       + '</div>';
   }).join('');
 }
 
 // Load home leaderboard when page loads
 window.addEventListener('load', () => {
-  setTimeout(()=>loadHomeLb('classic'), 800);
+  setTimeout(()=>loadHomeLb('daily'), 800);
   setTimeout(updateHomeStats, 200);
-  // Restore banner if interstitial has been shown before
-  try{
-    if(localStorage.getItem('lexitris_ad_seen')){
-      const banner = document.getElementById('home-banner-ad');
-      if(banner) banner.classList.add('show');
-      if(window.Android && window.Android.showBanner) window.Android.showBanner();
-    }
-  }catch(e){}
+
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
