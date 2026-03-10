@@ -417,24 +417,28 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 @keyframes wordGlowFade{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.1);}}
 .tbtn{
-  flex:1;height:52px;
-  background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:14px;
-  font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;
-  color:#a78bfa;cursor:pointer;
+  flex:1;height:104px;
+  background:linear-gradient(180deg,rgba(124,92,252,0.18),rgba(124,92,252,0.08));
+  border:1px solid rgba(124,92,252,0.4);
+  border-radius:16px;
+  font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:900;
+  color:#c4b5fd;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   -webkit-tap-highlight-color:transparent;
-  box-shadow:0 4px 0 rgba(85,51,204,0.6),inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow:0 5px 0 rgba(60,30,160,0.7),inset 0 1px 0 rgba(255,255,255,0.1);
   transition:transform .08s,box-shadow .08s;
 }
-.tbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(85,51,204,0.6);}
+.tbtn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(60,30,160,0.7);}
 #btn-drop{
-  flex:1.6;background:rgba(255,59,107,0.12);border-color:rgba(255,59,107,0.4);color:#ff3b6b;
-  box-shadow:0 4px 0 rgba(180,20,60,0.7),inset 0 1px 0 rgba(255,255,255,0.06);
-  font-size:.72rem;letter-spacing:.1em;
+  flex:1.6;
+  background:linear-gradient(180deg,rgba(255,59,107,0.2),rgba(255,59,107,0.08));
+  border-color:rgba(255,59,107,0.5);color:#ff7096;
+  box-shadow:0 5px 0 rgba(160,10,50,0.7),inset 0 1px 0 rgba(255,255,255,0.08);
+  font-size:.85rem;letter-spacing:.12em;font-weight:900;
 }
-#btn-drop:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(180,20,60,0.7);}
+#btn-drop:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(160,10,50,0.7);}
 @media(max-width:400px){
-  .tbtn{height:48px;}
+  .tbtn{height:96px;}
 }
 
 /* Overlay */
@@ -590,11 +594,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-btn{
   display:flex;align-items:center;gap:13px;
   background:rgba(255,255,255,0.04);
-  border:1px solid rgba(124,92,252,0.2);
+  border:1px solid rgba(124,92,252,0.22);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  border-radius:14px;padding:13px 16px;
-  width:100%;cursor:pointer;
+  border-radius:14px;padding:16px;
+  width:100%;cursor:pointer;min-height:80px;
   box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06);
   -webkit-tap-highlight-color:transparent;
   transition:transform .08s,box-shadow .08s,background .1s,border-color .1s;
@@ -609,7 +613,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
 .lx-mode-name{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.88rem;color:#d0d0f0;
+  font-size:.88rem;color:#e0e0ff;letter-spacing:.02em;
 }
 .lx-mode-desc{
   font-family:'Space Mono',monospace;font-size:.4rem;
@@ -1449,6 +1453,17 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .onboard-dots{display:flex;gap:6px;justify-content:center;}
 .onboard-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,92,252,0.3);}
 .onboard-dot.active{background:#7c5cfc;}
+
+/* Home banner ad */
+#home-banner-ad{
+  width:100%;max-width:360px;
+  min-height:60px;
+  display:none;
+  align-items:center;justify-content:center;
+  border-radius:12px;overflow:hidden;
+  margin-top:4px;
+}
+#home-banner-ad.show{ display:flex; }
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -1766,6 +1781,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <button onclick="showModeSelect()" style="width:100%;padding:16px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
       ▶ &nbsp;Play
     </button>
+
+    <!-- Banner ad — only visible after first interstitial -->
+    <div id="home-banner-ad">
+      <!-- AdMob banner slot injected by Android bridge -->
+      <div id="admob-banner-slot" style="width:320px;height:50px;"></div>
+    </div>
 
     <!-- Mini leaderboard -->
     <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
@@ -4094,6 +4115,7 @@ function saveDailyResult(score){
 let currentHomeLbMode = 'classic';
 
 function switchHomeLb(mode){
+  if(currentHomeLbMode === mode) return;
   currentHomeLbMode = mode;
   ['classic','timed','zen','daily'].forEach(m => {
     const tab = document.getElementById('home-lb-tab-'+m);
@@ -4126,6 +4148,14 @@ async function loadHomeLb(mode){
 window.addEventListener('load', () => {
   setTimeout(()=>loadHomeLb('classic'), 800);
   setTimeout(updateHomeStats, 200);
+  // Restore banner if interstitial has been shown before
+  try{
+    if(localStorage.getItem('lexitris_ad_seen')){
+      const banner = document.getElementById('home-banner-ad');
+      if(banner) banner.classList.add('show');
+      if(window.Android && window.Android.showBanner) window.Android.showBanner();
+    }
+  }catch(e){}
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
@@ -4242,6 +4272,7 @@ async function submitScore(){
   pendingLbScore = 0;
   document.getElementById('lb-submit-area').classList.remove('show');
   btn.textContent = '✅ Submitted!';
+  setTimeout(()=>{ btn.textContent='Submit Score'; btn.disabled=false; }, 2500);
   loadLeaderboard(currentLbMode);
 }
 
