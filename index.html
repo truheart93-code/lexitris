@@ -1469,6 +1469,273 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   margin-top:4px;
 }
 #home-banner-ad.show{ display:flex; }
+
+
+/* Gem packs */
+.gem-pack-row{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(56,189,248,0.06);
+  border:1px solid rgba(56,189,248,0.2);
+  border-radius:14px;padding:12px 14px;
+  cursor:pointer;transition:all .2s;
+}
+.gem-pack-row:hover{background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);}
+.gem-pack-row:active{transform:scale(.98);}
+.gem-pack-featured{
+  background:rgba(56,189,248,0.1);
+  border-color:rgba(56,189,248,0.4);
+  box-shadow:0 0 18px rgba(56,189,248,0.15);
+}
+.gem-pack-icon{font-size:1.3rem;width:2rem;text-align:center;flex-shrink:0;}
+.gem-pack-info{flex:1;}
+.gem-pack-name{font-size:.65rem;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;}
+.gem-pack-amt{font-size:.52rem;color:rgba(200,210,255,0.55);}
+.gem-pack-badge{
+  font-size:.36rem;font-weight:800;letter-spacing:.08em;
+  background:linear-gradient(90deg,#f5a623,#ff6b35);
+  color:#fff;padding:2px 5px;border-radius:4px;
+}
+.gem-pack-price{
+  font-size:.75rem;font-weight:900;
+  color:#38bdf8;font-family:'Space Mono',monospace;
+  flex-shrink:0;
+}
+
+/* Gem confirm modal */
+#gem-pack-modal{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,0.65);
+  display:none;align-items:flex-end;justify-content:center;
+  padding-bottom:24px;
+}
+#gem-pack-modal.show{display:flex;}
+.gpack-card{
+  width:calc(100% - 32px);max-width:400px;
+  background:linear-gradient(160deg,#111428,#0e0d1f);
+  border:1px solid rgba(56,189,248,0.35);
+  border-radius:24px;padding:22px 20px 18px;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+  animation:slideUp .3s ease;
+}
+.gpack-title{font-size:.9rem;font-weight:900;color:#fff;}
+.gpack-amt{font-size:2rem;font-weight:900;color:#38bdf8;font-family:'Space Mono',monospace;}
+.gpack-note{font-size:.52rem;color:rgba(200,210,255,0.5);text-align:center;line-height:1.5;}
+
+/* ══ GEM SYSTEM ══════════════════════════════════════════════════════════ */
+.gem-badge-home{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(56,189,248,0.1);
+  border:1px solid rgba(56,189,248,0.28);
+  border-radius:20px;padding:5px 12px;
+  font-weight:900;font-size:.7rem;color:#38bdf8;
+  cursor:pointer;transition:all .2s;
+  font-family:'Nunito',sans-serif;
+}
+.gem-badge-home:hover{background:rgba(56,189,248,0.18);}
+
+#gem-overlay{
+  position:fixed;inset:0;z-index:350;
+  background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
+  display:none;flex-direction:column;
+  overflow:hidden;
+}
+#gem-overlay.open{display:flex;}
+
+.gem-overlay-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;
+  border-bottom:1px solid rgba(124,92,252,0.2);
+  background:rgba(10,12,28,0.9);
+  flex-shrink:0;
+}
+.gem-overlay-title{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.85rem;letter-spacing:.12em;
+  color:rgba(200,210,255,0.9);text-transform:uppercase;
+}
+.gem-tabs{
+  display:flex;border-bottom:1px solid rgba(124,92,252,0.18);
+  flex-shrink:0;background:rgba(10,12,28,0.7);
+}
+.gem-tab{
+  flex:1;padding:10px 0;
+  font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(200,210,255,0.4);cursor:pointer;
+  border:none;background:none;
+  border-bottom:2px solid transparent;
+  transition:all .2s;margin-bottom:-1px;
+}
+.gem-tab.active{color:#a78bfa;border-bottom-color:#7c5cfc;}
+
+.gem-content{flex:1;overflow-y:auto;padding:16px;}
+
+/* Calendar */
+.week-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:6px;margin-bottom:16px;
+}
+.day-card{
+  display:flex;flex-direction:column;align-items:center;
+  gap:4px;padding:8px 3px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(124,92,252,0.2);
+  border-radius:12px;transition:all .2s;
+}
+.day-card.completed{background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.35);}
+.day-card.today{border-color:rgba(124,92,252,0.5);background:rgba(124,92,252,0.08);box-shadow:0 0 12px rgba(124,92,252,0.2);}
+.day-card.today.completed{border-color:rgba(74,222,128,0.5);box-shadow:0 0 12px rgba(74,222,128,0.2);}
+.day-card.future{opacity:0.35;}
+.day-label{font-size:.36rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(200,210,255,0.45);}
+.day-card.today .day-label{color:#a78bfa;}
+.day-num{font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;color:#fff;}
+.day-status{font-size:.8rem;line-height:1;min-height:1rem;display:flex;align-items:center;justify-content:center;}
+.day-check{
+  width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,#4ade80,#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.48rem;color:#fff;font-weight:900;
+  box-shadow:0 0 6px rgba(74,222,128,0.5);
+}
+.day-gem-lbl{font-size:.34rem;font-weight:800;color:#38bdf8;}
+
+.streak-banner{
+  background:linear-gradient(135deg,rgba(245,166,35,0.12),rgba(245,166,35,0.04));
+  border:1px solid rgba(245,166,35,0.28);
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.streak-info{flex:1;}
+.streak-num{font-size:.95rem;font-weight:900;color:#f5a623;}
+.streak-lbl{font-size:.46rem;color:rgba(200,210,255,0.5);text-transform:uppercase;letter-spacing:.08em;}
+.streak-bonus-pill{
+  font-size:.5rem;font-weight:800;color:#38bdf8;
+  background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);
+  border-radius:8px;padding:3px 7px;white-space:nowrap;
+}
+
+.gem-rewards-card{
+  background:rgba(56,189,248,0.05);
+  border:1px solid rgba(56,189,248,0.15);
+  border-radius:14px;padding:12px 14px;margin-bottom:14px;
+}
+.gem-rewards-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 0;
+}
+.gem-rewards-row+.gem-rewards-row{border-top:1px solid rgba(56,189,248,0.08);}
+.gem-rewards-label{font-size:.52rem;color:rgba(200,210,255,0.6);}
+.gem-rewards-val{font-size:.56rem;font-weight:900;color:#38bdf8;}
+
+/* Store */
+.store-section-hdr{
+  font-size:.52rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.12em;color:rgba(200,210,255,0.38);
+  margin:16px 0 8px;
+}
+.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.store-item{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(124,92,252,0.2);
+  border-radius:14px;padding:12px 10px;
+  display:flex;flex-direction:column;gap:5px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.store-item:hover{border-color:rgba(124,92,252,0.4);background:rgba(124,92,252,0.06);}
+.store-item.owned{border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.05);}
+.store-item.cant-afford{opacity:0.45;cursor:not-allowed;}
+.store-item.cant-afford:hover{border-color:rgba(124,92,252,0.2);background:rgba(255,255,255,0.04);}
+.store-item-icon{font-size:1.4rem;line-height:1;}
+.store-item-name{font-size:.6rem;font-weight:900;color:#fff;line-height:1.2;}
+.store-item-desc{font-size:.44rem;color:rgba(200,210,255,0.5);line-height:1.4;}
+.store-item-price{display:flex;align-items:center;gap:3px;font-size:.56rem;font-weight:900;color:#38bdf8;margin-top:2px;}
+.store-item-price.owned-price{color:#4ade80;}
+.store-owned-check{
+  position:absolute;top:7px;right:8px;
+  width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,#4ade80,#16a34a);
+  display:grid;place-items:center;
+  font-size:.48rem;color:#fff;font-weight:900;
+  box-shadow:0 0 6px rgba(74,222,128,0.4);
+}
+.tile-pip-row{display:flex;gap:3px;margin:2px 0;}
+.tile-pip{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
+/* Purchase modal */
+#gem-purchase-modal{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.6);
+  display:none;align-items:flex-end;justify-content:center;
+  padding-bottom:24px;
+}
+#gem-purchase-modal.show{display:flex;}
+.gpm-card{
+  width:calc(100% - 32px);max-width:400px;
+  background:linear-gradient(160deg,#111428,#0e0d1f);
+  border:1px solid rgba(124,92,252,0.35);
+  border-radius:24px;padding:22px 20px 18px;
+  display:flex;flex-direction:column;gap:12px;
+  animation:slideUp .3s ease;
+}
+.gpm-icon{font-size:2.4rem;text-align:center;}
+.gpm-title{font-size:.95rem;font-weight:900;color:#fff;text-align:center;}
+.gpm-desc{font-size:.58rem;color:rgba(200,210,255,0.6);text-align:center;line-height:1.6;}
+.gpm-price{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;font-weight:900;color:#38bdf8;}
+.gpm-btns{display:flex;gap:8px;}
+.gpm-btn{
+  flex:1;padding:12px;border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.65rem;letter-spacing:.08em;cursor:pointer;
+  text-transform:uppercase;transition:all .1s;
+}
+.gpm-confirm{background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;box-shadow:0 4px 0 rgba(40,20,120,0.8);}
+.gpm-confirm:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(40,20,120,0.8);}
+.gpm-cancel{background:rgba(255,255,255,0.05);color:rgba(200,210,255,0.5);}
+
+/* Complete modal */
+#gem-complete-modal{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.6);
+  display:none;align-items:flex-end;justify-content:center;
+  padding-bottom:24px;
+}
+#gem-complete-modal.show{display:flex;}
+.gcm-card{
+  width:calc(100% - 32px);max-width:400px;
+  background:linear-gradient(160deg,#111428,#0e0d1f);
+  border:1px solid rgba(74,222,128,0.35);
+  border-radius:24px;padding:22px 20px 18px;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+  animation:slideUp .3s ease;
+}
+.gcm-total{font-size:2rem;font-weight:900;color:#38bdf8;font-family:'Space Mono',monospace;}
+.gcm-lbl{font-size:.5rem;color:rgba(200,210,255,0.5);text-transform:uppercase;letter-spacing:.1em;}
+.gcm-breakdown{
+  width:100%;background:rgba(56,189,248,0.07);
+  border:1px solid rgba(56,189,248,0.18);
+  border-radius:12px;padding:10px 12px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.gcm-row{display:flex;justify-content:space-between;align-items:center;}
+.gcm-row-lbl{font-size:.52rem;color:rgba(200,210,255,0.6);}
+.gcm-row-val{font-size:.56rem;font-weight:900;color:#38bdf8;}
+
+/* Gem toast */
+#gem-toast{
+  position:fixed;top:68px;left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  background:rgba(56,189,248,0.14);
+  border:1px solid rgba(56,189,248,0.38);
+  border-radius:20px;padding:8px 18px;
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.72rem;color:#38bdf8;
+  display:flex;align-items:center;gap:7px;
+  opacity:0;pointer-events:none;
+  transition:all .4s cubic-bezier(.22,.68,0,1.2);
+  z-index:999;white-space:nowrap;
+}
+#gem-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -1534,17 +1801,20 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     const body = {
       fields: {
         name:  { stringValue: name.trim().substring(0,16) },
-        score: { integerValue: String(score) },
-        mode:  { stringValue: mode },
+        score: { integerValue: String(Math.floor(score)) },
+        mode:  { stringValue: mode.toLowerCase().trim() },
         date:  { stringValue: date }
       }
     };
+    console.log('[Lexitris] Submitting score:', JSON.stringify({name, score, mode, date}));
     const res = await apiFetch(BASE + "/scores?key=" + API_KEY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
-    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const responseText = await res.text();
+    console.log('[Lexitris] Firebase response:', res.status, responseText);
+    if(!res.ok) throw new Error('HTTP ' + res.status + ': ' + responseText);
   }
   async function flushQueue(){
     const q = getPendingQueue();
@@ -1564,12 +1834,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     try {
       await doSubmit(name, score, mode, date);
     } catch(e) {
+      console.error('[Lexitris] Score submit error:', e.message);
       // Network failed — queue for retry
-      console.warn('Score submit failed, queuing for retry:', e.message);
       const q = getPendingQueue();
       q.push({name, score, mode, date});
       savePendingQueue(q);
-      if(typeof showToast === 'function') showToast('Score saved — will submit when online');
+      if(typeof showToast === 'function') showToast('Submit failed: ' + e.message.substring(0,60));
     }
   };
 
@@ -1595,13 +1865,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         body: JSON.stringify(body)
       });
       const rows = await res.json();
-      return rows
+      console.log('[Lexitris] Leaderboard raw response:', JSON.stringify(rows).substring(0,500));
+      const mapped = rows
         .filter(r => r.document)
         .map(r => ({
           name:  r.document.fields.name.stringValue,
           score: parseInt(r.document.fields.score.integerValue),
           mode:  r.document.fields.mode.stringValue
         }));
+      console.log('[Lexitris] Mapped scores:', JSON.stringify(mapped));
+      return mapped;
     } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
   };
 })();
@@ -1623,7 +1896,68 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="loading-screen" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);z-index:9998;">
   <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;letter-spacing:.1em;background:linear-gradient(135deg,#a78bfa,#7c5cfc,#00e5cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">LEXITRIS</div>
   <div style="width:40px;height:40px;border:3px solid rgba(124,92,252,0.2);border-top-color:#7c5cfc;border-radius:50%;animation:ldSpin .8s linear infinite;"></div>
-  <style>@keyframes ldSpin{to{transform:rotate(360deg)}}</style>
+  <style>
+@keyframes shatterFlash{0%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(1.04) skewX(3deg)}100%{opacity:0;transform:scale(1.1) skewX(-2deg)}}
+@keyframes dissolveFlash{0%{opacity:1;filter:blur(0)}100%{opacity:0;filter:blur(6px) saturate(2)}}
+@keyframes lightningFlash{0%{opacity:0;transform:scaleX(0)}30%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
+@keyframes auroraFlash{0%{opacity:0;transform:translateX(-100%)}40%{opacity:.9;transform:translateX(0)}100%{opacity:0;transform:translateX(100%)}}
+
+/* Cosmetics settings tab */
+.cosm-section-lbl{
+  font-size:.5rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.1em;color:rgba(200,210,255,0.4);
+  margin:12px 0 6px;
+}
+.cosm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:2px;}
+.cosm-item{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 4px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(124,92,252,0.2);
+  border-radius:12px;cursor:pointer;transition:all .15s;
+  position:relative;
+}
+.cosm-item:active{transform:scale(.95);}
+.cosm-item.active{
+  border-color:rgba(124,92,252,0.6);
+  background:rgba(124,92,252,0.12);
+  box-shadow:0 0 10px rgba(124,92,252,0.25);
+}
+.cosm-item.locked{opacity:0.4;cursor:not-allowed;}
+.cosm-item-icon{font-size:1.1rem;line-height:1;}
+.cosm-item-name{font-size:.4rem;font-weight:800;color:rgba(200,210,255,0.8);text-align:center;line-height:1.2;}
+.cosm-item-lock{
+  position:absolute;top:4px;right:4px;
+  font-size:.55rem;opacity:0.6;
+}
+.cosm-active-dot{
+  position:absolute;top:4px;right:4px;
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,#a78bfa,#7c5cfc);
+  box-shadow:0 0 4px rgba(124,92,252,0.6);
+}
+.cosm-pip-row{display:flex;gap:2px;margin-top:1px;}
+.cosm-pip{width:8px;height:8px;border-radius:2px;}
+
+/* Settings tabs */
+.settings-tabs{
+  display:flex;width:100%;border-bottom:1px solid rgba(124,92,252,0.18);
+  margin-bottom:8px;
+}
+.settings-tab{
+  flex:1;padding:7px 0;
+  font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(200,210,255,0.4);cursor:pointer;
+  border:none;background:none;
+  border-bottom:2px solid transparent;
+  transition:all .2s;margin-bottom:-1px;
+}
+.settings-tab.active{color:#a78bfa;border-bottom-color:#7c5cfc;}
+.settings-tab-content{display:none;width:100%;overflow-y:auto;max-height:60vh;}
+.settings-tab-content.active{display:block;}
+
+@keyframes ldSpin{to{transform:rotate(360deg)}}</style>
 </div>
 
 <!-- High score celebration overlay -->
@@ -1746,10 +2080,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
   <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
 
-    <!-- Logo -->
-    <div style="text-align:center;margin-bottom:0;">
+    <!-- Logo + gem badge -->
+    <div style="text-align:center;margin-bottom:0;position:relative;">
       <div class="lx-logo">LEXITRIS</div>
       <div class="lx-sub">spell to survive</div>
+      <div style="position:absolute;top:50%;right:0;transform:translateY(-50%);">
+        <div class="gem-badge-home" onclick="openGemOverlay()">
+          💎 <span id="home-gem-count">0</span>
+        </div>
+      </div>
     </div>
 
     <!-- Stats card -->
@@ -1826,6 +2165,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <div class="home-quick-icon">📊</div>
         <div class="home-quick-title">Stats</div>
         <div class="home-quick-sub">Lifetime<br>progress</div>
+      </button>
+      <button class="home-quick-card" onclick="openGemOverlay()" style="border-color:rgba(56,189,248,0.3);background:rgba(56,189,248,0.05);">
+        <div class="home-quick-icon">💎</div>
+        <div class="home-quick-title" style="color:#38bdf8;">Gems</div>
+        <div class="home-quick-sub">Store &<br>Rewards</div>
       </button>
     </div>
 
@@ -1961,33 +2305,47 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ HOME SETTINGS ═══════════════════════════════════════════════ -->
 <div id="home-settings-overlay" class="lx-screen" onclick="if(event.target===this)closeHomeSettings()">
-  <div style="width:calc(100% - 24px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
+  <div style="width:calc(100% - 24px);max-height:calc(100vh - 32px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Settings</div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
-
-      <button id="home-sound-card" onclick="toggleSoundFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-sound-icon">🔊</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Sound</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-sound-text">On</div>
-      </button>
-
-      <button id="home-haptic-card" onclick="toggleHapticFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-haptic-icon">📳</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Haptics</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-haptic-text">On</div>
-      </button>
-
-      <button onclick="purchaseRemoveAds();syncHomeSettingsUI();" style="background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-        <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#f5a623;margin-bottom:2px;">Remove Ads</div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-remove-ads-text">$0.99 one-time</div>
-      </button>
-
+    <!-- Tabs -->
+    <div class="settings-tabs">
+      <button class="settings-tab active" id="stab-general" onclick="switchSettingsTab('general')">⚙️ General</button>
+      <button class="settings-tab" id="stab-cosmetics" onclick="switchSettingsTab('cosmetics')">🎨 Cosmetics</button>
     </div>
 
-    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeHomeSettings()">Close</button>
+    <!-- General tab -->
+    <div class="settings-tab-content active" id="stab-content-general">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
+
+        <button id="home-sound-card" onclick="toggleSoundFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+          <div style="font-size:1.1rem;margin-bottom:3px;" id="home-sound-icon">🔊</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Sound</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-sound-text">On</div>
+        </button>
+
+        <button id="home-haptic-card" onclick="toggleHapticFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+          <div style="font-size:1.1rem;margin-bottom:3px;" id="home-haptic-icon">📳</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Haptics</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-haptic-text">On</div>
+        </button>
+
+        <button onclick="purchaseRemoveAds();syncHomeSettingsUI();" style="background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+          <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#f5a623;margin-bottom:2px;">Remove Ads</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-remove-ads-text">$0.99 one-time</div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Cosmetics tab -->
+    <div class="settings-tab-content" id="stab-content-cosmetics">
+      <div id="cosm-settings-inner" style="width:100%;"></div>
+    </div>
+
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px;margin-top:4px;" onclick="closeHomeSettings()">Close</button>
   </div>
 </div>
 
@@ -2444,10 +2802,25 @@ function screenShake(){
 function flashRow(r){
   const cw=document.getElementById('cw');
   const el=document.createElement('div');
-  el.className='flash';
-  el.style.top=r*CELL+'px';el.style.left='0';
-  el.style.width=cv.width+'px';el.style.height=CELL+'px';
-  cw.appendChild(el);setTimeout(()=>el.remove(),460);
+  const _clear=typeof activeClear!=='undefined'?activeClear:'clear_default';
+  if(_clear==='clear_shatter'){
+    el.className='flash';
+    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;animation:shatterFlash .5s ease forwards;';
+  } else if(_clear==='clear_dissolve'){
+    el.className='flash';
+    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;animation:dissolveFlash .6s ease forwards;';
+  } else if(_clear==='clear_lightning'){
+    el.className='flash';
+    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;background:linear-gradient(90deg,transparent,rgba(255,255,180,0.9),transparent);animation:lightningFlash .35s ease forwards;';
+  } else if(_clear==='clear_aurora'){
+    el.className='flash';
+    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;background:linear-gradient(90deg,rgba(74,222,128,0.6),rgba(124,92,252,0.6),rgba(0,229,204,0.6));animation:auroraFlash .7s ease forwards;';
+  } else {
+    el.className='flash';
+    el.style.top=r*CELL+'px';el.style.left='0';
+    el.style.width=cv.width+'px';el.style.height=CELL+'px';
+  }
+  cw.appendChild(el);setTimeout(()=>el.remove(),700);
   // Spawn particles for the row (single call, no stagger)
   const midCell = grid[r] && grid[r][Math.floor(COLS/2)];
   const colors = ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'];
@@ -2570,7 +2943,22 @@ const COLORS={
   cons:  {fill:'#160d2e',stroke:'#7c5cfc',text:'#b09aff',dot:'#7c5cfc'},
   rare:  {fill:'#1e0d00',stroke:'#e07000',text:'#ffaa44',dot:'#e07000'},
 };
+function getThemeColors(){
+  // Returns {vowel, cons, rare} stroke colors from active theme
+  if(typeof GEM_THEMES==='undefined') return null;
+  const t=GEM_THEMES.find(function(t){return t.id===activeTheme;});
+  if(!t||t.id==='default') return null;
+  return t;
+}
 function lc(l){
+  const theme=getThemeColors();
+  if(theme){
+    const isRare=(LPTS[l]||1)>=8;
+    const isVowel='AEIOU'.includes(l);
+    const stroke=isRare?theme.rare:isVowel?theme.vowel:theme.cons;
+    // Darken fill by mixing stroke with black at 15%
+    return {fill:'#0d111e',stroke:stroke,text:stroke,dot:stroke};
+  }
   if((LPTS[l]||1)>=8)return COLORS.rare;
   if('AEIOU'.includes(l))return COLORS.vowel;
   return COLORS.cons;
@@ -2586,15 +2974,16 @@ function drawCell(x,y,letter,alpha=1,ghost=false){
     ctx.shadowBlur=8;
     ctx.shadowOffsetY=3;
   }
+  const shapeR = (typeof activeShape!=='undefined'&&activeShape==='shape_rounded')?Math.floor(CELL*.22):(typeof activeShape!=='undefined'&&activeShape==='shape_gem')?Math.floor(CELL*.32):6;
   ctx.fillStyle=ghost?'rgba(124,92,252,0.08)':c.fill;
-  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,shapeR);
   ctx.fill();
   ctx.shadowBlur=0;ctx.shadowOffsetY=0;
 
   // border
   ctx.strokeStyle=ghost?'rgba(124,92,252,0.25)':c.stroke;
   ctx.lineWidth=ghost?1:2;
-  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,shapeR);
   ctx.stroke();
 
   if(!ghost){
@@ -2627,6 +3016,36 @@ function draw(){
   ctx.fillStyle='#080b18';
   roundRect(ctx,0,0,cv.width,cv.height,6);ctx.fill();
 
+  // bg cosmetic
+  const _bg=typeof activeBg!=='undefined'?activeBg:'bg_void';
+  if(_bg==='bg_stars'){
+    if(!draw._stars){draw._stars=Array.from({length:40},function(){return{x:Math.random()*cv.width,y:Math.random()*cv.height,s:Math.random()*1.5+.3,sp:Math.random()*.15+.05};});}
+    draw._stars.forEach(function(s){
+      s.y+=s.sp; if(s.y>cv.height)s.y=0;
+      ctx.globalAlpha=0.35; ctx.fillStyle='#fff';
+      ctx.beginPath();ctx.arc(s.x,s.y,s.s,0,Math.PI*2);ctx.fill();
+    });
+    ctx.globalAlpha=1;
+  } else if(_bg==='bg_rain'){
+    if(!draw._rain){draw._rain=Array.from({length:18},function(){return{x:Math.random()*cv.width,y:Math.random()*cv.height,len:Math.random()*12+6,sp:Math.random()*3+2};});}
+    draw._rain.forEach(function(r){
+      r.y+=r.sp; if(r.y>cv.height)r.y=-r.len;
+      ctx.globalAlpha=0.18; ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(r.x,r.y);ctx.lineTo(r.x,r.y+r.len);ctx.stroke();
+    });
+    ctx.globalAlpha=1;
+  } else if(_bg==='bg_pulse'){
+    const pulse=0.04+0.015*Math.sin(Date.now()/900);
+    const gr=ctx.createRadialGradient(cv.width/2,cv.height/2,0,cv.width/2,cv.height/2,cv.width*.7);
+    gr.addColorStop(0,'rgba(124,92,252,'+pulse+')');gr.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,cv.width,cv.height);
+  } else if(_bg==='bg_grid'){
+    ctx.strokeStyle='rgba(124,92,252,0.06)';ctx.lineWidth=1;
+    const gs2=CELL*2;
+    for(let r=0;r<cv.height;r+=gs2){ctx.beginPath();ctx.moveTo(0,r);ctx.lineTo(cv.width,r);ctx.stroke();}
+    for(let c=0;c<cv.width;c+=gs2){ctx.beginPath();ctx.moveTo(c,0);ctx.lineTo(c,cv.height);ctx.stroke();}
+  }
+
   // grid lines
   ctx.strokeStyle='rgba(124,92,252,0.08)';ctx.lineWidth=1;
   for(let r=1;r<ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*CELL);ctx.lineTo(cv.width,r*CELL);ctx.stroke();}
@@ -2640,11 +3059,40 @@ function draw(){
     let gr=falling.row;
     while(gr+1<ROWS&&!grid[gr+1][falling.col])gr++;
     if(gr!==falling.row)drawCell(falling.col*CELL,gr*CELL,falling.l,0.3,true);
-    // Drop trail effect — show fading afterimages above the piece
-    const trailLen=Math.min(falling.row, 3);
-    for(let t=1;t<=trailLen;t++){
-      const trailAlpha=0.12*(1-t/4);
-      drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,trailAlpha,true);
+    // Drop trail effect
+    const _trail=typeof activeTrail!=='undefined'?activeTrail:'trail_none';
+    if(_trail!=='trail_none'){
+      const trailLen=Math.min(falling.row,4);
+      for(let t=1;t<=trailLen;t++){
+        const base=0.18*(1-t/(trailLen+1));
+        if(_trail==='trail_comet'){
+          // solid streak - brighter
+          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base*1.8,true);
+        } else if(_trail==='trail_ghost'){
+          // ghost copies, more visible
+          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base*1.2,true);
+        } else if(_trail==='trail_matrix'){
+          // draw random symbol instead of letter
+          ctx.globalAlpha=base*1.4;
+          ctx.fillStyle=lc(falling.l).stroke;
+          ctx.font='900 '+Math.floor(CELL*.38)+'px monospace';
+          ctx.textAlign='center';ctx.textBaseline='middle';
+          const syms=['0','1','█','▓','░'];
+          ctx.fillText(syms[(t+falling.row)%syms.length],falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2);
+          ctx.globalAlpha=1;
+        } else if(_trail==='trail_fire'){
+          // warm ember glow
+          ctx.globalAlpha=base*1.0;
+          const gr=ctx.createRadialGradient(falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2,1,falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2,CELL*.5);
+          gr.addColorStop(0,'rgba(255,120,0,0.5)');gr.addColorStop(1,'rgba(255,60,0,0)');
+          ctx.fillStyle=gr;
+          ctx.fillRect(falling.col*CELL,(falling.row-t)*CELL,CELL,CELL);
+          ctx.globalAlpha=1;
+        } else {
+          // sparkle — default faint ghost
+          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base,true);
+        }
+      }
     }
     drawCell(falling.col*CELL,falling.row*CELL,falling.l);
   }
@@ -3368,6 +3816,7 @@ function endGame(){
   if(_goMode==='daily'){
     saveDailyResult(_goScore);
     dailyCompleted=true;
+    setTimeout(()=>{ if(typeof awardDailyGems==='function') awardDailyGems(); }, 1200);
     const btn=document.getElementById('daily-mode-btn');
     const desc=document.getElementById('daily-mode-desc');
     if(desc) desc.textContent="Today's score: "+_goScore.toLocaleString();
@@ -4252,14 +4701,16 @@ async function loadLeaderboard(mode){
   const list = document.getElementById('lb-list');
   list.innerHTML = '<div id="lb-loading">Loading...</div>';
   let scores = [];
+  let debugMsg = '';
   try {
     scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
+    debugMsg = 'mode='+mode+' results='+scores.length;
   } catch(e) {
-    list.innerHTML = '<div class="lb-empty">Could not load scores. Check your connection.</div>';
+    list.innerHTML = '<div class="lb-empty">Error: '+e.message+'</div>';
     return;
   }
   if(scores.length === 0){
-    list.innerHTML = '<div class="lb-empty">No scores yet — be the first!</div>';
+    list.innerHTML = '<div class="lb-empty">No scores yet ('+debugMsg+')</div>';
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
@@ -4579,5 +5030,474 @@ function dismissOnboard(){
   background-clip: unset !important;
 }
 </style>
+
+<!-- ═══ GEM TOAST ═══════════════════════════════════════════════════════════ -->
+<div id="gem-toast">
+  <span>💎</span><span id="gem-toast-text">+10 gems earned!</span>
+</div>
+
+<!-- ═══ GEM PURCHASE MODAL ══════════════════════════════════════════════════ -->
+
+<!-- ═══ GEM PACK MODAL ═══════════════════════════════════════════════════════ -->
+<div id="gem-pack-modal">
+  <div class="gpack-card">
+    <div style="font-size:2rem;">💎</div>
+    <div class="gpack-title">Purchase Gems</div>
+    <div class="gpack-amt" id="gpack-amt">+100</div>
+    <div class="gpack-note" id="gpack-gems-after">Balance after: 100 💎</div>
+    <div class="gpack-note" style="margin-top:-4px;">Payment processed via Google Play · <span id="gpack-price">$0.99</span></div>
+    <div style="display:flex;gap:8px;width:100%;">
+      <button class="gpm-btn gpm-cancel" style="flex:1;" onclick="closeGemPackModal()">Cancel</button>
+      <button class="gpm-btn gpm-confirm" style="flex:1;" onclick="confirmGemPack()">Buy Now</button>
+    </div>
+  </div>
+</div>
+
+<div id="gem-purchase-modal">
+  <div class="gpm-card">
+    <div class="gpm-icon" id="gpm-icon">🎨</div>
+    <div class="gpm-title" id="gpm-name">Item</div>
+    <div class="gpm-desc" id="gpm-desc">Description</div>
+    <div class="gpm-price">💎 <span id="gpm-price">50</span></div>
+    <div class="gpm-btns">
+      <button class="gpm-btn gpm-cancel" onclick="closeGemPurchaseModal()">Cancel</button>
+      <button class="gpm-btn gpm-confirm" onclick="confirmGemPurchase()">Buy Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GEM COMPLETE MODAL ═══════════════════════════════════════════════════ -->
+<div id="gem-complete-modal">
+  <div class="gcm-card">
+    <div style="font-size:2rem;">🏆</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#fff;">Daily Complete!</div>
+    <div class="gcm-total" id="gcm-total">+10</div>
+    <div class="gcm-lbl">gems earned</div>
+    <div class="gcm-breakdown" id="gcm-breakdown"></div>
+    <button class="gpm-btn gpm-confirm" style="width:100%;margin-top:4px;" onclick="closeGemCompleteModal()">Collect 💎</button>
+  </div>
+</div>
+
+<!-- ═══ GEM OVERLAY ══════════════════════════════════════════════════════════ -->
+<div id="gem-overlay">
+  <div class="gem-overlay-hdr">
+    <div class="gem-overlay-title">Gems</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="gem-badge-home" style="pointer-events:none;">💎 <span id="gem-overlay-count">0</span></div>
+      <button class="hdr-btn" onclick="closeGemOverlay()" style="font-size:1rem;">✕</button>
+    </div>
+  </div>
+  <div class="gem-tabs">
+    <button class="gem-tab active" id="gtab-calendar" onclick="switchGemTab('calendar')">📅 Daily Calendar</button>
+    <button class="gem-tab" id="gtab-store" onclick="switchGemTab('store')">🛒 Store</button>
+  </div>
+  <div class="gem-content" id="gem-content-calendar">
+
+    <!-- Streak -->
+    <div class="streak-banner">
+      <div style="font-size:1.5rem;">🔥</div>
+      <div class="streak-info">
+        <div class="streak-num" id="gs-streak-num">0 day streak</div>
+        <div class="streak-lbl">Keep it going for bonus gems</div>
+      </div>
+      <div class="streak-bonus-pill" id="gs-streak-bonus">No bonus yet</div>
+    </div>
+
+    <!-- 7-day grid -->
+    <div class="week-grid" id="gs-week-grid"></div>
+
+    <!-- Reward breakdown -->
+    <div class="gem-rewards-card">
+      <div style="font-size:.5rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(200,210,255,0.4);margin-bottom:8px;">Daily Gem Rewards</div>
+      <div class="gem-rewards-row"><span class="gem-rewards-label">Complete daily challenge</span><span class="gem-rewards-val">💎 10</span></div>
+      <div class="gem-rewards-row"><span class="gem-rewards-label">3-day streak bonus</span><span class="gem-rewards-val">💎 +5</span></div>
+      <div class="gem-rewards-row"><span class="gem-rewards-label">7-day streak bonus</span><span class="gem-rewards-val">💎 +15</span></div>
+      <div class="gem-rewards-row"><span class="gem-rewards-label">Full week complete!</span><span class="gem-rewards-val" style="color:#f5a623;">💎 +25 bonus</span></div>
+    </div>
+
+    <button class="play-daily-btn" id="gs-play-btn" onclick="closeModeSelectSheet();closeGemOverlay();openModeDialog('daily')" style="width:100%;padding:14px;background:linear-gradient(135deg,#4ade80,#16a34a);border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.1em;color:#fff;cursor:pointer;text-transform:uppercase;box-shadow:0 5px 0 rgba(0,60,20,0.8);margin-bottom:8px;">▶ &nbsp;Play Today's Challenge</button>
+    <div style="font-size:.44rem;color:rgba(200,210,255,0.3);text-align:center;letter-spacing:.06em;">Resets at midnight · Same puzzle for everyone</div>
+
+  </div>
+  <div class="gem-content" id="gem-content-store" style="display:none;">
+
+    <div style="font-size:.5rem;color:rgba(200,210,255,0.38);margin-bottom:8px;">Earn gems by completing daily challenges, or buy them below</div>
+
+    <!-- Gem packs -->
+    <div class="store-section-hdr">💎 Buy Gems</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;" id="gs-gem-packs">
+      <div class="gem-pack-row" onclick="buyGemPack(100,'$0.99')">
+        <div class="gem-pack-icon">💎</div>
+        <div class="gem-pack-info"><div class="gem-pack-name">Handful</div><div class="gem-pack-amt">100 Gems</div></div>
+        <div class="gem-pack-price">$0.99</div>
+      </div>
+      <div class="gem-pack-row gem-pack-featured" onclick="buyGemPack(500,'$2.99')">
+        <div class="gem-pack-icon">💎💎</div>
+        <div class="gem-pack-info"><div class="gem-pack-name">Pouch <span class="gem-pack-badge">POPULAR</span></div><div class="gem-pack-amt">500 Gems</div></div>
+        <div class="gem-pack-price">$2.99</div>
+      </div>
+      <div class="gem-pack-row" onclick="buyGemPack(1000,'$4.99')">
+        <div class="gem-pack-icon">💎💎💎</div>
+        <div class="gem-pack-info"><div class="gem-pack-name">Treasure</div><div class="gem-pack-amt">1,000 Gems</div></div>
+        <div class="gem-pack-price">$4.99</div>
+      </div>
+    </div>
+
+    <div class="store-section-hdr">🎨 Tile Themes</div>
+    <div class="store-grid" id="gs-store-themes"></div>
+
+    <div class="store-section-hdr">✨ Drop Trails</div>
+    <div class="store-grid" id="gs-store-trails"></div>
+
+    <div class="store-section-hdr">💥 Word Clear Effects</div>
+    <div class="store-grid" id="gs-store-clears"></div>
+
+    <div class="store-section-hdr">🌌 Board Backgrounds</div>
+    <div class="store-grid" id="gs-store-bgs"></div>
+
+    <div class="store-section-hdr">🔷 Tile Shapes</div>
+    <div class="store-grid" id="gs-store-shapes"></div>
+
+    <div style="height:32px;"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════
+// GEM SYSTEM
+// ══════════════════════════════════════════════════════════════════════════
+let gemCount = 0;
+let gemStreak = 0;
+let gemWeekData = {};
+let gemOwned = new Set(['default']);
+let gemPendingPurchase = null;
+// Active cosmetic selections
+let activeTheme   = 'default';
+let activeTrail   = 'trail_none';
+let activeClear   = 'clear_default';
+let activeBg      = 'bg_void';
+let activeShape   = 'shape_square';
+
+try {
+  const gs = JSON.parse(localStorage.getItem('lx_gems') || '{}');
+  gemCount   = gs.gems || 0;
+  gemStreak  = gs.streak || 0;
+  gemWeekData= gs.weekData || {};
+  gemOwned   = new Set(gs.owned || ['default']);
+  activeTheme= gs.activeTheme  || 'default';
+  activeTrail= gs.activeTrail  || 'trail_none';
+  activeClear= gs.activeClear  || 'clear_default';
+  activeBg   = gs.activeBg     || 'bg_void';
+  activeShape= gs.activeShape  || 'shape_square';
+} catch(e) {}
+
+function saveGems() {
+  try {
+    localStorage.setItem('lx_gems', JSON.stringify({
+      gems: gemCount, streak: gemStreak,
+      weekData: gemWeekData, owned: [...gemOwned],
+      activeTheme, activeTrail, activeClear, activeBg, activeShape
+    }));
+  } catch(e) {}
+}
+
+const GEM_THEMES = [
+  { id:'default',  name:'Classic',     price:0,   icon:'🎨', vowel:'#3b82f6', cons:'#7c5cfc', rare:'#f5a623', desc:'The original Lexitris colors' },
+  { id:'neon',     name:'Neon Nights', price:200, icon:'🌃', vowel:'#00e5ff', cons:'#ff00e5', rare:'#ffe000', desc:'Electric colors that pop' },
+  { id:'forest',   name:'Deep Forest', price:200, icon:'🌲', vowel:'#4ade80', cons:'#86efac', rare:'#f59e0b', desc:'Earthy greens and warm ambers' },
+  { id:'ember',    name:'Ember',       price:350, icon:'🔥', vowel:'#ff6b35', cons:'#ff3b6b', rare:'#ffd700', desc:'Fiery reds and molten gold' },
+  { id:'ice',      name:'Arctic Ice',  price:350, icon:'🧊', vowel:'#bfdbfe', cons:'#60a5fa', rare:'#e0f2fe', desc:'Crisp blues and icy whites' },
+  { id:'galaxy',   name:'Galaxy',      price:600, icon:'🌌', vowel:'#c084fc', cons:'#818cf8', rare:'#2dd4bf', desc:'Deep space purples and cosmic teal' },
+];
+const GEM_TRAILS = [
+  { id:'trail_none',    name:'None',     price:0,   icon:'·',  desc:'Clean — no trail effect' },
+  { id:'trail_sparkle', name:'Sparkle',  price:200, icon:'✨', desc:'Tiny star particles follow the tile' },
+  { id:'trail_comet',   name:'Comet',    price:200, icon:'☄️', desc:'Glowing streak behind the tile' },
+  { id:'trail_ghost',   name:'Ghost',    price:350, icon:'👻', desc:'Fading ghost copies trail below' },
+  { id:'trail_matrix',  name:'Matrix',   price:350, icon:'🟩', desc:'Cascading green symbols' },
+  { id:'trail_fire',    name:'Fire',     price:600, icon:'🔥', desc:'Ember particles rise as you drop' },
+];
+const GEM_CLEARS = [
+  { id:'clear_default',  name:'Flash',    price:0,   icon:'⚡', desc:'Default quick flash' },
+  { id:'clear_shatter',  name:'Shatter',  price:200, icon:'💥', desc:'Tiles explode outward' },
+  { id:'clear_dissolve', name:'Dissolve', price:200, icon:'🌊', desc:'Tiles melt away in a wave' },
+  { id:'clear_lightning',name:'Lightning',price:350, icon:'🌩', desc:'Electric arc across the word' },
+  { id:'clear_aurora',   name:'Aurora',   price:600, icon:'🌈', desc:'Ripple of color across the row' },
+];
+const GEM_BGS = [
+  { id:'bg_void',     name:'Void',      price:0,   icon:'⬛', desc:'Pure dark — the classic look' },
+  { id:'bg_stars',    name:'Starfield', price:200, icon:'🌌', desc:'Slow drifting stars behind the grid' },
+  { id:'bg_rain',     name:'Rain',      price:200, icon:'🌧', desc:'Streaking vertical lines' },
+  { id:'bg_pulse',    name:'Pulse',     price:350, icon:'💜', desc:'Slow breathing glow from center' },
+  { id:'bg_grid',     name:'Grid',      price:350, icon:'📐', desc:'Faint geometric lines' },
+];
+const GEM_SHAPES = [
+  { id:'shape_square',  name:'Square',  price:0,   icon:'⬜', desc:'Default sharp corners' },
+  { id:'shape_rounded', name:'Rounded', price:200, icon:'▢',  desc:'Soft rounded corners' },
+  { id:'shape_gem',     name:'Gem Cut', price:500, icon:'💎', desc:'Slight faceted gem look' },
+];
+
+
+function getGemDateStr(offset=0){
+  const d=new Date(); d.setDate(d.getDate()+offset);
+  return d.toISOString().split('T')[0];
+}
+function getGemWeekDays(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today=new Date();
+  const start=new Date(today); start.setDate(today.getDate()-today.getDay());
+  return Array.from({length:7},(_,i)=>{
+    const d=new Date(start); d.setDate(start.getDate()+i);
+    return {
+      label:days[d.getDay()], num:d.getDate(),
+      dateStr:d.toISOString().split('T')[0],
+      isToday:d.toDateString()===today.toDateString(),
+      isPast:d<new Date(today.toDateString())
+    };
+  });
+}
+
+function updateGemDisplays(){
+  ['home-gem-count','gem-overlay-count'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=gemCount.toLocaleString();
+  });
+}
+
+function showGemToast(text){
+  const t=document.getElementById('gem-toast');
+  if(!t) return;
+  document.getElementById('gem-toast-text').textContent=text;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function openGemOverlay(){
+  document.getElementById('gem-overlay').classList.add('open');
+  renderGemCalendar();
+  renderGemStore();
+  updateGemDisplays();
+}
+function closeGemOverlay(){
+  document.getElementById('gem-overlay').classList.remove('open');
+}
+function switchGemTab(tab){
+  document.getElementById('gem-content-calendar').style.display=tab==='calendar'?'block':'none';
+  document.getElementById('gem-content-store').style.display=tab==='store'?'block':'none';
+  document.getElementById('gtab-calendar').classList.toggle('active',tab==='calendar');
+  document.getElementById('gtab-store').classList.toggle('active',tab==='store');
+}
+
+function renderGemCalendar(){
+  const weekDays=getGemWeekDays();
+  const grid=document.getElementById('gs-week-grid');
+  if(!grid) return;
+  grid.innerHTML=weekDays.map(day=>{
+    const done=!!gemWeekData[day.dateStr];
+    const cls=['day-card',done?'completed':'',day.isToday?'today':'',!day.isToday&&!day.isPast?'future':''].filter(Boolean).join(' ');
+    const status=done
+      ?`<div class="day-check">✓</div>`
+      :day.isToday?`<div style="font-size:.7rem;">📅</div>`
+      :day.isPast?`<div style="font-size:.6rem;opacity:0.3;">·</div>`
+      :`<div style="font-size:.5rem;color:#38bdf8;opacity:0.5;">💎</div>`;
+    return `<div class="${cls}">
+      <div class="day-label">${day.label}</div>
+      <div class="day-num">${day.num}</div>
+      <div class="day-status">${status}</div>
+      <div class="day-gem-lbl">${done||day.isToday?'💎10':''}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('gs-streak-num').textContent=gemStreak+(gemStreak===1?' day streak':' day streak');
+  const bonus=gemStreak>=7?15:gemStreak>=3?5:0;
+  document.getElementById('gs-streak-bonus').textContent=bonus>0?`+${bonus} bonus`:'No bonus yet';
+
+  const btn=document.getElementById('gs-play-btn');
+  if(btn){
+    const todayDone=!!gemWeekData[getGemDateStr(0)];
+    btn.textContent=todayDone?'✓ Completed Today':'▶  Play Today\'s Challenge';
+    btn.disabled=todayDone;
+    btn.style.opacity=todayDone?'0.6':'1';
+  }
+}
+
+function awardDailyGems(){
+  const todayStr=getGemDateStr(0);
+  if(gemWeekData[todayStr]) return;
+  gemWeekData[todayStr]=true;
+  let base=10,streakBonus=0,weekBonus=0;
+  gemStreak++;
+  if(gemStreak>=7) streakBonus=15;
+  else if(gemStreak>=3) streakBonus=5;
+  const weekDays=getGemWeekDays();
+  if(weekDays.every(d=>gemWeekData[d.dateStr])) weekBonus=25;
+  const total=base+streakBonus+weekBonus;
+  gemCount+=total;
+  saveGems();
+  updateGemDisplays();
+  const breakdown=[];
+  breakdown.push({label:'Daily completion',val:base});
+  if(streakBonus>0) breakdown.push({label:gemStreak+'-day streak bonus',val:streakBonus});
+  if(weekBonus>0) breakdown.push({label:'🎉 Full week bonus!',val:weekBonus});
+  document.getElementById('gcm-total').textContent='+'+total;
+  document.getElementById('gcm-breakdown').innerHTML=breakdown.map(r=>
+    `<div class="gcm-row"><span class="gcm-row-lbl">${r.label}</span><span class="gcm-row-val">+${r.val} 💎</span></div>`
+  ).join('');
+  document.getElementById('gem-complete-modal').classList.add('show');
+}
+
+function closeGemCompleteModal(){
+  document.getElementById('gem-complete-modal').classList.remove('show');
+  const total=document.getElementById('gcm-total').textContent;
+  showGemToast(total+' gems collected!');
+  renderGemCalendar();
+}
+
+function makeStoreItem(item,type,extraInner){
+  extraInner=extraInner||'';
+  const isOwned=gemOwned.has(item.id);
+  const cantAfford=!isOwned&&gemCount<item.price;
+  const oc=isOwned||cantAfford?'':("openGemPurchase('"+type+"','"+item.id+"')");
+  return '<div class="store-item '+(isOwned?'owned':cantAfford?'cant-afford':'')+'" onclick="'+oc+'">'
+    +(isOwned?'<div class="store-owned-check">✓</div>':'')
+    +'<div class="store-item-icon">'+item.icon+'</div>'
+    +extraInner
+    +'<div class="store-item-name">'+item.name+'</div>'
+    +'<div class="store-item-desc">'+item.desc+'</div>'
+    +'<div class="store-item-price '+(isOwned?'owned-price':'')+'">'+( isOwned?'✓ Owned':item.price===0?'Free':'💎 '+item.price)+'</div>'
+    +'</div>';
+}
+function renderGemStore(){
+  const themesEl=document.getElementById('gs-store-themes');
+  if(!themesEl) return;
+  themesEl.innerHTML=GEM_THEMES.map(function(item){
+    return makeStoreItem(item,'theme',
+      '<div class="tile-pip-row">'
+      +'<div class="tile-pip" style="background:'+item.vowel+'"></div>'
+      +'<div class="tile-pip" style="background:'+item.cons+'"></div>'
+      +'<div class="tile-pip" style="background:'+item.rare+'"></div>'
+      +'</div>');
+  }).join('');
+  var trailsEl=document.getElementById('gs-store-trails');
+  if(trailsEl) trailsEl.innerHTML=GEM_TRAILS.map(function(i){return makeStoreItem(i,'trail');}).join('');
+  var clearsEl=document.getElementById('gs-store-clears');
+  if(clearsEl) clearsEl.innerHTML=GEM_CLEARS.map(function(i){return makeStoreItem(i,'clear');}).join('');
+  var bgsEl=document.getElementById('gs-store-bgs');
+  if(bgsEl) bgsEl.innerHTML=GEM_BGS.map(function(i){return makeStoreItem(i,'bg');}).join('');
+  var shapesEl=document.getElementById('gs-store-shapes');
+  if(shapesEl) shapesEl.innerHTML=GEM_SHAPES.map(function(i){return makeStoreItem(i,'shape');}).join('');
+}
+
+function openGemPurchase(type,id){
+  const all=[...GEM_THEMES,...GEM_TRAILS,...GEM_CLEARS,...GEM_BGS,...GEM_SHAPES];
+  const item=all.find(i=>i.id===id);
+  if(!item||gemCount<item.price) return;
+  gemPendingPurchase={type,id,item};
+  document.getElementById('gpm-icon').textContent=item.icon;
+  document.getElementById('gpm-name').textContent=item.name;
+  document.getElementById('gpm-desc').textContent=item.desc;
+  document.getElementById('gpm-price').textContent=item.price;
+  document.getElementById('gem-purchase-modal').classList.add('show');
+}
+function closeGemPurchaseModal(){
+  document.getElementById('gem-purchase-modal').classList.remove('show');
+  gemPendingPurchase=null;
+}
+function confirmGemPurchase(){
+  if(!gemPendingPurchase) return;
+  const{type,id,item}=gemPendingPurchase;
+  if(gemCount<item.price){closeGemPurchaseModal();return;}
+  gemCount-=item.price;
+  if(type==='theme'||type==='flair') gemOwned.add(id);
+  saveGems();
+  updateGemDisplays();
+  renderGemStore();
+  closeGemPurchaseModal();
+  showGemToast(item.icon+' '+item.name+' unlocked!');
+}
+
+function buyGemPack(amount, price){
+  document.getElementById('gpack-amt').textContent='+'+amount.toLocaleString();
+  document.getElementById('gpack-price').textContent=price;
+  document.getElementById('gpack-gems-after').textContent='Balance after: '+( gemCount+amount).toLocaleString()+' 💎';
+  window._pendingPackAmount=amount;
+  document.getElementById('gem-pack-modal').classList.add('show');
+}
+function closeGemPackModal(){
+  document.getElementById('gem-pack-modal').classList.remove('show');
+  window._pendingPackAmount=null;
+}
+function confirmGemPack(){
+  // In production this triggers Play Billing — here we just award for prototype
+  const amt=window._pendingPackAmount||0;
+  gemCount+=amt;
+  saveGems();
+  updateGemDisplays();
+  renderGemStore();
+  closeGemPackModal();
+  showGemToast('+'+amt.toLocaleString()+' gems added!');
+}
+
+updateGemDisplays();
+
+// ── COSMETICS SETTINGS ─────────────────────────────────────────────────────
+function switchSettingsTab(tab){
+  ['general','cosmetics'].forEach(function(t){
+    document.getElementById('stab-'+t).classList.toggle('active',t===tab);
+    document.getElementById('stab-content-'+t).classList.toggle('active',t===tab);
+  });
+  if(tab==='cosmetics') renderCosmSettings();
+}
+
+function renderCosmSettings(){
+  const el=document.getElementById('cosm-settings-inner');
+  if(!el||typeof GEM_THEMES==='undefined') return;
+
+  function makeCosmSection(label, items, activeId, setter){
+    const rows=items.map(function(item){
+      const isOwned=gemOwned.has(item.id)||(item.price===0);
+      const isActive=activeId===item.id;
+      let inner='<div class="cosm-item-icon">'+item.icon+'</div>';
+      if(item.vowel){
+        inner+='<div class="cosm-pip-row">'
+          +'<div class="cosm-pip" style="background:'+item.vowel+'"></div>'
+          +'<div class="cosm-pip" style="background:'+item.cons+'"></div>'
+          +'<div class="cosm-pip" style="background:'+item.rare+'"></div>'
+          +'</div>';
+      }
+      inner+='<div class="cosm-item-name">'+item.name+'</div>';
+      if(isActive) inner+='<div class="cosm-active-dot"></div>';
+      if(!isOwned) inner+='<div class="cosm-item-lock">🔒</div>';
+      const cls='cosm-item'+(isActive?' active':'')+(isOwned?'':' locked');
+      const click=isOwned?('selectCosm(\"'+setter+'\",\"'+item.id+'\")'):('openGemOverlay();switchGemTab(\"store\")');
+      return '<div class="'+cls+'" onclick="'+click+'">'+inner+'</div>';
+    });
+    return '<div class="cosm-section-lbl">'+label+'</div>'
+      +'<div class="cosm-grid">'+rows.join('')+'</div>';
+  }
+
+  el.innerHTML=
+    makeCosmSection('🎨 Tile Theme', GEM_THEMES, activeTheme, 'theme')
+    +makeCosmSection('✨ Drop Trail', GEM_TRAILS, activeTrail, 'trail')
+    +makeCosmSection('💥 Word Clear Effect', GEM_CLEARS, activeClear, 'clear')
+    +makeCosmSection('🌌 Board Background', GEM_BGS, activeBg, 'bg')
+    +makeCosmSection('🔷 Tile Shape', GEM_SHAPES, activeShape, 'shape')
+    +'<div style="height:8px;"></div>';
+}
+
+function selectCosm(type, id){
+  if(type==='theme')  activeTheme=id;
+  if(type==='trail')  activeTrail=id;
+  if(type==='clear')  activeClear=id;
+  if(type==='bg')     { activeBg=id; if(draw._stars) draw._stars=null; if(draw._rain) draw._rain=null; }
+  if(type==='shape')  activeShape=id;
+  saveGems();
+  renderCosmSettings();
+  // Refresh store selected states too
+  if(document.getElementById('gem-overlay').classList.contains('open')) renderGemStore();
+}
+
+window.addGems=function(n){n=n||100;gemCount+=n;saveGems();updateGemDisplays();renderGemStore();showGemToast('+'+n+' gems added!');};
+</script>
 </body>
 </html>
