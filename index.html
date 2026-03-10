@@ -1595,9 +1595,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         body: JSON.stringify(body)
       });
       const rows = await res.json();
-      return rows
-        .filter(r => r.document)
-        .map(r => ({
+      console.log('[LB] raw rows:', JSON.stringify(rows).substring(0, 500));
+      const filtered = rows.filter(r => r.document);
+      console.log('[LB] filtered docs:', filtered.length, 'mode queried:', mode);
+      return filtered.map(r => ({
           name:  r.document.fields.name.stringValue,
           score: parseInt(r.document.fields.score.integerValue || r.document.fields.score.doubleValue || 0),
           mode:  r.document.fields.mode.stringValue
