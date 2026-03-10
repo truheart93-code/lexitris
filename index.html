@@ -598,7 +598,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-radius:14px;padding:16px;
-  width:100%;cursor:pointer;min-height:80px;
+  width:100%;cursor:pointer;
+  height:80px;box-sizing:border-box;
   box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06);
   -webkit-tap-highlight-color:transparent;
   transition:transform .08s,box-shadow .08s,background .1s,border-color .1s;
@@ -613,7 +614,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
 .lx-mode-name{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.88rem;color:#e0e0ff;letter-spacing:.02em;
+  font-size:.8rem;color:#e0e0ff;letter-spacing:.02em;
+  white-space:nowrap;
 }
 .lx-mode-desc{
   font-family:'Space Mono',monospace;font-size:.4rem;
@@ -1834,7 +1836,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;">
       <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 20px rgba(74,222,128,0.3);" onclick="closeModeSelectSheet();openModeDialog('daily')">
         <span class="lx-mode-icon">📅</span>
-        <span class="lx-mode-text"><span class="lx-mode-name">Daily Challenge</span><span class="lx-mode-desc" id="daily-mode-desc">Same puzzle · everyone · every day</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Daily</span><span class="lx-mode-desc">Same puzzle · everyone · every day</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
       <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);" onclick="closeModeSelectSheet();openModeDialog('classic')">
