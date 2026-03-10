@@ -1534,7 +1534,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     const body = {
       fields: {
         name:  { stringValue: name.trim().substring(0,16) },
-        score: { integerValue: String(Math.floor(Number(score))) },
+        score: { integerValue: String(score) },
         mode:  { stringValue: mode },
         date:  { stringValue: date }
       }
@@ -1595,12 +1595,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         body: JSON.stringify(body)
       });
       const rows = await res.json();
-      console.log('[LB] raw rows:', JSON.stringify(rows).substring(0, 500));
-      const filtered = rows.filter(r => r.document);
-      console.log('[LB] filtered docs:', filtered.length, 'mode queried:', mode);
-      return filtered.map(r => ({
+      return rows
+        .filter(r => r.document)
+        .map(r => ({
           name:  r.document.fields.name.stringValue,
-          score: parseInt(r.document.fields.score.integerValue || r.document.fields.score.doubleValue || 0),
+          score: parseInt(r.document.fields.score.integerValue),
           mode:  r.document.fields.mode.stringValue
         }));
     } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
@@ -1745,7 +1744,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
 <div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
-  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
+  <canvas id="intro-bg-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
+  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;position:relative;z-index:1;">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -1831,6 +1831,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
   </div>
+  </div><!-- end z-index:1 wrapper -->
 </div>
 
 <!-- ═══ MODE SELECT SHEET ═══════════════════════════════════════════ -->
@@ -4580,5 +4581,97 @@ function dismissOnboard(){
   background-clip: unset !important;
 }
 </style>
+
+<script>
+// ── Intro screen falling letters screensaver ──────────────────────────────
+(function(){
+  const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const COLORS = ['#7c5cfc','#a78bfa','#4ade80','#f5a623','#ee2266','#00e5cc'];
+  let canvas, ctx, cols, drops, sizes, speeds, chars, colors, animFrame;
+  let active = false;
+
+  function init(){
+    canvas = document.getElementById('intro-bg-canvas');
+    if(!canvas) return;
+    ctx = canvas.getContext('2d');
+    resize();
+    window.addEventListener('resize', resize);
+  }
+
+  function resize(){
+    if(!canvas) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const colW = 28;
+    const numCols = Math.ceil(canvas.width / colW);
+    cols = numCols;
+    drops = Array.from({length:numCols}, () => Math.random() * -canvas.height);
+    sizes = Array.from({length:numCols}, () => 11 + Math.random() * 10);
+    speeds = Array.from({length:numCols}, () => 0.6 + Math.random() * 1.2);
+    chars = Array.from({length:numCols}, () => LETTERS[Math.floor(Math.random()*LETTERS.length)]);
+    colors = Array.from({length:numCols}, () => COLORS[Math.floor(Math.random()*COLORS.length)]);
+  }
+
+  function draw(){
+    if(!active || !canvas) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(let i = 0; i < cols; i++){
+      // Randomly change letter occasionally
+      if(Math.random() < 0.02) chars[i] = LETTERS[Math.floor(Math.random()*LETTERS.length)];
+      if(Math.random() < 0.005) colors[i] = COLORS[Math.floor(Math.random()*COLORS.length)];
+
+      const x = i * 28 + 14;
+      const y = drops[i];
+
+      // Draw with fade trail
+      ctx.font = `900 ${sizes[i]}px 'Space Mono', monospace`;
+      ctx.fillStyle = colors[i];
+      ctx.globalAlpha = 0.85;
+      ctx.fillText(chars[i], x, y);
+
+      // Faded trail letter above
+      ctx.globalAlpha = 0.2;
+      ctx.fillText(chars[i], x, y - sizes[i] * 1.4);
+      ctx.globalAlpha = 1;
+
+      drops[i] += speeds[i];
+      if(drops[i] > canvas.height + 40){
+        drops[i] = -sizes[i] * 2 - Math.random() * 200;
+        chars[i] = LETTERS[Math.floor(Math.random()*LETTERS.length)];
+        speeds[i] = 0.6 + Math.random() * 1.2;
+      }
+    }
+    animFrame = requestAnimationFrame(draw);
+  }
+
+  function start(){
+    if(active) return;
+    active = true;
+    draw();
+  }
+
+  function stop(){
+    active = false;
+    cancelAnimationFrame(animFrame);
+    if(ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // Start/stop based on intro screen visibility
+  const observer = new MutationObserver(() => {
+    const introOpen = document.getElementById('intro-screen')?.classList.contains('open');
+    if(introOpen) start(); else stop();
+  });
+
+  window.addEventListener('load', () => {
+    init();
+    const intro = document.getElementById('intro-screen');
+    if(intro){
+      observer.observe(intro, {attributes:true, attributeFilter:['class']});
+      if(intro.classList.contains('open')) start();
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
