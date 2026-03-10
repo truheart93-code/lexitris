@@ -1599,7 +1599,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         .filter(r => r.document)
         .map(r => ({
           name:  r.document.fields.name.stringValue,
-          score: parseInt(r.document.fields.score.integerValue),
+          score: parseInt((r.document.fields.score.integerValue||r.document.fields.score.doubleValue||0)),
           mode:  r.document.fields.mode.stringValue
         }));
     } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
