@@ -27,9 +27,7 @@ html{
   font-size:26px;
 }
 @media(max-width:400px){html{font-size:23px;}}
-@media(min-width:600px){html{font-size:22px;}}
-@media(min-width:1024px){html{font-size:18px;}}
-@media(min-width:1400px){html{font-size:16px;}}
+@media(min-width:600px){html{font-size:29px;}}
 body{
   height:100vh;width:100vw;
   overflow:hidden;
@@ -49,7 +47,7 @@ body{
 #hdr{
   width:100%;box-sizing:border-box;
   display:flex;flex-direction:column;
-  padding:3px 10px;
+  padding:6px 12px;
   flex-shrink:0;
   background:rgba(10,12,28,0.9);border-bottom:1px solid rgba(124,92,252,0.2);
   box-shadow:0 1px 20px rgba(0,0,0,0.5);
@@ -85,7 +83,7 @@ body{
 }
 #lb-header h2{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.85rem;letter-spacing:.12em;
+  font-size:1.3rem;letter-spacing:.12em;
   background:linear-gradient(135deg,#f5a623,#a78bfa);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:8px;
@@ -275,9 +273,8 @@ body{
   font-weight:900;letter-spacing:.2em;
   background:linear-gradient(90deg,#a78bfa,#7c5cfc,#00e5cc);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  flex-shrink:0;white-space:nowrap;flex-grow:0;
 }
-.stats{display:flex;gap:8px;}
+.stats{display:flex;gap:12px;}
 .stat{text-align:center;}
 .stat span{display:block;font-size:.38rem;letter-spacing:.15em;color:rgba(200,210,255,0.7);text-transform:uppercase;}
 .stat b{font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(.75rem,2.5vw,1rem);}
@@ -286,7 +283,7 @@ body{
 .red{color:#ff3b6b;}
 
 /* Main */
-#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:2px;overflow:hidden;min-height:0;}
+#main{display:flex;flex:1;width:100%;justify-content:center;align-items:stretch;gap:4px;padding:4px;overflow:hidden;min-height:0;}
 
 /* Side panels */
 .side{width:62px;flex-shrink:0;display:flex;flex-direction:column;gap:6px;}
@@ -320,7 +317,7 @@ body{
 .wle .p{color:#f5a623;font-weight:700;}
 
 /* Canvas wrap */
-#cw{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;align-self:stretch;}
+#cw{position:relative;flex-shrink:0;}
 canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;box-shadow:0 0 30px rgba(124,92,252,0.12),0 8px 32px rgba(0,0,0,0.5);}
 #particle-cv{position:absolute;top:0;left:0;pointer-events:none;border:none;box-shadow:none;background:transparent;border-radius:8px;}
 
@@ -343,7 +340,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Touch bar */
 #tbar{
-  display:flex;width:100%;gap:6px;padding:6px 10px;
+  display:flex;width:100%;gap:8px;padding:8px 10px;
   border-top:1px solid rgba(124,92,252,0.2);flex-shrink:0;
   background:rgba(10,12,28,0.9);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -418,28 +415,24 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 @keyframes wordGlowFade{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.1);}}
 .tbtn{
-  flex:1;height:104px;
-  background:linear-gradient(180deg,rgba(124,92,252,0.18),rgba(124,92,252,0.08));
-  border:1px solid rgba(124,92,252,0.4);
-  border-radius:16px;
-  font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:900;
-  color:#c4b5fd;cursor:pointer;
+  flex:1;height:58px;
+  background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:14px;
+  font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:900;
+  color:#a78bfa;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   -webkit-tap-highlight-color:transparent;
-  box-shadow:0 5px 0 rgba(60,30,160,0.7),inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow:0 4px 0 rgba(85,51,204,0.6),inset 0 1px 0 rgba(255,255,255,0.08);
   transition:transform .08s,box-shadow .08s;
 }
-.tbtn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(60,30,160,0.7);}
+.tbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(85,51,204,0.6);}
 #btn-drop{
-  flex:1.6;
-  background:linear-gradient(180deg,rgba(255,59,107,0.2),rgba(255,59,107,0.08));
-  border-color:rgba(255,59,107,0.5);color:#ff7096;
-  box-shadow:0 5px 0 rgba(160,10,50,0.7),inset 0 1px 0 rgba(255,255,255,0.08);
-  font-size:.85rem;letter-spacing:.12em;font-weight:900;
+  flex:1.6;background:rgba(255,59,107,0.12);border-color:rgba(255,59,107,0.4);color:#ff3b6b;
+  box-shadow:0 4px 0 rgba(180,20,60,0.7),inset 0 1px 0 rgba(255,255,255,0.06);
+  font-size:.72rem;letter-spacing:.1em;
 }
-#btn-drop:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(160,10,50,0.7);}
+#btn-drop:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(180,20,60,0.7);}
 @media(max-width:400px){
-  .tbtn{height:96px;}
+  .tbtn{height:52px;}
 }
 
 /* Overlay */
@@ -520,7 +513,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Logo */
 .lx-logo{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:clamp(1.8rem,7vw,3rem);
+  font-size:clamp(2.2rem,9vw,3.8rem);
   letter-spacing:.1em;
   background:linear-gradient(135deg,#a78bfa 0%,#7c5cfc 50%,#00e5cc 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -534,7 +527,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-sub{
   font-family:'Space Mono',monospace;
   font-size:.52rem;letter-spacing:.32em;
-  color:rgba(200,215,255,0.7);margin-bottom:4px;text-transform:uppercase;
+  color:rgba(200,215,255,0.7);margin-bottom:28px;text-transform:uppercase;
 }
 
 /* Card — frosted dark glass */
@@ -595,12 +588,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-btn{
   display:flex;align-items:center;gap:13px;
   background:rgba(255,255,255,0.04);
-  border:1px solid rgba(124,92,252,0.22);
+  border:1px solid rgba(124,92,252,0.2);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  border-radius:14px;padding:16px;
+  border-radius:14px;padding:13px 16px;
   width:100%;cursor:pointer;
-  height:80px;box-sizing:border-box;
   box-shadow:0 4px 16px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06);
   -webkit-tap-highlight-color:transparent;
   transition:transform .08s,box-shadow .08s,background .1s,border-color .1s;
@@ -614,11 +606,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .lx-mode-icon{font-size:1.5rem;flex-shrink:0;width:2rem;text-align:center;}
 .lx-mode-text{flex:1;display:flex;flex-direction:column;text-align:left;}
 .lx-mode-name{
-  -webkit-text-fill-color:#ffffff !important;
-  background:none !important;
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.8rem;color:#e0e0ff;letter-spacing:.02em;
-  white-space:nowrap;
+  font-size:.88rem;color:#d0d0f0;
 }
 .lx-mode-desc{
   font-family:'Space Mono',monospace;font-size:.4rem;
@@ -829,15 +818,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   transition:transform .08s,border-color .1s,background .1s;
 }
 .s-card:active{transform:translateY(2px);}
-.s-card-icon{font-size:1rem;margin-bottom:2px;}
+.s-card-icon{font-size:1.15rem;margin-bottom:3px;}
 .s-card-title{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.56rem;line-height:1.15;
+  font-size:.62rem;line-height:1.15;
   color:#a78bfa;margin-bottom:2px;
 }
 .s-card-sub{
   font-family:'Nunito',sans-serif;font-weight:600;
-  font-size:.46rem;line-height:1.35;
+  font-size:.5rem;line-height:1.35;
   color:rgba(200,210,240,0.65);
 }
 .s-card.gold{
@@ -932,7 +921,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .home-quick-title{
   font-family:'Nunito',sans-serif;
   font-weight:900;
-  font-size:.46rem;
+  font-size:.58rem;
   letter-spacing:.08em;
   text-transform:uppercase;
   color:#e5e9ff;
@@ -940,128 +929,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .home-quick-sub{
   font-family:'Space Mono',monospace;
-  font-size:.32rem;
+  font-size:.4rem;
   line-height:1.35;
   color:rgba(180,190,230,0.62);
   text-align:center;
 }
 @media(max-width:360px){
   .home-quick-card{min-height:84px;padding:10px 8px;}
-  .home-quick-title{font-size:.42rem;}
-  .home-quick-sub{font-size:.28rem;}
+  .home-quick-title{font-size:.54rem;}
+  .home-quick-sub{font-size:.38rem;}
 }
-
-
-/* ══ LANDSCAPE / TV / XBOX ════════════════════════════════════════════════ */
-@media (min-width: 600px) {
-  html { font-size: 18px; }
-}
-@media (min-width: 900px) {
-  html { font-size: 16px; }
-}
-@media (min-width: 1200px) {
-  html { font-size: 14px; }
-}
-
-/* Landscape home screen — two column layout */
-@media (orientation: landscape) and (min-width: 600px) {
-  #intro-screen {
-    padding: 16px 24px !important;
-    overflow-y: auto;
-  }
-  #intro-screen > div {
-    flex-direction: row !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  /* Left column: logo + daily + stats */
-  #intro-screen > div > div:first-child,
-  #home-stats-card {
-    flex: 1;
-  }
-  /* Right column: play button + leaderboard + quick actions */
-  .home-quick-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-  /* Logo smaller in landscape */
-  .lx-logo { font-size: clamp(1.4rem, 4vw, 2.4rem) !important; }
-}
-
-/* TV / large screen home layout */
-@media (min-width: 1024px) {
-  #intro-screen > div {
-    flex-direction: row !important;
-    align-items: stretch !important;
-    gap: 24px !important;
-    max-width: 1400px;
-    margin: 0 auto;
-    height: 100%;
-  }
-  #home-stats-card { flex: 1; }
-  .lx-logo { font-size: 2.8rem !important; }
-
-  /* Mode select sheet — horizontal on TV */
-  #mode-select-sheet > div > div:nth-child(2) {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px !important;
-  }
-  .lx-mode-btn {
-    flex: 0 1 calc(50% - 8px) !important;
-    max-width: 360px;
-  }
-
-  /* Mode dialog — wider card */
-  .md-card {
-    max-width: 560px !important;
-    margin: 0 auto;
-    height: 100vh;
-  }
-  #mode-dialog-backdrop {
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Game board — bigger side panels on TV */
-  .side { width: 90px !important; }
-  .panel label { font-size: .5rem !important; }
-}
-
-/* Controller focus ring — visible when using gamepad/keyboard */
-.gp-focus {
-  outline: 3px solid #a78bfa !important;
-  outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgba(124,92,252,0.25) !important;
-}
-
-/* Controller hint bar — shows when gamepad connected */
-#controller-hint {
-  position: fixed;
-  bottom: 72px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 500;
-  background: rgba(10,12,28,0.9);
-  border: 1px solid rgba(124,92,252,0.3);
-  border-radius: 12px;
-  padding: 6px 14px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 11px;
-  color: rgba(180,190,230,0.8);
-  display: none;
-  gap: 12px;
-  align-items: center;
-  white-space: nowrap;
-  pointer-events: none;
-  letter-spacing: .04em;
-}
-#controller-hint.show { display: flex; }
-#controller-hint span { color: #a78bfa; }
 
 /* Revised mode dialog */
 .md-card{
@@ -1101,7 +978,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   line-height:1.25;
 }
 .md-last{
-  margin:0 16px 24px;
+  margin:0 16px 18px;
   width:min(360px,calc(100% - 32px));
   border-radius:18px;
   background:linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.025));
@@ -1114,7 +991,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-hero{
   text-align:center;
-  padding:2px 16px 8px;
+  padding:2px 16px 12px;
   border-bottom:1px solid rgba(124,92,252,0.1);
 }
 .md-last-kicker{
@@ -1134,10 +1011,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   letter-spacing:.04em;
 }
 .md-last-stats{
-  min-height:60px;
+  min-height:78px;
 }
 .md-last-stat{
-  padding:7px 8px 9px;
+  padding:12px 8px 14px;
 }
 .md-last-stat span{
   font-size:1rem;
@@ -1148,7 +1025,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   line-height:1.25;
 }
 .md-last-summary{
-  display:none;
+  padding:12px 14px 14px;
+  border-top:1px solid rgba(124,92,252,0.08);
+  font-family:'Space Mono',monospace;
+  font-size:.44rem;
+  line-height:1.55;
+  text-align:center;
+  color:rgba(200,215,255,0.72);
 }
 .md-last-word{
   padding:11px 14px 12px;
@@ -1173,15 +1056,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* ══ PREMIUM MODE DIALOG ═══════════════════════════════════════════ */
 .md-card{
   width:100%;
-  height:100vh;
+  height:100%;
+  max-height:100vh;
   border-radius:0;
-  overflow-y:auto;
+  overflow:hidden;
   background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
   border:none;
   box-shadow:none;
   display:flex;flex-direction:column;
-  justify-content:space-between;
-  padding:0 0 8px;
+  justify-content:center;
 }
 @keyframes mdSlideUp{
   from{opacity:0;transform:translateY(28px) scale(.97)}
@@ -1190,7 +1073,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Hero section */
 .md-hero{
-  position:relative;padding:0 24px 10px;
+  position:relative;padding:20px 24px 16px;
   display:flex;flex-direction:column;align-items:center;
   overflow:hidden;
 }
@@ -1200,9 +1083,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   transition:background .4s;
 }
 .md-hero-icon{
-  font-size:1.7rem;
+  font-size:2.2rem;
   position:relative;z-index:1;
-  margin-bottom:4px;
+  margin-bottom:6px;
   filter:drop-shadow(0 0 16px currentColor);
   animation:iconFloat 3s ease-in-out infinite;
 }
@@ -1212,15 +1095,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-hero-name{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:1.15rem;letter-spacing:.12em;
+  font-size:1.4rem;letter-spacing:.12em;
   color:#fff;
   position:relative;z-index:1;
   margin-bottom:4px;
 }
 .md-hero-tagline{
-  font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.75rem;letter-spacing:.03em;
-  color:rgba(255,255,255,0.82);
+  font-family:'Nunito',sans-serif;font-weight:600;
+  font-size:.7rem;letter-spacing:.05em;
+  color:rgba(255,255,255,0.5);
   text-align:center;
   position:relative;z-index:1;
 }
@@ -1228,7 +1111,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 /* Stat chips */
 .md-chips{
   display:flex;gap:6px;justify-content:center;
-  padding:0 16px 18px;flex-wrap:wrap;
+  padding:0 16px 12px;flex-wrap:wrap;
   max-width:400px;align-self:center;width:100%;
 }
 .md-chip{
@@ -1236,12 +1119,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(124,92,252,0.18);
   border-radius:10px;
-  padding:8px 10px;min-width:56px;
+  padding:7px 10px;min-width:56px;
   flex:1;
 }
 .md-chip-val{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.8rem;color:#a78bfa;
+  font-size:.9rem;color:#a78bfa;
   line-height:1;margin-bottom:2px;
 }
 .md-chip-label{
@@ -1276,15 +1159,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Action buttons */
 .md-actions{
-  display:flex;flex-direction:column;gap:10px;
-  padding:0 16px 20px;
+  display:flex;flex-direction:column;gap:6px;
+  padding:0 16px 16px;
   margin-top:auto;
   max-width:400px;
   width:100%;
   align-self:center;
 }
 .md-play-btn{
-  width:100%;padding:14px;border:none;border-radius:14px;
+  width:100%;padding:15px;border:none;border-radius:14px;
   font-family:'Nunito',sans-serif;font-weight:900;
   font-size:1rem;letter-spacing:.1em;
   color:#fff;cursor:pointer;
@@ -1320,13 +1203,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .md-hero[data-mode="zen"] .md-hero-name{background:linear-gradient(135deg,#6ee7b7,#00e5cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .md-play-btn[data-mode="zen"]{background:linear-gradient(135deg,#00e5cc 0%,#009e8e 100%);box-shadow:0 5px 0 rgba(0,60,55,0.8),0 0 30px rgba(0,229,204,0.25);}
 
-.md-hero[data-mode="daily"] .md-hero-glow{background:radial-gradient(ellipse at 50% 0%,#4ade80 0%,transparent 70%);}
-.md-hero[data-mode="daily"] .md-hero-name{background:linear-gradient(135deg,#86efac,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.md-play-btn[data-mode="daily"]{background:linear-gradient(135deg,#4ade80 0%,#16a34a 100%);box-shadow:0 5px 0 rgba(0,60,20,0.8),0 0 30px rgba(74,222,128,0.25);}
-
 /* Last game section inside mode dialog */
 .md-last{
-  margin:0 16px 24px;
+  margin:0 16px 14px;
   border-radius:14px;overflow:hidden;
   border:1px solid rgba(124,92,252,0.15);
   background:rgba(255,255,255,0.025);
@@ -1336,7 +1215,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
   letter-spacing:.12em;text-transform:uppercase;
   color:rgba(200,215,255,0.72);
-  padding:10px 14px 6px;
+  padding:10px 14px 5px;
 }
 .md-last-stats{
   display:flex;gap:0;
@@ -1344,13 +1223,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .md-last-stat{
   flex:1;display:flex;flex-direction:column;align-items:center;
-  padding:13px 6px 15px;
+  padding:10px 6px 12px;
   border-right:1px solid rgba(124,92,252,0.1);
 }
 .md-last-stat:last-child{border-right:none;}
 .md-last-stat span{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.95rem;color:#a78bfa;line-height:1;margin-bottom:4px;
+  font-size:1.05rem;color:#a78bfa;line-height:1;margin-bottom:4px;
 }
 .md-last-stat.md-last-best span{color:#f5a623;}
 .md-last-stat label{
@@ -1407,335 +1286,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   60%{transform:translateX(4px)}
   75%{transform:translateX(-2px)}
 }
-
-/* Rate prompt */
-#rate-overlay{
-  position:fixed;inset:0;z-index:600;
-  display:none;align-items:flex-end;justify-content:center;
-  background:rgba(0,0,0,0.55);
-  padding-bottom:24px;
-}
-#rate-overlay.show{display:flex;}
-#rate-card{
-  width:calc(100% - 32px);max-width:400px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1px solid rgba(124,92,252,0.35);
-  border-radius:20px;padding:22px 20px 18px;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  animation:slideUp .3s ease;
-}
-@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
-#rate-stars{display:flex;gap:8px;font-size:2rem;cursor:pointer;}
-#rate-stars span{transition:transform .1s;}
-#rate-stars span:hover{transform:scale(1.25);}
-.rate-btn{
-  width:100%;padding:12px;border:none;border-radius:12px;
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;
-  letter-spacing:.08em;cursor:pointer;
-}
-
-/* Onboarding tutorial */
-#onboard-overlay{
-  position:fixed;inset:0;z-index:700;
-  display:none;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding:0 16px 32px;
-  pointer-events:none;
-}
-#onboard-overlay.show{display:flex;pointer-events:all;}
-#onboard-card{
-  width:100%;max-width:420px;
-  background:linear-gradient(160deg,#151830,#0e0d1f);
-  border:1px solid rgba(124,92,252,0.4);
-  border-radius:20px;padding:20px;
-  display:flex;flex-direction:column;gap:10px;
-  animation:slideUp .3s ease;
-}
-.onboard-step{display:none;}
-.onboard-step.active{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;}
-.onboard-emoji{font-size:2.4rem;line-height:1;}
-.onboard-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#fff;}
-.onboard-body{font-family:'Nunito',sans-serif;font-weight:600;font-size:.6rem;color:rgba(200,210,255,0.7);line-height:1.5;}
-.onboard-dots{display:flex;gap:6px;justify-content:center;}
-.onboard-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,92,252,0.3);}
-.onboard-dot.active{background:#7c5cfc;}
-
-/* Home banner ad */
-#home-banner-ad{
-  width:100%;max-width:360px;
-  min-height:60px;
-  display:none;
-  align-items:center;justify-content:center;
-  border-radius:12px;overflow:hidden;
-  margin-top:4px;
-}
-#home-banner-ad.show{ display:flex; }
-
-
-/* Gem packs */
-.gem-pack-row{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(56,189,248,0.06);
-  border:1px solid rgba(56,189,248,0.2);
-  border-radius:14px;padding:12px 14px;
-  cursor:pointer;transition:all .2s;
-}
-.gem-pack-row:hover{background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);}
-.gem-pack-row:active{transform:scale(.98);}
-.gem-pack-featured{
-  background:rgba(56,189,248,0.1);
-  border-color:rgba(56,189,248,0.4);
-  box-shadow:0 0 18px rgba(56,189,248,0.15);
-}
-.gem-pack-icon{font-size:1.3rem;width:2rem;text-align:center;flex-shrink:0;}
-.gem-pack-info{flex:1;}
-.gem-pack-name{font-size:.65rem;font-weight:900;color:#fff;display:flex;align-items:center;gap:6px;}
-.gem-pack-amt{font-size:.52rem;color:rgba(200,210,255,0.55);}
-.gem-pack-badge{
-  font-size:.36rem;font-weight:800;letter-spacing:.08em;
-  background:linear-gradient(90deg,#f5a623,#ff6b35);
-  color:#fff;padding:2px 5px;border-radius:4px;
-}
-.gem-pack-price{
-  font-size:.75rem;font-weight:900;
-  color:#38bdf8;font-family:'Space Mono',monospace;
-  flex-shrink:0;
-}
-
-/* Gem confirm modal */
-#gem-pack-modal{
-  position:fixed;inset:0;z-index:600;
-  background:rgba(0,0,0,0.65);
-  display:none;align-items:flex-end;justify-content:center;
-  padding-bottom:24px;
-}
-#gem-pack-modal.show{display:flex;}
-.gpack-card{
-  width:calc(100% - 32px);max-width:400px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1px solid rgba(56,189,248,0.35);
-  border-radius:24px;padding:22px 20px 18px;
-  display:flex;flex-direction:column;gap:12px;align-items:center;
-  animation:slideUp .3s ease;
-}
-.gpack-title{font-size:.9rem;font-weight:900;color:#fff;}
-.gpack-amt{font-size:2rem;font-weight:900;color:#38bdf8;font-family:'Space Mono',monospace;}
-.gpack-note{font-size:.52rem;color:rgba(200,210,255,0.5);text-align:center;line-height:1.5;}
-
-/* ══ GEM SYSTEM ══════════════════════════════════════════════════════════ */
-.gem-badge-home{
-  display:flex;align-items:center;gap:5px;
-  background:rgba(56,189,248,0.1);
-  border:1px solid rgba(56,189,248,0.28);
-  border-radius:20px;padding:5px 12px;
-  font-weight:900;font-size:.7rem;color:#38bdf8;
-  cursor:pointer;transition:all .2s;
-  font-family:'Nunito',sans-serif;
-}
-.gem-badge-home:hover{background:rgba(56,189,248,0.18);}
-
-#gem-overlay{
-  position:fixed;inset:0;z-index:350;
-  background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
-  display:none;flex-direction:column;
-  overflow:hidden;
-}
-#gem-overlay.open{display:flex;}
-
-.gem-overlay-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px;
-  border-bottom:1px solid rgba(124,92,252,0.2);
-  background:rgba(10,12,28,0.9);
-  flex-shrink:0;
-}
-.gem-overlay-title{
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.85rem;letter-spacing:.12em;
-  color:rgba(200,210,255,0.9);text-transform:uppercase;
-}
-.gem-tabs{
-  display:flex;border-bottom:1px solid rgba(124,92,252,0.18);
-  flex-shrink:0;background:rgba(10,12,28,0.7);
-}
-.gem-tab{
-  flex:1;padding:10px 0;
-  font-family:'Nunito',sans-serif;font-weight:800;
-  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(200,210,255,0.4);cursor:pointer;
-  border:none;background:none;
-  border-bottom:2px solid transparent;
-  transition:all .2s;margin-bottom:-1px;
-}
-.gem-tab.active{color:#a78bfa;border-bottom-color:#7c5cfc;}
-
-.gem-content{flex:1;overflow-y:auto;padding:16px;}
-
-/* Calendar */
-.week-grid{
-  display:grid;grid-template-columns:repeat(7,1fr);
-  gap:6px;margin-bottom:16px;
-}
-.day-card{
-  display:flex;flex-direction:column;align-items:center;
-  gap:4px;padding:8px 3px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(124,92,252,0.2);
-  border-radius:12px;transition:all .2s;
-}
-.day-card.completed{background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.35);}
-.day-card.today{border-color:rgba(124,92,252,0.5);background:rgba(124,92,252,0.08);box-shadow:0 0 12px rgba(124,92,252,0.2);}
-.day-card.today.completed{border-color:rgba(74,222,128,0.5);box-shadow:0 0 12px rgba(74,222,128,0.2);}
-.day-card.future{opacity:0.35;}
-.day-label{font-size:.36rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(200,210,255,0.45);}
-.day-card.today .day-label{color:#a78bfa;}
-.day-num{font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;color:#fff;}
-.day-status{font-size:.8rem;line-height:1;min-height:1rem;display:flex;align-items:center;justify-content:center;}
-.day-check{
-  width:16px;height:16px;border-radius:50%;
-  background:linear-gradient(135deg,#4ade80,#16a34a);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.48rem;color:#fff;font-weight:900;
-  box-shadow:0 0 6px rgba(74,222,128,0.5);
-}
-.day-gem-lbl{font-size:.34rem;font-weight:800;color:#38bdf8;}
-
-.streak-banner{
-  background:linear-gradient(135deg,rgba(245,166,35,0.12),rgba(245,166,35,0.04));
-  border:1px solid rgba(245,166,35,0.28);
-  border-radius:14px;padding:12px 14px;
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:14px;
-}
-.streak-info{flex:1;}
-.streak-num{font-size:.95rem;font-weight:900;color:#f5a623;}
-.streak-lbl{font-size:.46rem;color:rgba(200,210,255,0.5);text-transform:uppercase;letter-spacing:.08em;}
-.streak-bonus-pill{
-  font-size:.5rem;font-weight:800;color:#38bdf8;
-  background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);
-  border-radius:8px;padding:3px 7px;white-space:nowrap;
-}
-
-.gem-rewards-card{
-  background:rgba(56,189,248,0.05);
-  border:1px solid rgba(56,189,248,0.15);
-  border-radius:14px;padding:12px 14px;margin-bottom:14px;
-}
-.gem-rewards-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:4px 0;
-}
-.gem-rewards-row+.gem-rewards-row{border-top:1px solid rgba(56,189,248,0.08);}
-.gem-rewards-label{font-size:.52rem;color:rgba(200,210,255,0.6);}
-.gem-rewards-val{font-size:.56rem;font-weight:900;color:#38bdf8;}
-
-/* Store */
-.store-section-hdr{
-  font-size:.52rem;font-weight:800;text-transform:uppercase;
-  letter-spacing:.12em;color:rgba(200,210,255,0.38);
-  margin:16px 0 8px;
-}
-.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
-.store-item{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(124,92,252,0.2);
-  border-radius:14px;padding:12px 10px;
-  display:flex;flex-direction:column;gap:5px;
-  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
-}
-.store-item:hover{border-color:rgba(124,92,252,0.4);background:rgba(124,92,252,0.06);}
-.store-item.owned{border-color:rgba(74,222,128,0.3);background:rgba(74,222,128,0.05);}
-.store-item.cant-afford{opacity:0.45;cursor:not-allowed;}
-.store-item.cant-afford:hover{border-color:rgba(124,92,252,0.2);background:rgba(255,255,255,0.04);}
-.store-item-icon{font-size:1.4rem;line-height:1;}
-.store-item-name{font-size:.6rem;font-weight:900;color:#fff;line-height:1.2;}
-.store-item-desc{font-size:.44rem;color:rgba(200,210,255,0.5);line-height:1.4;}
-.store-item-price{display:flex;align-items:center;gap:3px;font-size:.56rem;font-weight:900;color:#38bdf8;margin-top:2px;}
-.store-item-price.owned-price{color:#4ade80;}
-.store-owned-check{
-  position:absolute;top:7px;right:8px;
-  width:16px;height:16px;border-radius:50%;
-  background:linear-gradient(135deg,#4ade80,#16a34a);
-  display:grid;place-items:center;
-  font-size:.48rem;color:#fff;font-weight:900;
-  box-shadow:0 0 6px rgba(74,222,128,0.4);
-}
-.tile-pip-row{display:flex;gap:3px;margin:2px 0;}
-.tile-pip{width:12px;height:12px;border-radius:3px;display:inline-block;}
-
-/* Purchase modal */
-#gem-purchase-modal{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,0.6);
-  display:none;align-items:flex-end;justify-content:center;
-  padding-bottom:24px;
-}
-#gem-purchase-modal.show{display:flex;}
-.gpm-card{
-  width:calc(100% - 32px);max-width:400px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1px solid rgba(124,92,252,0.35);
-  border-radius:24px;padding:22px 20px 18px;
-  display:flex;flex-direction:column;gap:12px;
-  animation:slideUp .3s ease;
-}
-.gpm-icon{font-size:2.4rem;text-align:center;}
-.gpm-title{font-size:.95rem;font-weight:900;color:#fff;text-align:center;}
-.gpm-desc{font-size:.58rem;color:rgba(200,210,255,0.6);text-align:center;line-height:1.6;}
-.gpm-price{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;font-weight:900;color:#38bdf8;}
-.gpm-btns{display:flex;gap:8px;}
-.gpm-btn{
-  flex:1;padding:12px;border:none;border-radius:12px;
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.65rem;letter-spacing:.08em;cursor:pointer;
-  text-transform:uppercase;transition:all .1s;
-}
-.gpm-confirm{background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;box-shadow:0 4px 0 rgba(40,20,120,0.8);}
-.gpm-confirm:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(40,20,120,0.8);}
-.gpm-cancel{background:rgba(255,255,255,0.05);color:rgba(200,210,255,0.5);}
-
-/* Complete modal */
-#gem-complete-modal{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,0.6);
-  display:none;align-items:flex-end;justify-content:center;
-  padding-bottom:24px;
-}
-#gem-complete-modal.show{display:flex;}
-.gcm-card{
-  width:calc(100% - 32px);max-width:400px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1px solid rgba(74,222,128,0.35);
-  border-radius:24px;padding:22px 20px 18px;
-  display:flex;flex-direction:column;gap:12px;align-items:center;
-  animation:slideUp .3s ease;
-}
-.gcm-total{font-size:2rem;font-weight:900;color:#38bdf8;font-family:'Space Mono',monospace;}
-.gcm-lbl{font-size:.5rem;color:rgba(200,210,255,0.5);text-transform:uppercase;letter-spacing:.1em;}
-.gcm-breakdown{
-  width:100%;background:rgba(56,189,248,0.07);
-  border:1px solid rgba(56,189,248,0.18);
-  border-radius:12px;padding:10px 12px;
-  display:flex;flex-direction:column;gap:5px;
-}
-.gcm-row{display:flex;justify-content:space-between;align-items:center;}
-.gcm-row-lbl{font-size:.52rem;color:rgba(200,210,255,0.6);}
-.gcm-row-val{font-size:.56rem;font-weight:900;color:#38bdf8;}
-
-/* Gem toast */
-#gem-toast{
-  position:fixed;top:68px;left:50%;
-  transform:translateX(-50%) translateY(-20px);
-  background:rgba(56,189,248,0.14);
-  border:1px solid rgba(56,189,248,0.38);
-  border-radius:20px;padding:8px 18px;
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.72rem;color:#38bdf8;
-  display:flex;align-items:center;gap:7px;
-  opacity:0;pointer-events:none;
-  transition:all .4s cubic-bezier(.22,.68,0,1.2);
-  z-index:999;white-space:nowrap;
-}
-#gem-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -1790,57 +1340,22 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     });
   }
 
-  // Pending queue — saves locally if network fails, retries on next load
-  function getPendingQueue(){
-    try{ return JSON.parse(localStorage.getItem('lexitris_score_queue')||'[]'); }catch(e){ return []; }
-  }
-  function savePendingQueue(q){
-    try{ localStorage.setItem('lexitris_score_queue', JSON.stringify(q)); }catch(e){}
-  }
-  async function doSubmit(name, score, mode, date){
-    const body = {
-      fields: {
-        name:  { stringValue: name.trim().substring(0,16) },
-        score: { integerValue: String(Math.floor(score)) },
-        mode:  { stringValue: mode.toLowerCase().trim() },
-        date:  { stringValue: date }
-      }
-    };
-    console.log('[Lexitris] Submitting score:', JSON.stringify({name, score, mode, date}));
-    const res = await apiFetch(BASE + "/scores?key=" + API_KEY, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    const responseText = await res.text();
-    console.log('[Lexitris] Firebase response:', res.status, responseText);
-    if(!res.ok) throw new Error('HTTP ' + res.status + ': ' + responseText);
-  }
-  async function flushQueue(){
-    const q = getPendingQueue();
-    if(!q.length) return;
-    const remaining = [];
-    for(const item of q){
-      try{ await doSubmit(item.name, item.score, item.mode, item.date); }
-      catch(e){ remaining.push(item); }
-    }
-    savePendingQueue(remaining);
-  }
-  // Try to flush any queued scores on load
-  setTimeout(flushQueue, 3000);
-
   window.submitLeaderboardScore = async function(name, score, mode) {
-    const date = new Date().toISOString();
     try {
-      await doSubmit(name, score, mode, date);
-    } catch(e) {
-      console.error('[Lexitris] Score submit error:', e.message);
-      // Network failed — queue for retry
-      const q = getPendingQueue();
-      q.push({name, score, mode, date});
-      savePendingQueue(q);
-      if(typeof showToast === 'function') showToast('Submit failed: ' + e.message.substring(0,60));
-    }
+      const body = {
+        fields: {
+          name:  { stringValue: name.trim().substring(0,16) },
+          score: { integerValue: String(score) },
+          mode:  { stringValue: mode },
+          date:  { stringValue: new Date().toISOString() }
+        }
+      };
+      await apiFetch(BASE + "/scores?key=" + API_KEY, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } catch(e) { console.error("Score submit failed:", e); }
   };
 
   window.fetchLeaderboard = async function(mode) {
@@ -1865,8 +1380,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         body: JSON.stringify(body)
       });
       const rows = await res.json();
-      console.log('[Lexitris] Leaderboard raw response:', JSON.stringify(rows).substring(0,500));
-      const mapped = rows
+      return rows
         .filter(r => r.document)
         .map(r => {
           const sf = r.document.fields.score;
@@ -1877,8 +1391,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
             mode:  r.document.fields.mode.stringValue
           };
         });
-      console.log('[Lexitris] Mapped scores:', JSON.stringify(mapped));
-      return mapped;
     } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
   };
 })();
@@ -1900,68 +1412,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="loading-screen" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);z-index:9998;">
   <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;letter-spacing:.1em;background:linear-gradient(135deg,#a78bfa,#7c5cfc,#00e5cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">LEXITRIS</div>
   <div style="width:40px;height:40px;border:3px solid rgba(124,92,252,0.2);border-top-color:#7c5cfc;border-radius:50%;animation:ldSpin .8s linear infinite;"></div>
-  <style>
-@keyframes shatterFlash{0%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(1.04) skewX(3deg)}100%{opacity:0;transform:scale(1.1) skewX(-2deg)}}
-@keyframes dissolveFlash{0%{opacity:1;filter:blur(0)}100%{opacity:0;filter:blur(6px) saturate(2)}}
-@keyframes lightningFlash{0%{opacity:0;transform:scaleX(0)}30%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1)}}
-@keyframes auroraFlash{0%{opacity:0;transform:translateX(-100%)}40%{opacity:.9;transform:translateX(0)}100%{opacity:0;transform:translateX(100%)}}
-
-/* Cosmetics settings tab */
-.cosm-section-lbl{
-  font-size:.5rem;font-weight:800;text-transform:uppercase;
-  letter-spacing:.1em;color:rgba(200,210,255,0.4);
-  margin:12px 0 6px;
-}
-.cosm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:2px;}
-.cosm-item{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:8px 4px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(124,92,252,0.2);
-  border-radius:12px;cursor:pointer;transition:all .15s;
-  position:relative;
-}
-.cosm-item:active{transform:scale(.95);}
-.cosm-item.active{
-  border-color:rgba(124,92,252,0.6);
-  background:rgba(124,92,252,0.12);
-  box-shadow:0 0 10px rgba(124,92,252,0.25);
-}
-.cosm-item.locked{opacity:0.4;cursor:not-allowed;}
-.cosm-item-icon{font-size:1.1rem;line-height:1;}
-.cosm-item-name{font-size:.4rem;font-weight:800;color:rgba(200,210,255,0.8);text-align:center;line-height:1.2;}
-.cosm-item-lock{
-  position:absolute;top:4px;right:4px;
-  font-size:.55rem;opacity:0.6;
-}
-.cosm-active-dot{
-  position:absolute;top:4px;right:4px;
-  width:8px;height:8px;border-radius:50%;
-  background:linear-gradient(135deg,#a78bfa,#7c5cfc);
-  box-shadow:0 0 4px rgba(124,92,252,0.6);
-}
-.cosm-pip-row{display:flex;gap:2px;margin-top:1px;}
-.cosm-pip{width:8px;height:8px;border-radius:2px;}
-
-/* Settings tabs */
-.settings-tabs{
-  display:flex;width:100%;border-bottom:1px solid rgba(124,92,252,0.18);
-  margin-bottom:8px;
-}
-.settings-tab{
-  flex:1;padding:7px 0;
-  font-family:'Nunito',sans-serif;font-weight:800;
-  font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;
-  color:rgba(200,210,255,0.4);cursor:pointer;
-  border:none;background:none;
-  border-bottom:2px solid transparent;
-  transition:all .2s;margin-bottom:-1px;
-}
-.settings-tab.active{color:#a78bfa;border-bottom-color:#7c5cfc;}
-.settings-tab-content{display:none;width:100%;overflow-y:auto;max-height:60vh;}
-.settings-tab-content.active{display:block;}
-
-@keyframes ldSpin{to{transform:rotate(360deg)}}</style>
+  <style>@keyframes ldSpin{to{transform:rotate(360deg)}}</style>
 </div>
 
 <!-- High score celebration overlay -->
@@ -1985,13 +1436,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="hdr">
   <div class="hdr-top">
     <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
-    <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;flex-shrink:0;margin-left:auto;">⏸</button>
-  </div>
-  <div id="timer-bar-wrap" style="display:none;width:100%;padding:3px 10px 4px;box-sizing:border-box;">
-    <div id="timer-box" style="position:relative;background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:8px;overflow:hidden;height:28px;width:100%;">
-      <div id="timer-bar" style="position:absolute;inset:0;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:8px;opacity:0.35;"></div>
-      <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:#e0d0ff;text-shadow:0 0 12px rgba(124,92,252,0.8);pointer-events:none;">3:00</div>
-    </div>
+    <button class="hdr-btn" id="btn-lb" title="Leaderboard" onclick="openLeaderboard(0)" style="font-size:1.1rem;width:36px;height:36px">🏆</button>
+    <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;margin-left:8px">⏸</button>
   </div>
   <div class="stats">
     <div class="stat"><span>Score</span><b class="gold" id="s-score">0</b></div>
@@ -2000,6 +1446,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div class="stat"><span>Lines</span><b class="blue" id="s-lines">0</b></div>
     <div class="stat"><span>Combo</span><b class="red" id="s-combo">×1</b></div>
   </div>
+</div>
+<div id="timer-bar-wrap" style="width:100%;flex-shrink:0;display:none;position:relative;background:rgba(124,92,252,0.08);">
+  <div id="timer-bar" style="height:4px;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:0;"></div>
+  <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;letter-spacing:.1em;color:#a78bfa;pointer-events:none;">3:00</div>
 </div>
 
 <!-- Settings / Pause backdrop -->
@@ -2043,7 +1493,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="main">
   <div class="side">
     <div class="panel"><label>Next</label><div class="next-box" id="next-box">?</div></div>
-    <div class="panel" style="flex:1"><label>Words</label><div id="last-word-display" style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:#4ade80;letter-spacing:.08em;min-height:1.2em;text-align:center;margin-bottom:4px;text-transform:uppercase;transition:opacity .3s;opacity:0;"></div><div id="word-log"></div></div>
+    <div class="panel" style="flex:1"><label>Words</label><div id="word-log"></div></div>
   </div>
   <div id="cw"><div id="danger-bar"></div><div id="combo-badge">×2</div><canvas id="cv"></canvas><canvas id="particle-cv"></canvas></div>
 
@@ -2067,13 +1517,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   </div>
 </div>
 
-<div id="controller-hint">
-  <span>🎮</span>
-  <span style="color:rgba(180,190,230,0.6);">A</span> Drop &nbsp;
-  <span style="color:rgba(180,190,230,0.6);">←→</span> Move &nbsp;
-  <span style="color:rgba(180,190,230,0.6);">↓</span> Soft drop &nbsp;
-  <span style="color:rgba(180,190,230,0.6);">B</span> Pause
-</div>
 <div id="tbar">
   <button class="tbtn" id="btn-left">◀</button>
   <button class="tbtn" id="btn-drop">▼ DROP</button>
@@ -2081,31 +1524,20 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
-  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:12px 20px 20px;">
+  <div style="width:min(320px,92vw);display:flex;flex-direction:column;gap:8px;align-items:center;padding-top:4px;">
 
-    <!-- Logo + gem badge -->
-    <div style="text-align:center;margin-bottom:0;position:relative;">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:0;">
       <div class="lx-logo">LEXITRIS</div>
       <div class="lx-sub">spell to survive</div>
-      <div style="position:absolute;top:50%;right:0;transform:translateY(-50%);">
-        <div class="gem-badge-home" onclick="openGemOverlay()">
-          💎 <span id="home-gem-count">0</span>
-        </div>
-      </div>
     </div>
 
     <!-- Stats card -->
-    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
-      <!-- Daily Challenge strip -->
-      <div id="home-daily-strip" onclick="closeModeSelectSheet();openModeDialog('daily')" style="display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-        <div id="home-daily-status-icon" style="font-size:1.5rem;line-height:1;flex-shrink:0;">📅</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.62rem;color:#4ade80;text-transform:uppercase;letter-spacing:.08em;">Daily Challenge</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="home-daily-sub">Same puzzle · everyone · every day</div>
-        </div>
-        <div id="home-daily-score" style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#f5a623;flex-shrink:0;display:none;"></div>
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:rgba(160,170,210,0.5);flex-shrink:0;">›</div>
+    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+      <div style="text-align:center;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;">
+        <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;">Best Score</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;color:#f5a623;" id="home-stat-best">0</div>
       </div>
       <div style="display:flex;justify-content:space-around;">
         <div style="text-align:center;">
@@ -2130,14 +1562,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       ▶ &nbsp;Play
     </button>
 
-    <!-- Banner ad — only visible after first interstitial -->
-    <div id="home-banner-ad">
-      <!-- AdMob banner slot injected by Android bridge -->
-      <div id="admob-banner-slot" style="width:320px;height:50px;"></div>
-    </div>
-
     <!-- Mini leaderboard -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
       <div style="text-align:center;margin-bottom:8px;">
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
       </div>
@@ -2145,7 +1571,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <button class="lb-tab active" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
         <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.52rem;padding:3px 7px;">Zen</button>
-        <button class="lb-tab" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
       </div>
       <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
         <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
@@ -2154,26 +1579,21 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
     <!-- Quick action cards -->
-    <div class="home-quick-grid" style="width:100%;">
+    <div class="home-quick-grid">
       <button class="home-quick-card" onclick="openHomeSettings()">
         <div class="home-quick-icon">⚙️</div>
         <div class="home-quick-title">Settings</div>
-        <div class="home-quick-sub">Sound<br>Haptics<br>Ads</div>
+        <div class="home-quick-sub">Sound, haptics, ads</div>
       </button>
       <button class="home-quick-card" onclick="document.getElementById('help-overlay').classList.add('open')">
         <div class="home-quick-icon">❓</div>
         <div class="home-quick-title">How to Play</div>
-        <div class="home-quick-sub">Learn<br>the rules</div>
+        <div class="home-quick-sub">Learn the rules</div>
       </button>
       <button class="home-quick-card" onclick="openStats()">
         <div class="home-quick-icon">📊</div>
         <div class="home-quick-title">Stats</div>
-        <div class="home-quick-sub">Lifetime<br>progress</div>
-      </button>
-      <button class="home-quick-card" onclick="openGemOverlay()" style="border-color:rgba(56,189,248,0.3);background:rgba(56,189,248,0.05);">
-        <div class="home-quick-icon">💎</div>
-        <div class="home-quick-title" style="color:#38bdf8;">Gems</div>
-        <div class="home-quick-sub">Store &<br>Rewards</div>
+        <div class="home-quick-sub">Lifetime progress</div>
       </button>
     </div>
 
@@ -2185,25 +1605,19 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   <div style="width:100%;height:100%;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.7);text-transform:uppercase;text-align:center;margin-bottom:20px;">Choose Mode</div>
     <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;">
-      <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 28px rgba(74,222,128,0.55),inset 0 0 20px rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.07);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('daily')">
-        <span class="lx-mode-icon">📅</span>
-        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Daily</span><span class="lx-mode-desc">Same puzzle · everyone · every day</span></span>
-        <span id="daily-check" style="display:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#16a34a);box-shadow:0 0 10px rgba(74,222,128,0.5);flex-shrink:0;display:none;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:900;">✓</span>
-        <span class="lx-mode-arrow" id="daily-arrow">›</span>
-      </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('classic')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(124,92,252,0.3);" onclick="closeModeSelectSheet();openModeDialog('classic')">
         <span class="lx-mode-icon">📖</span>
-        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Classic</span><span class="lx-mode-desc">Endless · speed builds with level</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(245,166,35,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('timed')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(245,166,35,0.3);" onclick="closeModeSelectSheet();openModeDialog('timed')">
         <span class="lx-mode-icon">⏱</span>
-        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Timed</span><span class="lx-mode-desc">3 minutes · score as much as you can</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Timed</span><span class="lx-mode-desc">3 minutes · score as much as you can</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('zen')">
+      <button class="lx-mode-btn" style="box-shadow:0 0 20px rgba(0,229,204,0.3);" onclick="closeModeSelectSheet();openModeDialog('zen')">
         <span class="lx-mode-icon">🧘</span>
-        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
+        <span class="lx-mode-text"><span class="lx-mode-name">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
         <span class="lx-mode-arrow">›</span>
       </button>
     </div>
@@ -2264,17 +1678,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <button class="lb-tab active" onclick="switchLbTab('classic')">Classic</button>
         <button class="lb-tab" onclick="switchLbTab('timed')">Timed</button>
         <button class="lb-tab" onclick="switchLbTab('zen')">Zen</button>
-        <button class="lb-tab" onclick="switchLbTab('daily')">Daily</button>
       </div>
     </div>
     <div id="lb-list"><div id="lb-loading">Loading...</div></div>
     <div id="lb-actions">
       <div id="lb-submit-area">
         <label>SUBMIT YOUR SCORE</label>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-          <input id="lb-name-input" type="text" maxlength="16" autocomplete="off" style="flex:1;" />
-          <button onclick="generatePlayerName()" style="padding:6px 10px;border-radius:8px;border:1px solid rgba(124,92,252,0.3);background:rgba(124,92,252,0.12);color:#a78bfa;font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;cursor:pointer;white-space:nowrap;">🎲 New</button>
-        </div>
+        <input id="lb-name-input" type="text" maxlength="16" placeholder="Enter your name..." autocomplete="off" />
         <button id="lb-submit-btn" onclick="submitScore()">Submit Score</button>
       </div>
       <button id="lb-close-btn" onclick="closeLeaderboard()">← Back</button>
@@ -2309,53 +1719,39 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ HOME SETTINGS ═══════════════════════════════════════════════ -->
 <div id="home-settings-overlay" class="lx-screen" onclick="if(event.target===this)closeHomeSettings()">
-  <div style="width:calc(100% - 24px);max-height:calc(100vh - 32px);display:flex;flex-direction:column;align-items:center;gap:6px;">
+  <div style="width:min(340px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">Settings</div>
 
-    <!-- Tabs -->
-    <div class="settings-tabs">
-      <button class="settings-tab active" id="stab-general" onclick="switchSettingsTab('general')">⚙️ General</button>
-      <button class="settings-tab" id="stab-cosmetics" onclick="switchSettingsTab('cosmetics')">🎨 Cosmetics</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
+
+      <button id="home-sound-card" onclick="toggleSoundFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-sound-icon">🔊</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Sound</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-sound-text">On</div>
+      </button>
+
+      <button id="home-haptic-card" onclick="toggleHapticFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;" id="home-haptic-icon">📳</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Haptics</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-haptic-text">On</div>
+      </button>
+
+      <button onclick="purchaseRemoveAds();syncHomeSettingsUI();" style="background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#f5a623;margin-bottom:2px;">Remove Ads</div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-remove-ads-text">$0.99 one-time</div>
+      </button>
+
     </div>
 
-    <!-- General tab -->
-    <div class="settings-tab-content active" id="stab-content-general">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;">
-
-        <button id="home-sound-card" onclick="toggleSoundFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-          <div style="font-size:1.1rem;margin-bottom:3px;" id="home-sound-icon">🔊</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Sound</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-sound-text">On</div>
-        </button>
-
-        <button id="home-haptic-card" onclick="toggleHapticFromHome()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-          <div style="font-size:1.1rem;margin-bottom:3px;" id="home-haptic-icon">📳</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#a78bfa;margin-bottom:2px;">Haptics</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-haptic-text">On</div>
-        </button>
-
-        <button onclick="purchaseRemoveAds();syncHomeSettingsUI();" style="background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-          <div style="font-size:1.1rem;margin-bottom:3px;">✨</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;color:#f5a623;margin-bottom:2px;">Remove Ads</div>
-          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,240,0.65);line-height:1.4;" id="home-remove-ads-text">$0.99 one-time</div>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Cosmetics tab -->
-    <div class="settings-tab-content" id="stab-content-cosmetics">
-      <div id="cosm-settings-inner" style="width:100%;"></div>
-    </div>
-
-    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px;margin-top:4px;" onclick="closeHomeSettings()">Close</button>
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeHomeSettings()">Close</button>
   </div>
 </div>
 
 <!-- ═══ HOW TO PLAY ══════════════════════════════════════════════════ -->
 <div id="help-overlay" class="lx-screen" onclick="if(event.target===this)this.classList.remove('open')">
-  <div style="width:calc(100% - 24px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
+  <div style="width:min(340px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">How to Play</div>
 
@@ -2446,9 +1842,7 @@ let bag=[];
 function fillBag(){
   bag=[];
   for(const[l,n]of Object.entries(LDIST))for(let i=0;i<n;i++)bag.push(l);
-  // Use seeded RNG for daily so everyone gets identical letter sequence
-  const rng = (gameMode==='daily') ? window._dailyRand : Math.random.bind(Math);
-  for(let i=bag.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
+  for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
 }
 const VOWELS=new Set(['A','E','I','O','U']);
 let consecutiveVowels=0;
@@ -2475,18 +1869,23 @@ const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
 
 function calcCell(){
+  // Use exact measured heights of chrome elements
   const hdrH=document.getElementById('hdr').offsetHeight||48;
   const tbarH=document.getElementById('tbar').offsetHeight||58;
-  // Use visualViewport if available (accounts for Android system bars correctly)
-  const viewH = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-  const avH=viewH-hdrH-tbarH-4;
+  const timerEl=document.getElementById('timer-bar-wrap');
+  const timerH=(timerEl&&timerEl.style.display!=='none')?timerEl.offsetHeight:0;
+  // Available height: fill everything between header and touch bar
+  const adBannerH=60; // reserve space for ad banner at bottom
+  const avH=window.innerHeight-hdrH-tbarH-timerH-adBannerH-8;
+  // Cell size driven by height first
   const cellByH=Math.floor(avH/ROWS);
+  // Available width: screen minus both side panels
   const sideEls=[...document.querySelectorAll('#main .side')].filter(s=>s.offsetParent!==null);
   const sideW=sideEls.reduce((acc,s)=>acc+s.offsetWidth,0)+(sideEls.length*4);
-  const avW=window.innerWidth-sideW-4;
+  const avW=window.innerWidth-sideW-8;
   const cellByW=Math.floor(avW/COLS);
-  const minCell = window.innerWidth > 1024 ? 40 : 26;
-  return Math.max(minCell,Math.floor(Math.min(cellByH,cellByW)*0.99));
+  // Take height-driven size, but don't exceed width constraint
+  return Math.max(28,Math.min(cellByH,cellByW));
 }
 let CELL=calcCell();
 function resizeCv(){
@@ -2502,7 +1901,7 @@ window.addEventListener('resize',resizeCv);
 window.addEventListener('orientationchange',()=>setTimeout(resizeCv,150));
 
 // State
-let grid,falling,nextLetter,lastCol=null;
+let grid,falling,nextLetter;
 let score=0,bestScore=0,level=1,lines=0,combo=1;
 let gameOver=false,paused=false;
 let dropMs=1000,lastDropT=0,animId=null;
@@ -2541,8 +1940,7 @@ function spawnFalling(){
   nb.classList.remove('pop');
   void nb.offsetWidth;
   nb.classList.add('pop');
-  const spawnCol = (lastCol !== null) ? lastCol : Math.floor(COLS/2);
-  falling={l,col:spawnCol,row:0};
+  falling={l,col:Math.floor(COLS/2),row:0};
   if(grid[0][falling.col]){
     if(gameMode==='zen'){
       // Shift the entire grid down by clearing the top 2 rows to make space
@@ -2688,14 +2086,6 @@ function checkWords(){
     hallOfFame=hallOfFame.slice(0,5);
     playWord(res.word.length);hapticStrong();
     logWord(res.word,pts,res.dr,res.dc);
-    // Show last word found
-    const lwd=document.getElementById('last-word-display');
-    if(lwd){
-      lwd.textContent=res.word.toUpperCase()+' +'+pts;
-      lwd.style.opacity='1';
-      clearTimeout(lwd._t);
-      lwd._t=setTimeout(()=>lwd.style.opacity='0',1800);
-    }
     showPopup(pts,res.cx,res.cy);
     glowWordCells(res.cells);
     // Every scored word clears the entire row of every cell it touches
@@ -2806,30 +2196,17 @@ function screenShake(){
 function flashRow(r){
   const cw=document.getElementById('cw');
   const el=document.createElement('div');
-  const _clear=typeof activeClear!=='undefined'?activeClear:'clear_default';
-  if(_clear==='clear_shatter'){
-    el.className='flash';
-    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;animation:shatterFlash .5s ease forwards;';
-  } else if(_clear==='clear_dissolve'){
-    el.className='flash';
-    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;animation:dissolveFlash .6s ease forwards;';
-  } else if(_clear==='clear_lightning'){
-    el.className='flash';
-    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;background:linear-gradient(90deg,transparent,rgba(255,255,180,0.9),transparent);animation:lightningFlash .35s ease forwards;';
-  } else if(_clear==='clear_aurora'){
-    el.className='flash';
-    el.style.cssText='position:absolute;top:'+r*CELL+'px;left:0;width:'+cv.width+'px;height:'+CELL+'px;background:linear-gradient(90deg,rgba(74,222,128,0.6),rgba(124,92,252,0.6),rgba(0,229,204,0.6));animation:auroraFlash .7s ease forwards;';
-  } else {
-    el.className='flash';
-    el.style.top=r*CELL+'px';el.style.left='0';
-    el.style.width=cv.width+'px';el.style.height=CELL+'px';
+  el.className='flash';
+  el.style.top=r*CELL+'px';el.style.left='0';
+  el.style.width=cv.width+'px';el.style.height=CELL+'px';
+  cw.appendChild(el);setTimeout(()=>el.remove(),460);
+  // Spawn particles for each cell in the row
+  for(let c=0;c<COLS;c++){
+    const cell=grid[r]&&grid[r][c];
+    const colors=['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'];
+    const color = cell ? lc(cell.letter).stroke : colors[Math.floor(Math.random()*colors.length)];
+    setTimeout(()=>spawnRowParticles(r, color), c*12);
   }
-  cw.appendChild(el);setTimeout(()=>el.remove(),700);
-  // Spawn particles for the row (single call, no stagger)
-  const midCell = grid[r] && grid[r][Math.floor(COLS/2)];
-  const colors = ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'];
-  const pColor = midCell ? lc(midCell.letter).stroke : colors[Math.floor(Math.random()*colors.length)];
-  spawnRowParticles(r, pColor);
 }
 function flashCells(cells){
   const cw=document.getElementById('cw');
@@ -2893,22 +2270,24 @@ function initParticleCanvas(){
 
 function spawnRowParticles(r, color){
   if(!pcv) initParticleCanvas();
-  // Only spawn from every other cell, 1 particle each — keeps it light
-  for(let c=0;c<COLS;c+=2){
-    const x = c*CELL + CELL/2;
-    const y = r*CELL + CELL/2;
-    const angle = Math.random()*Math.PI*2;
-    const speed = 1.5 + Math.random()*2.5;
-    particles.push({
-      x, y,
-      vx: Math.cos(angle)*speed,
-      vy: Math.sin(angle)*speed - 1.5,
-      size: 2 + Math.random()*3,
-      color: color || ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'][Math.floor(Math.random()*6)],
-      alpha: 1,
-      decay: 0.03 + Math.random()*0.03,
-      gravity: 0.1,
-    });
+  const count = 18;
+  for(let c=0;c<COLS;c++){
+    for(let p=0;p<3;p++){
+      const x = c*CELL + CELL/2 + (Math.random()-0.5)*CELL*0.6;
+      const y = r*CELL + CELL/2 + (Math.random()-0.5)*CELL*0.4;
+      const angle = Math.random()*Math.PI*2;
+      const speed = 1.5 + Math.random()*3.5;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle)*speed,
+        vy: Math.sin(angle)*speed - 2,
+        size: 2 + Math.random()*4,
+        color: color || ['#7c5cfc','#00e5cc','#f5a623','#ff3b6b','#4ade80','#60bbff'][Math.floor(Math.random()*6)],
+        alpha: 1,
+        decay: 0.02 + Math.random()*0.03,
+        gravity: 0.12,
+      });
+    }
   }
   if(!particleAnimId) animateParticles();
 }
@@ -2947,22 +2326,7 @@ const COLORS={
   cons:  {fill:'#160d2e',stroke:'#7c5cfc',text:'#b09aff',dot:'#7c5cfc'},
   rare:  {fill:'#1e0d00',stroke:'#e07000',text:'#ffaa44',dot:'#e07000'},
 };
-function getThemeColors(){
-  // Returns {vowel, cons, rare} stroke colors from active theme
-  if(typeof GEM_THEMES==='undefined') return null;
-  const t=GEM_THEMES.find(function(t){return t.id===activeTheme;});
-  if(!t||t.id==='default') return null;
-  return t;
-}
 function lc(l){
-  const theme=getThemeColors();
-  if(theme){
-    const isRare=(LPTS[l]||1)>=8;
-    const isVowel='AEIOU'.includes(l);
-    const stroke=isRare?theme.rare:isVowel?theme.vowel:theme.cons;
-    // Darken fill by mixing stroke with black at 15%
-    return {fill:'#0d111e',stroke:stroke,text:stroke,dot:stroke};
-  }
   if((LPTS[l]||1)>=8)return COLORS.rare;
   if('AEIOU'.includes(l))return COLORS.vowel;
   return COLORS.cons;
@@ -2978,16 +2342,15 @@ function drawCell(x,y,letter,alpha=1,ghost=false){
     ctx.shadowBlur=8;
     ctx.shadowOffsetY=3;
   }
-  const shapeR = (typeof activeShape!=='undefined'&&activeShape==='shape_rounded')?Math.floor(CELL*.22):(typeof activeShape!=='undefined'&&activeShape==='shape_gem')?Math.floor(CELL*.32):6;
   ctx.fillStyle=ghost?'rgba(124,92,252,0.08)':c.fill;
-  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,shapeR);
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
   ctx.fill();
   ctx.shadowBlur=0;ctx.shadowOffsetY=0;
 
   // border
   ctx.strokeStyle=ghost?'rgba(124,92,252,0.25)':c.stroke;
   ctx.lineWidth=ghost?1:2;
-  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,shapeR);
+  roundRect(ctx,x+2,y+2,CELL-4,CELL-4,6);
   ctx.stroke();
 
   if(!ghost){
@@ -3020,36 +2383,6 @@ function draw(){
   ctx.fillStyle='#080b18';
   roundRect(ctx,0,0,cv.width,cv.height,6);ctx.fill();
 
-  // bg cosmetic
-  const _bg=typeof activeBg!=='undefined'?activeBg:'bg_void';
-  if(_bg==='bg_stars'){
-    if(!draw._stars){draw._stars=Array.from({length:40},function(){return{x:Math.random()*cv.width,y:Math.random()*cv.height,s:Math.random()*1.5+.3,sp:Math.random()*.15+.05};});}
-    draw._stars.forEach(function(s){
-      s.y+=s.sp; if(s.y>cv.height)s.y=0;
-      ctx.globalAlpha=0.35; ctx.fillStyle='#fff';
-      ctx.beginPath();ctx.arc(s.x,s.y,s.s,0,Math.PI*2);ctx.fill();
-    });
-    ctx.globalAlpha=1;
-  } else if(_bg==='bg_rain'){
-    if(!draw._rain){draw._rain=Array.from({length:18},function(){return{x:Math.random()*cv.width,y:Math.random()*cv.height,len:Math.random()*12+6,sp:Math.random()*3+2};});}
-    draw._rain.forEach(function(r){
-      r.y+=r.sp; if(r.y>cv.height)r.y=-r.len;
-      ctx.globalAlpha=0.18; ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(r.x,r.y);ctx.lineTo(r.x,r.y+r.len);ctx.stroke();
-    });
-    ctx.globalAlpha=1;
-  } else if(_bg==='bg_pulse'){
-    const pulse=0.04+0.015*Math.sin(Date.now()/900);
-    const gr=ctx.createRadialGradient(cv.width/2,cv.height/2,0,cv.width/2,cv.height/2,cv.width*.7);
-    gr.addColorStop(0,'rgba(124,92,252,'+pulse+')');gr.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=gr;ctx.fillRect(0,0,cv.width,cv.height);
-  } else if(_bg==='bg_grid'){
-    ctx.strokeStyle='rgba(124,92,252,0.06)';ctx.lineWidth=1;
-    const gs2=CELL*2;
-    for(let r=0;r<cv.height;r+=gs2){ctx.beginPath();ctx.moveTo(0,r);ctx.lineTo(cv.width,r);ctx.stroke();}
-    for(let c=0;c<cv.width;c+=gs2){ctx.beginPath();ctx.moveTo(c,0);ctx.lineTo(c,cv.height);ctx.stroke();}
-  }
-
   // grid lines
   ctx.strokeStyle='rgba(124,92,252,0.08)';ctx.lineWidth=1;
   for(let r=1;r<ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*CELL);ctx.lineTo(cv.width,r*CELL);ctx.stroke();}
@@ -3063,40 +2396,11 @@ function draw(){
     let gr=falling.row;
     while(gr+1<ROWS&&!grid[gr+1][falling.col])gr++;
     if(gr!==falling.row)drawCell(falling.col*CELL,gr*CELL,falling.l,0.3,true);
-    // Drop trail effect
-    const _trail=typeof activeTrail!=='undefined'?activeTrail:'trail_none';
-    if(_trail!=='trail_none'){
-      const trailLen=Math.min(falling.row,4);
-      for(let t=1;t<=trailLen;t++){
-        const base=0.18*(1-t/(trailLen+1));
-        if(_trail==='trail_comet'){
-          // solid streak - brighter
-          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base*1.8,true);
-        } else if(_trail==='trail_ghost'){
-          // ghost copies, more visible
-          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base*1.2,true);
-        } else if(_trail==='trail_matrix'){
-          // draw random symbol instead of letter
-          ctx.globalAlpha=base*1.4;
-          ctx.fillStyle=lc(falling.l).stroke;
-          ctx.font='900 '+Math.floor(CELL*.38)+'px monospace';
-          ctx.textAlign='center';ctx.textBaseline='middle';
-          const syms=['0','1','█','▓','░'];
-          ctx.fillText(syms[(t+falling.row)%syms.length],falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2);
-          ctx.globalAlpha=1;
-        } else if(_trail==='trail_fire'){
-          // warm ember glow
-          ctx.globalAlpha=base*1.0;
-          const gr=ctx.createRadialGradient(falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2,1,falling.col*CELL+CELL/2,(falling.row-t)*CELL+CELL/2,CELL*.5);
-          gr.addColorStop(0,'rgba(255,120,0,0.5)');gr.addColorStop(1,'rgba(255,60,0,0)');
-          ctx.fillStyle=gr;
-          ctx.fillRect(falling.col*CELL,(falling.row-t)*CELL,CELL,CELL);
-          ctx.globalAlpha=1;
-        } else {
-          // sparkle — default faint ghost
-          drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,base,true);
-        }
-      }
+    // Drop trail effect — show fading afterimages above the piece
+    const trailLen=Math.min(falling.row, 3);
+    for(let t=1;t<=trailLen;t++){
+      const trailAlpha=0.12*(1-t/4);
+      drawCell(falling.col*CELL,(falling.row-t)*CELL,falling.l,trailAlpha,true);
     }
     drawCell(falling.col*CELL,falling.row*CELL,falling.l);
   }
@@ -3111,7 +2415,6 @@ function lock(){
     // Not actually at bottom yet, keep falling
     return;
   }
-  lastCol=falling.col;
   grid[falling.row][falling.col]=falling.l;
   playLand();
   falling=null;
@@ -3162,22 +2465,14 @@ function loop(ts){
     const pct=remaining/timedDuration;
     const tb=document.getElementById('timer-bar');
     const tl=document.getElementById('timer-label');
-    const tbox=document.getElementById('timer-box');
     tb.style.width=(pct*100)+'%';
-    const gradColor = pct<0.2
-      ? 'linear-gradient(90deg,#ff1144,#ff5500)'
-      : pct<0.4
-        ? 'linear-gradient(90deg,#ff6600,#ffaa00)'
-        : 'linear-gradient(90deg,#7c5cfc,#00e5cc)';
-    tb.style.background=gradColor;
-    if(tbox){
-      tbox.style.borderColor=pct<0.2?'rgba(255,30,80,0.7)':pct<0.4?'rgba(255,120,0,0.6)':'rgba(124,92,252,0.35)';
-      tbox.style.boxShadow=pct<0.2?'0 0 10px rgba(255,30,80,0.4)':pct<0.4?'0 0 8px rgba(255,120,0,0.3)':'none';
-    }
+    const color=pct<0.2?'#ee2266':pct<0.4?'#ff8800':'#5533ee';
+    tb.style.background=color;
+    document.getElementById('timer-bar-wrap').style.background=pct<0.2?'rgba(255,59,107,0.15)':pct<0.4?'rgba(245,166,35,0.1)':'rgba(124,92,252,0.08)';
     const mins=Math.floor(remaining/60);
     const secs=Math.floor(remaining%60);
     tl.textContent=mins+':'+(secs<10?'0':'')+secs;
-    tl.style.color='#fff';
+    tl.style.color=pct<0.4?'#fff':'#fff';
     if(remaining<=0&&!gameOver){endGame();return;}
   }
   if(!paused&&falling&&ts-lastDropT>getEffectiveDropMs()){
@@ -3207,112 +2502,6 @@ document.addEventListener('keydown',e=>{
   else if(e.key.toLowerCase()==='r')startGame();
 });
 
-
-// ── Gamepad / Controller Support ─────────────────────────────────────────
-// Works for Xbox, PlayStation, and generic controllers
-// Buttons: A(0)=drop, B(1)=pause, Left(14)=left, Right(15)=right, Down(13)=softdrop
-// Left stick also works for movement
-let gpLastLeft=false, gpLastRight=false, gpLastDrop=false, gpLastPause=false;
-let gpRepeatLeft=null, gpRepeatRight=null;
-const GP_REPEAT_DELAY=180, GP_REPEAT_INTERVAL=90;
-
-function pollGamepad(){
-  const gpList=navigator.getGamepads?navigator.getGamepads():[];
-  const gp=Array.from(gpList).find(g=>g&&g.connected);
-  if(!gp){requestAnimationFrame(pollGamepad);return;}
-
-  const left  = gp.buttons[14]?.pressed || gp.axes[0] < -0.5;
-  const right = gp.buttons[15]?.pressed || gp.axes[0] >  0.5;
-  const down  = gp.buttons[13]?.pressed || gp.axes[1] >  0.5;
-  const dropBtn  = gp.buttons[0]?.pressed; // A
-  const pauseBtn = gp.buttons[1]?.pressed || gp.buttons[9]?.pressed; // B or Start
-
-  // Pause — on press only
-  if(pauseBtn && !gpLastPause) togglePause();
-  gpLastPause = pauseBtn;
-
-  // Drop (A button) — on press only
-  if(dropBtn && !gpLastDrop && !paused && !gameOver) drop();
-  gpLastDrop = dropBtn;
-
-  // Soft drop (down) — continuous
-  if(down && !paused && !gameOver) softDrop();
-
-  // Left — press + repeat
-  if(left && !gpLastLeft){
-    goLeft();
-    gpRepeatLeft=setTimeout(function rep(){goLeft();gpRepeatLeft=setTimeout(rep,GP_REPEAT_INTERVAL);},GP_REPEAT_DELAY);
-  } else if(!left){
-    clearTimeout(gpRepeatLeft); gpRepeatLeft=null;
-  }
-  gpLastLeft=left;
-
-  // Right — press + repeat
-  if(right && !gpLastRight){
-    goRight();
-    gpRepeatRight=setTimeout(function rep(){goRight();gpRepeatRight=setTimeout(rep,GP_REPEAT_INTERVAL);},GP_REPEAT_DELAY);
-  } else if(!right){
-    clearTimeout(gpRepeatRight); gpRepeatRight=null;
-  }
-  gpLastRight=right;
-
-  requestAnimationFrame(pollGamepad);
-}
-
-window.addEventListener('gamepadconnected', e=>{
-  console.log('Controller connected:', e.gamepad.id);
-  showToast('🎮 Controller connected!');
-  const hint = document.getElementById('controller-hint');
-  if(hint) hint.classList.add('show');
-  pollGamepad();
-});
-window.addEventListener('gamepaddisconnected', e=>{
-  showToast('🎮 Controller disconnected');
-  const hint = document.getElementById('controller-hint');
-  if(hint) hint.classList.remove('show');
-});
-
-// Also handle menu navigation with controller (for home/mode screens)
-let gpMenuLastA=false, gpMenuLastB=false, gpMenuLastStart=false;
-function pollGamepadMenus(){
-  const gpList=navigator.getGamepads?navigator.getGamepads():[];
-  const gp=Array.from(gpList).find(g=>g&&g.connected);
-  if(!gp){ requestAnimationFrame(pollGamepadMenus); return; }
-
-  const aBtn = gp.buttons[0]?.pressed;
-  const bBtn = gp.buttons[1]?.pressed;
-  const start = gp.buttons[9]?.pressed;
-
-  // On intro screen: A = Play, Start = Play
-  const introOpen = document.getElementById('intro-screen')?.classList.contains('open');
-  if(introOpen){
-    if((aBtn||start) && !(gpMenuLastA||gpMenuLastStart)) showModeSelect();
-  }
-
-  // On mode select: B = cancel
-  const modeSheetOpen = document.getElementById('mode-select-sheet')?.classList.contains('open');
-  if(modeSheetOpen){
-    if(bBtn && !gpMenuLastB) closeModeSelectSheet();
-  }
-
-  // On mode dialog: A = play, B = back
-  const modeDialogOpen = document.getElementById('mode-dialog-backdrop')?.classList.contains('open');
-  if(modeDialogOpen){
-    if(aBtn && !gpMenuLastA) confirmPlayMode();
-    if(bBtn && !gpMenuLastB) closeModeDialog();
-  }
-
-  // On leaderboard: B = close
-  const lbOpen = document.getElementById('lb-overlay')?.classList.contains('open');
-  if(lbOpen){
-    if(bBtn && !gpMenuLastB) closeLeaderboard();
-  }
-
-  gpMenuLastA=aBtn; gpMenuLastB=bBtn; gpMenuLastStart=start;
-  requestAnimationFrame(pollGamepadMenus);
-}
-// Start menu polling immediately
-requestAnimationFrame(pollGamepadMenus);
 document.getElementById('btn-left').addEventListener('click',goLeft);
 document.getElementById('btn-right').addEventListener('click',goRight);
 document.getElementById('btn-drop').addEventListener('click',drop);
@@ -3331,39 +2520,14 @@ let holdId=null;
 document.getElementById('btn-drop').addEventListener('touchstart',e=>{e.preventDefault();drop();},{passive:false});
 
 // Swipe
-// ── Swipe & touch on canvas ──────────────────────────────────────────────
-let sx=0,sy=0,st=0,lastSwipeX=0,swipeLocked=null;
-cv.addEventListener('touchstart',e=>{
-  e.preventDefault();
-  sx=e.touches[0].clientX;sy=e.touches[0].clientY;
-  lastSwipeX=sx;st=Date.now();swipeLocked=null;
-},{passive:false});
-cv.addEventListener('touchmove',e=>{
-  e.preventDefault();
-  if(gameOver||paused)return;
-  const cx=e.touches[0].clientX,cy=e.touches[0].clientY;
-  const dx=cx-sx,dy=cy-sy;
-  // Lock direction on first significant move
-  if(!swipeLocked){
-    if(Math.abs(dx)>8||Math.abs(dy)>8)
-      swipeLocked=Math.abs(dx)>Math.abs(dy)?'h':'v';
-  }
-  if(swipeLocked==='h'){
-    // Move every CELL pixels of horizontal drag
-    const moved=cx-lastSwipeX;
-    if(Math.abs(moved)>CELL*0.7){
-      if(moved<0)goLeft();else goRight();
-      lastSwipeX=cx;
-    }
-  }
-},{passive:false});
+let sx=0,sy=0,st=0;
+cv.addEventListener('touchstart',e=>{e.preventDefault();sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();},{passive:false});
 cv.addEventListener('touchend',e=>{
   e.preventDefault();
   const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;
-  // Tap = drop
-  if(Math.abs(dx)<12&&Math.abs(dy)<12&&dt<200){drop();return;}
-  // Swipe down = drop
-  if(swipeLocked==='v'&&dy>30)drop();
+  if(Math.abs(dx)<15&&Math.abs(dy)<15&&dt<250){drop();return;}
+  if(Math.abs(dx)>Math.abs(dy)){if(dx<-20)goLeft();else if(dx>20)goRight();}
+  else if(dy>20)drop();
 },{passive:false});
 
 
@@ -3451,129 +2615,185 @@ function makeHat(ac,t,master,vol=0.08){
   src.start(t);
 }
 
-// ── Dark Tension Music ───────────────────────────────────────────────────
-// Minor key drone, slow pulse, creeping bassline. One style only.
-let musicOn = true, musicStarted = false;
+// ── Lo-fi chord pads ──────────────────────────────────────────────────────
+// Detuned twin oscillators for that warm cassette chord sound
+function makeChordPad(ac,freqs,t,dur,master){
+  freqs.forEach(f=>{
+    [0,-4,4].forEach((detune,di)=>{  // 3 slightly detuned voices
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type='triangle';
+      o.frequency.value=f;
+      o.detune.value=detune;
+      const vol=di===0?0.18:0.07;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(vol,t+0.3);
+      g.gain.setValueAtTime(vol,t+dur-0.5);
+      g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+      o.connect(g);g.connect(master);
+      o.start(t);o.stop(t+dur+0.05);
+    });
+  });
+}
 
-// Chords in two octaves — low for pads, high*2 for melody
-const DARK_CHORDS = [
-  { low:[55.0,65.4,82.4],   mel:[220.0,261.6,329.6], bass:27.5  }, // Am
-  { low:[49.0,58.3,73.4],   mel:[196.0,246.9,293.7], bass:24.5  }, // Em
-  { low:[51.9,61.7,77.8],   mel:[207.7,261.6,311.1], bass:25.9  }, // Fm
-  { low:[49.0,58.3,69.3],   mel:[196.0,246.9,277.2], bass:24.5  }, // Em7
+// ── Lo-fi bassline ────────────────────────────────────────────────────────
+function makeBass(ac,freq,t,dur,master){
+  const o=ac.createOscillator(),g=ac.createGain();
+  const filt=ac.createBiquadFilter();filt.type='lowpass';filt.frequency.value=280;
+  o.type='sawtooth';o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.4,t+0.02);
+  g.gain.setValueAtTime(0.35,t+dur-0.05);g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o.connect(filt);filt.connect(g);g.connect(master);
+  o.start(t);o.stop(t+dur+0.05);
+}
+
+// ── Main loop ─────────────────────────────────────────────────────────────
+// 4/4 at ~72bpm. Each bar = 4 beats. One bar = ~3.33s
+let musicNodes=[], musicOn=true, musicStarted=false, musicStyle='chill';
+let loopTimer=null;
+
+const LOFI_CHORDS=[
+  {freqs:[110,138.6,165,220],   bass:55},   // Am7
+  {freqs:[87.3,110,130.8,174.6],bass:43.7}, // Fmaj7
+  {freqs:[130.8,164.8,196,261.6],bass:65.4},// Cmaj7
+  {freqs:[98,123.5,146.8,196],  bass:49},   // G
 ];
-let darkChord = 0, darkTimer = null;
+let lofiChord=0;
 
-function scheduleDarkBar(startT) {
-  if (!musicStarted) return;
-  try {
-    const ac = getAC(); const master = getMaster();
-    const bpm = 64; const beat = 60 / bpm; const bar = beat * 4;
-    const ch = DARK_CHORDS[darkChord % DARK_CHORDS.length];
+function scheduleLofiBar(startT){
+  if(!musicStarted)return;
+  try{
+    const ac=getAC(); const master=getMaster();
+    const bpm=72; const beat=60/bpm; const bar=beat*4;
+    const ch=LOFI_CHORDS[lofiChord%LOFI_CHORDS.length];
 
-    // Low pad — warm drone foundation
-    ch.low.forEach((f, i) => {
-      const o = ac.createOscillator(), g = ac.createGain();
-      const filt = ac.createBiquadFilter();
-      filt.type = 'lowpass'; filt.frequency.value = 700;
-      o.type = 'triangle'; o.frequency.value = f;
-      o.detune.value = (i % 2 === 0 ? 4 : -4);
-      const vol = i === 0 ? 0.18 : 0.10;
-      g.gain.setValueAtTime(0, startT);
-      g.gain.linearRampToValueAtTime(vol, startT + 0.8);
-      g.gain.setValueAtTime(vol, startT + bar - 0.6);
-      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.2);
-      o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(startT); o.stop(startT + bar + 0.3);
-    });
-
-    // High melody — plucked notes on beats 1, 2.5, 3, 4
-    const melOffsets = [0, beat*1.5, beat*2, beat*3];
-    const melFreqs   = [ch.mel[0], ch.mel[2], ch.mel[1], ch.mel[2]];
-    melOffsets.forEach((offset, i) => {
-      const o = ac.createOscillator(), g = ac.createGain();
-      const filt = ac.createBiquadFilter();
-      filt.type = 'bandpass'; filt.frequency.value = 1800; filt.Q.value = 1.2;
-      o.type = 'sine'; o.frequency.value = melFreqs[i];
-      const t = startT + offset;
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.14, t + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, t + beat * 0.85);
-      o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(t); o.stop(t + beat);
-    });
-
-    // Sub kick — beat 1 and 3
-    [0, beat*2].forEach(offset => {
-      const o = ac.createOscillator(), g = ac.createGain();
-      const t = startT + offset;
-      o.type = 'sine';
-      o.frequency.setValueAtTime(70, t);
-      o.frequency.exponentialRampToValueAtTime(28, t + 0.22);
-      g.gain.setValueAtTime(0.55, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + 0.35);
-    });
-
-    // Snare — beat 2 and 4, light
-    [beat, beat*3].forEach(offset => {
-      const buf = ac.createBuffer(1, ac.sampleRate * 0.12, ac.sampleRate);
-      const d = buf.getChannelData(0);
-      for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
-      const src = ac.createBufferSource(); src.buffer = buf;
-      const filt = ac.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=1800; filt.Q.value=0.8;
-      const g = ac.createGain(); g.gain.setValueAtTime(0.09, startT+offset);
-      src.connect(filt); filt.connect(g); g.connect(master);
-      src.start(startT + offset);
-    });
-
-    // Hi-hat — every half beat, subtle
+    // Chord pad — whole bar
+    makeChordPad(ac,ch.freqs,startT,bar*0.95,master);
+    // Bass — hits on beat 1 and beat 3
+    makeBass(ac,ch.bass,startT,beat*0.9,master);
+    makeBass(ac,ch.bass*1.003,startT+beat*2,beat*0.9,master);
+    // Kick: beats 1 & 3
+    makeKick(ac,startT,master);
+    makeKick(ac,startT+beat*2,master);
+    // Snare: beats 2 & 4
+    makeSnare(ac,startT+beat,master);
+    makeSnare(ac,startT+beat*3,master);
+    // Hi-hat: every half beat, quieter on offbeats
     for(let i=0;i<8;i++){
-      const buf = ac.createBuffer(1, ac.sampleRate*0.04, ac.sampleRate);
-      const d = buf.getChannelData(0);
-      for(let j=0;j<d.length;j++) d[j]=(Math.random()*2-1)*(1-j/d.length);
-      const src = ac.createBufferSource(); src.buffer = buf;
-      const filt = ac.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=7000;
-      const g = ac.createGain(); g.gain.setValueAtTime(i%2===0?0.055:0.03, startT+i*beat*0.5);
-      src.connect(filt); filt.connect(g); g.connect(master);
-      src.start(startT + i*beat*0.5);
+      makeHat(ac,startT+i*beat*0.5,master,i%2===0?0.07:0.04);
     }
 
-    // Deep bass note
-    (() => {
-      const o = ac.createOscillator(), g = ac.createGain();
-      const filt = ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=180;
-      o.type='sawtooth'; o.frequency.value=ch.bass;
-      g.gain.setValueAtTime(0, startT+0.02);
-      g.gain.linearRampToValueAtTime(0.28, startT+0.05);
-      g.gain.setValueAtTime(0.22, startT+bar-0.3);
-      g.gain.exponentialRampToValueAtTime(0.001, startT+bar+0.1);
-      o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(startT); o.stop(startT+bar+0.2);
-    })();
+    lofiChord++;
+    // Schedule next bar
+    const nextT=(startT+bar)-ac.currentTime;
+    loopTimer=setTimeout(()=>{
+      if(musicStarted)scheduleLofiBar(getAC().currentTime+0.05);
+    }, Math.max(0,(nextT-0.1)*1000));
+  }catch(e){}
+}
 
-    darkChord++;
-    const nextT = (startT + bar) - ac.currentTime;
-    darkTimer = setTimeout(() => {
-      if (musicStarted) scheduleDarkBar(getAC().currentTime + 0.05);
-    }, Math.max(0, (nextT - 0.15) * 1000));
-  } catch(e) {}
+// ── Style: Chill — sparse slow piano notes, no drums, dreamy ─────────────
+const CHILL_NOTES=[
+  {freqs:[130.8,164.8,196],    bass:65.4},  // C
+  {freqs:[110,138.6,165],      bass:55},    // Am
+  {freqs:[174.6,220,261.6],    bass:87.3},  // F
+  {freqs:[196,246.9,293.7],    bass:98},    // G
+];
+let chillChord=0, chillTimer=null;
+function scheduleChillBar(startT){
+  if(!musicStarted)return;
+  try{
+    const ac=getAC(); const master=getMaster();
+    const ch=CHILL_NOTES[chillChord%CHILL_NOTES.length];
+    const dur=4.8;
+    // Soft pad chord — sine, slow attack
+    ch.freqs.forEach((f,i)=>{
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine'; o.frequency.value=f;
+      const delay=i*0.12;
+      g.gain.setValueAtTime(0,startT+delay);
+      g.gain.linearRampToValueAtTime(0.12,startT+delay+0.6);
+      g.gain.setValueAtTime(0.10,startT+dur-0.8);
+      g.gain.exponentialRampToValueAtTime(0.001,startT+dur);
+      o.connect(g);g.connect(master);
+      o.start(startT+delay);o.stop(startT+dur+0.1);
+    });
+    // Gentle bass note, very soft
+    const ob=ac.createOscillator(),gb=ac.createGain();
+    const fb=ac.createBiquadFilter();fb.type='lowpass';fb.frequency.value=200;
+    ob.type='sine'; ob.frequency.value=ch.bass;
+    gb.gain.setValueAtTime(0,startT);
+    gb.gain.linearRampToValueAtTime(0.22,startT+0.08);
+    gb.gain.exponentialRampToValueAtTime(0.001,startT+dur*0.6);
+    ob.connect(fb);fb.connect(gb);gb.connect(master);
+    ob.start(startT);ob.stop(startT+dur);
+    chillChord++;
+    const nextT=(startT+dur)-ac.currentTime;
+    chillTimer=setTimeout(()=>{
+      if(musicStarted)scheduleChillBar(getAC().currentTime+0.05);
+    },Math.max(0,(nextT-0.1)*1000));
+  }catch(e){}
+}
+
+// ── Style: Retro — bouncy square wave arpeggio, no crackle ───────────────
+const RETRO_ARP=[261.6,329.6,392,523.3,659.3,523.3,392,329.6];
+const RETRO_BASS=[130.8,130.8,196,196,174.6,174.6,196,196];
+let retroStep=0, retroTimer=null;
+function scheduleRetroTick(){
+  if(!musicStarted)return;
+  try{
+    const ac=getAC(); const master=getMaster();
+    const t=ac.currentTime;
+    const bpm=140; const beat=60/bpm;
+    // High arp voice
+    const o1=ac.createOscillator(),g1=ac.createGain();
+    o1.type='square'; o1.frequency.value=RETRO_ARP[retroStep%RETRO_ARP.length];
+    g1.gain.setValueAtTime(0.22,t); g1.gain.exponentialRampToValueAtTime(0.001,t+beat*0.7);
+    o1.connect(g1);g1.connect(master);o1.start(t);o1.stop(t+beat);
+    // Low bass every 2 steps
+    if(retroStep%2===0){
+      const o2=ac.createOscillator(),g2=ac.createGain();
+      const f2=ac.createBiquadFilter();f2.type='lowpass';f2.frequency.value=400;
+      o2.type='square'; o2.frequency.value=RETRO_BASS[Math.floor(retroStep/2)%RETRO_BASS.length];
+      g2.gain.setValueAtTime(0.18,t); g2.gain.exponentialRampToValueAtTime(0.001,t+beat*1.4);
+      o2.connect(f2);f2.connect(g2);g2.connect(master);o2.start(t);o2.stop(t+beat*1.5);
+    }
+    // Tiny noise snare on beat 3 of every 4
+    if(retroStep%4===2){
+      const buf=ac.createBuffer(1,ac.sampleRate*0.04,ac.sampleRate);
+      const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+      const src=ac.createBufferSource();src.buffer=buf;
+      const filt=ac.createBiquadFilter();filt.type='bandpass';filt.frequency.value=3000;
+      const g3=ac.createGain();g3.gain.setValueAtTime(0.12,t);g3.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+      src.connect(filt);filt.connect(g3);g3.connect(master);src.start(t);
+    }
+    retroStep++;
+    retroTimer=setTimeout(scheduleRetroTick, beat*1000);
+  }catch(e){}
 }
 
 function stopMusic(){
-  if(darkTimer) clearTimeout(darkTimer); darkTimer = null;
-  masterOut = null; masterFilter = null;
-  musicStarted = false;
+  if(loopTimer)clearTimeout(loopTimer);loopTimer=null;
+  if(chillTimer)clearTimeout(chillTimer);chillTimer=null;
+  if(retroTimer)clearTimeout(retroTimer);retroTimer=null;
+  stopCrackle();
+  masterOut=null;masterFilter=null;
+  musicStarted=false;
 }
 
 function startMusic(){
-  if(!musicOn || musicStarted) return;
-  musicStarted = true;
-  try {
-    const ac = getAC(); getMaster();
-    scheduleDarkBar(ac.currentTime + 0.1);
-  } catch(e) {}
+  if(!musicOn||musicStarted)return;
+  musicStarted=true;
+  try{
+    const ac=getAC();getMaster();
+    if(musicStyle==='lofi'){
+      startCrackle();
+      scheduleLofiBar(ac.currentTime+0.1);
+    } else if(musicStyle==='chill'){
+      scheduleChillBar(ac.currentTime+0.1);
+    } else if(musicStyle==='retro'){
+      scheduleRetroTick();
+    }
+  }catch(e){}
 }
 
 function setMusicOn(on){
@@ -3685,11 +2905,11 @@ function syncHomeSettingsUI(){
 
   if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
   if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
 
   if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
   if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
 
   if(adsText){
     adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
@@ -3708,11 +2928,11 @@ function syncGameSettingsUI(){
 
   if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
   if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+  if(soundCard) soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
 
   if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
   if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+  if(hapticCard) hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.35)' : 'rgba(124,92,252,0.12)';
 
   if(adsText){
     adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
@@ -3723,8 +2943,8 @@ function syncGameSettingsUI(){
   }
 }
 function syncAllSettingsUI(){
+  syncAllSettingsUI();
   syncGameSettingsUI();
-  syncHomeSettingsUI();
 }
 function openHomeSettings(){
   syncAllSettingsUI();
@@ -3735,8 +2955,7 @@ function closeHomeSettings(){
 }
 function setSoundEnabled(enabled){
   soundOn=!!enabled;
-  if(soundOn){ sfx(440,0.1,0.1); setMusicOn(true); }
-  else setMusicOn(false);
+  if(soundOn)beep(440,0.1);
   syncAllSettingsUI();
 }
 function setHapticEnabled(enabled){
@@ -3800,7 +3019,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key=
 
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
-  // ads removed
   gameOver=true;cancelAnimationFrame(animId);
   screenShake();
   savedState=null;
@@ -3817,31 +3035,12 @@ function endGame(){
   if(isNewBest && score > 0) setTimeout(()=>showHighScoreCelebration(score), 600);
   // Store pending score for leaderboard button
   const _goScore = score, _goMode = gameMode;
-  if(_goMode==='daily'){
-    saveDailyResult(_goScore);
-    dailyCompleted=true;
-    setTimeout(()=>{ if(typeof awardDailyGems==='function') awardDailyGems(); }, 1200);
-    const btn=document.getElementById('daily-mode-btn');
-    const desc=document.getElementById('daily-mode-desc');
-    if(desc) desc.textContent="Today's score: "+_goScore.toLocaleString();
-    if(btn){
-      btn.style.opacity='1';
-      btn.style.background='rgba(74,222,128,0.04)';
-      btn.style.borderColor='rgba(74,222,128,0.2)';
-      btn.style.boxShadow='none';
-    }
-    const chk2 = document.getElementById('daily-check');
-    const arr2 = document.getElementById('daily-arrow');
-    if(chk2){ chk2.style.display='flex'; }
-    if(arr2){ arr2.style.display='none'; }
-  }
   // Update per-mode best
   if(score>=(modeBests[gameMode]||0))modeBests[gameMode]=score;
   // Save last game stats for this mode
   modeLastGame[gameMode]={score,level,lines,bestWord:sessionBestWord,bestWordPts:sessionBestWordPts};
   // Update lifetime stats
   lifetimeStats.gamesPlayed++;
-  maybeShowRate();
   const today=new Date().toDateString();
   if(lifetimeStats.lastPlayDate===today){/* same day */}
   else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
@@ -3878,8 +3077,22 @@ function goToIntro(){
 }
 
 function setMusicStyle(style){
-  // Only one style now — treat as on/off toggle
-  setMusicOn(style !== 'off');
+  const wasPlaying=musicStarted;
+  stopMusic();
+  musicStyle=style;
+  musicOn=(style!=='off');
+  const tog=document.getElementById('tog-music');
+  if(tog)tog.checked=musicOn;
+  // Update button highlights
+  ['chill','retro','lofi'].forEach(s=>{
+    const btn=document.getElementById('ms-'+s);
+    if(!btn)return;
+    const active=(s===style);
+    btn.style.background=active?'#5533ee':'#f0eeff';
+    btn.style.color=active?'#fff':'#5533ee';
+    btn.style.borderColor=active?'#5533ee':'#dde3f8';
+  });
+  if(wasPlaying&&musicOn)startMusic();
   hapticLight();
 }
 
@@ -3933,7 +3146,6 @@ function showIntro(){
   document.getElementById('intro-screen').classList.add('open');
   updateHomeStats();
   loadHomeLb(currentHomeLbMode);
-  maybeShowOnboard();
 }
 
 function introNewGame(){
@@ -3961,34 +3173,14 @@ function closeModeSelectSheet(){
 }
 
 function updateHomeStats(){
+  const best = document.getElementById('home-stat-best');
   const games = document.getElementById('home-stat-games');
   const words = document.getElementById('home-stat-words');
   const combo = document.getElementById('home-stat-combo');
+  if(best) best.textContent = (bestScore||0).toLocaleString();
   if(games) games.textContent = (lifetimeStats.gamesPlayed||0).toLocaleString();
   if(words) words.textContent = (lifetimeStats.totalWords||0).toLocaleString();
   if(combo) combo.textContent = '×'+(lifetimeStats.bestCombo||1);
-
-  // Daily challenge strip
-  const dailySub = document.getElementById('home-daily-sub');
-  const dailyScoreEl = document.getElementById('home-daily-score');
-  const strip = document.getElementById('home-daily-strip');
-  const statusIcon = document.getElementById('home-daily-status-icon');
-  try {
-    const saved = JSON.parse(localStorage.getItem('lexitris_daily')||'{}');
-    if(saved.date === getDailyDate() && saved.score > 0){
-      // Completed — show trophy icon + score
-      if(statusIcon) statusIcon.textContent = '🏆';
-      if(dailySub) dailySub.textContent = 'Score: ' + saved.score.toLocaleString();
-      if(dailyScoreEl) dailyScoreEl.style.display='none';
-      if(strip){ strip.style.borderColor='rgba(74,222,128,0.35)'; strip.style.background='rgba(74,222,128,0.05)'; }
-    } else {
-      // Not yet played — show calendar icon
-      if(statusIcon) statusIcon.textContent = '📅';
-      if(dailySub) dailySub.textContent = 'Same puzzle · everyone · every day';
-      if(dailyScoreEl) dailyScoreEl.style.display='none';
-      if(strip){ strip.style.borderColor=''; strip.style.background=''; }
-    }
-  } catch(e){}
 }
 
 function introContinue(){
@@ -4028,11 +3220,13 @@ function restoreState(){
   playStart();
 }
 
-// ── Inject music toggle into settings panel ──────────────────────────────
+// ── Inject music controls into settings panel ────────────────────────────
 function injectMusicToggle(){
   const soundRow=document.querySelector('#settings-panel .s-row');
   if(!soundRow||document.getElementById('music-style-row'))return;
   const container=soundRow.parentNode;
+
+  // Music on/off toggle row
   const toggleRow=document.createElement('div');
   toggleRow.className='s-row';
   toggleRow.id='music-style-row';
@@ -4044,6 +3238,27 @@ function injectMusicToggle(){
       <div class="toggle-thumb"></div>
     </label>`;
   container.insertBefore(toggleRow, soundRow);
+
+  // Style picker row
+  const styleRow=document.createElement('div');
+  styleRow.className='s-row';
+  styleRow.style.flexDirection='column';
+  styleRow.style.alignItems='stretch';
+  styleRow.style.gap='8px';
+  styleRow.innerHTML=`
+    <div class="s-row-label" style="font-size:.75rem"><span>🎼</span> Style</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${['chill','retro','lofi'].map(s=>`
+        <button onclick="setMusicStyle('${s}')" id="ms-${s}"
+          style="flex:1;padding:7px 4px;border-radius:8px;border:2px solid #dde3f8;
+          background:${s==='chill'?'#5533ee':'#f0eeff'};
+          color:${s==='chill'?'#fff':'#5533ee'};
+          font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;
+          cursor:pointer;-webkit-tap-highlight-color:transparent;
+          letter-spacing:.05em;text-transform:capitalize">${s}</button>
+      `).join('')}
+    </div>`;
+  container.insertBefore(styleRow, soundRow);
 }
 setTimeout(injectMusicToggle,0);
 
@@ -4054,10 +3269,9 @@ let gameMode='classic';
 let timedStart=0, timedDuration=180; // 3 minutes
 
 const MODE_CONFIG={
-  classic:{ startMs:900,  minMs:160,  levelStep:75,  label:'Classic', icon:'📖' },
-  timed:  { startMs:720,  minMs:150,  levelStep:65,  label:'Timed',   icon:'⏱'  },
+  classic:{ startMs:1000, minMs:200,  levelStep:80,  label:'Classic', icon:'📖' },
+  timed:  { startMs:800,  minMs:180,  levelStep:70,  label:'Timed',   icon:'⏱'  },
   zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
-  daily:  { startMs:780,  minMs:180,  levelStep:75,  label:'Daily',   icon:'📅'  },
 };
 
 // Mode metadata for dialog
@@ -4087,15 +3301,6 @@ const MODE_META={
       {icon:'☮️',text:'Board never triggers game over'},
       {icon:'🐢',text:'Slow, peaceful drop speed'},
       {icon:'✨',text:'Great for learning and finding long words'},
-    ]
-  },
-  daily:{
-    icon:'📅',name:'Daily Challenge',tagline:'One puzzle, everyone, every day',
-    chips:[{val:'1×',label:'Per day'},{val:'4+',label:'Min letters'},{val:'🌍',label:'Global'}],
-    features:[
-      {icon:'📅',text:'Same seed for all players every day'},
-      {icon:'🏆',text:'Compare your score with the world'},
-      {icon:'🔒',text:'One attempt only'},
     ]
   }
 };
@@ -4130,16 +3335,6 @@ const MODE_PREVIEW={
       {val:'∞',label:'No KO'}
     ],
     summary:'Relaxed play with no game over. Take your time, explore the board, and hunt longer words.'
-  },
-  daily:{
-    kicker:'Resets',
-    big:'24h',
-    stats:[
-      {val:'4+',label:'Min Letters'},
-      {val:'1×',label:'Attempts'},
-      {val:'🌍',label:'Global'}
-    ],
-    summary:'Same board for everyone today. One shot to set your best score and climb the daily rankings.'
   }
 };
 
@@ -4212,16 +3407,6 @@ function openModeDialog(mode){
     wordEl.style.display='none';
   }
 
-  // Daily challenge — show completed state
-  const playBtn = document.querySelector('.md-play-btn');
-  if(mode==='daily' && dailyCompleted){
-    playBtn.textContent = '✅ Completed Today';
-    playBtn.style.opacity = '0.6';
-  } else {
-    playBtn.innerHTML = '<span class="md-play-icon">▶</span> Play Now';
-    playBtn.style.opacity = '1';
-  }
-
   // Continue button — only for zen with a saved state
   const contBtn = document.getElementById('intro-continue-btn');
   const zenHasSave = mode === 'zen' && (savedState !== null || (typeof modeLastGame !== 'undefined' && modeLastGame['zen'] && modeLastGame['zen'].score > 0));
@@ -4238,11 +3423,6 @@ function closeModeDialog(e){
 }
 
 function confirmPlayMode(){
-  // Block daily if already played today
-  if(pendingMode==='daily' && dailyCompleted){
-    showToast("You've already played today's challenge! Come back tomorrow.");
-    return;
-  }
   document.getElementById('mode-dialog-backdrop').classList.remove('open');
   gameMode=pendingMode;
   hapticMed();
@@ -4261,8 +3441,7 @@ function updateSpeed(){
 function startGame(){
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
-  score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
-  if(gameMode==='daily') window._dailyRand=seededRand(dailySeed);
+  score=0;level=1;lines=0;combo=1;wordLog=[];
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
   consecutiveVowels=0;
 
@@ -4276,12 +3455,8 @@ function startGame(){
     document.getElementById('timer-bar-wrap').style.display='block';
     document.getElementById('timer-bar').style.width='100%';
     document.getElementById('timer-bar').style.background='linear-gradient(90deg,#7c5cfc,#00e5cc)';
-    const modeBadge = document.getElementById('mode-badge');
-    if(modeBadge) modeBadge.style.display='none';
   } else {
     document.getElementById('timer-bar-wrap').style.display='none';
-    const modeBadge2 = document.getElementById('mode-badge');
-    if(modeBadge2) modeBadge2.style.display='';
   }
 
   // Mode badge
@@ -4437,35 +3612,14 @@ function closeStats(e){
 // ── Remove Ads state ──────────────────────────────────────────────────────
 let adsRemoved=false;
 
-// Detect console/non-mobile platforms — no ads on Xbox, PlayStation, or desktop
-function isAdFreeplatform(){
-  const ua = navigator.userAgent || '';
-  if(/Xbox|XBOX/i.test(ua)) return true;           // Xbox PWA
-  if(/PlayStation|PSP|PS4|PS5/i.test(ua)) return true; // PlayStation
-  if(/Windows NT|Macintosh|Linux/i.test(ua) && !/Android/i.test(ua)) return true; // Desktop
-  if(window.location.search.includes('adfree=1')) return true; // Manual override
-  return false;
-}
-
 function loadAdsRemovedState(){
   try{ adsRemoved=localStorage.getItem('lexitris_no_ads')==='1'; }catch(e){}
-  if(isAdFreeplatform()) adsRemoved=true;
   applyAdsRemovedUI();
 }
 
 function applyAdsRemovedUI(){
-  const adFree = isAdFreeplatform();
-  // Hide purchase button entirely on ad-free platforms
-  ['btn-remove-ads'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.style.display = adFree ? 'none' : '';
-  });
-  // Also hide the home settings remove-ads card
-  const homeAdsBtn = document.querySelector('[onclick*="purchaseRemoveAds"]');
-  if(homeAdsBtn) homeAdsBtn.style.display = adFree ? 'none' : '';
-
   const btn=document.getElementById('btn-remove-ads');
-  if(btn && !adFree){
+  if(btn){
     if(adsRemoved){
       btn.textContent='✅ Ads Removed';
       btn.classList.add('owned');
@@ -4541,64 +3695,12 @@ window.onAdEvent=function(event){
 };
 
 // ── Simple toast notification ─────────────────────────────────────────────
-// ── Daily Challenge ────────────────────────────────────────────────────────
-function getDailyDate(){
-  const d=new Date();
-  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-}
-function getDailySeed(){
-  // Simple hash of date string for deterministic seed
-  const s=getDailyDate();
-  let h=0;
-  for(let i=0;i<s.length;i++){h=Math.imul(31,h)+s.charCodeAt(i)|0;}
-  return Math.abs(h);
-}
-function seededRand(seed){
-  // Simple LCG
-  let s=seed;
-  return function(){
-    s=(s*1664525+1013904223)&0xffffffff;
-    return (s>>>0)/0xffffffff;
-  };
-}
-let dailyCompleted=false;
-let dailySeed=0;
-function initDailyMode(){
-  dailySeed=getDailySeed();
-  const today=getDailyDate();
-  try{
-    const saved=JSON.parse(localStorage.getItem('lexitris_daily')||'{}');
-    if(saved.date===today){
-      dailyCompleted=true;
-      const btn=document.getElementById('daily-mode-btn');
-      const desc=document.getElementById('daily-mode-desc');
-      if(desc) desc.textContent="Today's score: "+saved.score.toLocaleString();
-      if(btn){
-        btn.style.opacity='1';
-        btn.style.background='rgba(74,222,128,0.04)';
-        btn.style.borderColor='rgba(74,222,128,0.2)';
-        btn.style.boxShadow='none';
-      }
-      const chk = document.getElementById('daily-check');
-      const arr = document.getElementById('daily-arrow');
-      if(chk){ chk.style.display='flex'; }
-      if(arr){ arr.style.display='none'; }
-    }
-  }catch(e){}
-}
-function saveDailyResult(score){
-  try{
-    localStorage.setItem('lexitris_daily',JSON.stringify({date:getDailyDate(),score}));
-  }catch(e){}
-}
-
 // ── Home Leaderboard Preview ───────────────────────────────────────────────
 let currentHomeLbMode = 'classic';
 
 function switchHomeLb(mode){
-  if(currentHomeLbMode === mode) return;
   currentHomeLbMode = mode;
-  ['classic','timed','zen','daily'].forEach(m => {
+  ['classic','timed','zen'].forEach(m => {
     const tab = document.getElementById('home-lb-tab-'+m);
     if(tab) tab.classList.toggle('active', m === mode);
   });
@@ -4629,14 +3731,6 @@ async function loadHomeLb(mode){
 window.addEventListener('load', () => {
   setTimeout(()=>loadHomeLb('classic'), 800);
   setTimeout(updateHomeStats, 200);
-  // Restore banner if interstitial has been shown before
-  try{
-    if(localStorage.getItem('lexitris_ad_seen')){
-      const banner = document.getElementById('home-banner-ad');
-      if(banner) banner.classList.add('show');
-      if(window.Android && window.Android.showBanner) window.Android.showBanner();
-    }
-  }catch(e){}
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
@@ -4645,26 +3739,7 @@ let pendingLbScore = 0;
 let pendingLbMode = '';
 let playerName = '';
 
-const NAME_ADJS = ['Swift','Bold','Clever','Sly','Lucky','Brave','Quick','Sharp','Sneaky','Jolly','Grumpy','Calm','Witty','Loud','Quiet','Fierce','Gentle','Wild','Cool','Odd'];
-const NAME_NOUNS = ['Fox','Owl','Bear','Wolf','Hawk','Lynx','Frog','Crab','Mole','Wasp','Newt','Ibis','Dingo','Finch','Stoat','Vole','Wren','Puffin','Gecko','Moose'];
-
-function generatePlayerName(){
-  const adj = NAME_ADJS[Math.floor(Math.random()*NAME_ADJS.length)];
-  const noun = NAME_NOUNS[Math.floor(Math.random()*NAME_NOUNS.length)];
-  const num = Math.floor(Math.random()*99)+1;
-  const name = adj+noun+num;
-  const input = document.getElementById('lb-name-input');
-  if(input) input.value = name;
-  return name;
-}
-
-try {
-  playerName = localStorage.getItem('lexitris_player_name') || '';
-  if(!playerName){
-    playerName = generatePlayerName();
-    localStorage.setItem('lexitris_player_name', playerName);
-  }
-} catch(e){ playerName = generatePlayerName(); }
+try { playerName = localStorage.getItem('lexitris_player_name') || ''; } catch(e){}
 
 function openLeaderboard(submitScore, submitMode){
   pendingLbScore = submitScore || 0;
@@ -4675,7 +3750,7 @@ function openLeaderboard(submitScore, submitMode){
   const submitArea = document.getElementById('lb-submit-area');
   if(pendingLbScore > 0){
     submitArea.classList.add('show');
-    document.getElementById('lb-name-input').value = playerName || generatePlayerName();
+    document.getElementById('lb-name-input').value = playerName;
   } else {
     submitArea.classList.remove('show');
   }
@@ -4704,17 +3779,9 @@ function switchLbTab(mode){
 async function loadLeaderboard(mode){
   const list = document.getElementById('lb-list');
   list.innerHTML = '<div id="lb-loading">Loading...</div>';
-  let scores = [];
-  let debugMsg = '';
-  try {
-    scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
-    debugMsg = 'mode='+mode+' results='+scores.length;
-  } catch(e) {
-    list.innerHTML = '<div class="lb-empty">Error: '+e.message+'</div>';
-    return;
-  }
+  const scores = await (window.fetchLeaderboard ? window.fetchLeaderboard(mode) : Promise.resolve([]));
   if(scores.length === 0){
-    list.innerHTML = '<div class="lb-empty">No scores yet ('+debugMsg+')</div>';
+    list.innerHTML = '<div class="lb-empty">No scores yet — play and submit your score!</div>';
     return;
   }
   const rankIcons = ['🥇','🥈','🥉'];
@@ -4732,18 +3799,10 @@ function escLb(str){
   return String(str).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 }
 
-// Basic profanity filter
-function cleanName(n){
-  const bad=['fuck','shit','ass','dick','cock','cunt','bitch','nigger','nigga','fag','retard','whore','slut','bastard','piss','crap'];
-  let s=n.toLowerCase();
-  for(const w of bad){ if(s.includes(w)) return null; }
-  return n.trim();
-}
-
 async function submitScore(){
   const nameInput = document.getElementById('lb-name-input');
-  const raw = (nameInput.value || playerName).trim();
-  const name = cleanName(raw) || playerName || generatePlayerName();
+  const name = nameInput.value.trim();
+  if(!name){ nameInput.focus(); return; }
   playerName = name;
   try { localStorage.setItem('lexitris_player_name', name); } catch(e){}
   const btn = document.getElementById('lb-submit-btn');
@@ -4755,7 +3814,6 @@ async function submitScore(){
   pendingLbScore = 0;
   document.getElementById('lb-submit-area').classList.remove('show');
   btn.textContent = '✅ Submitted!';
-  setTimeout(()=>{ btn.textContent='Submit Score'; btn.disabled=false; }, 2500);
   loadLeaderboard(currentLbMode);
 }
 
@@ -4851,28 +3909,42 @@ function showToast(msg){
   el._t=setTimeout(()=>el.style.opacity='0',2800);
 }
 
-// ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
-// AdMob calls are inlined directly into endGame/startGame/showIntro below
+// ── Game lifecycle hooks ──────────────────────────────────────────────────
+const _origEndGame=endGame;
+window.endGame=function(){
+  _origEndGame();
+  AdMob.hideBanner();
+  if(!adsRemoved){
+    AdMob._gamesBetweenInterstitials++;
+    if(AdMob._gamesBetweenInterstitials>=AdMob.INTERSTITIAL_EVERY){
+      AdMob._gamesBetweenInterstitials=0;
+      setTimeout(()=>AdMob.showInterstitial(),800);
+    }
+  }
+};
+
+const _origStartGame=startGame;
+window.startGame=function(){
+  _origStartGame();
+  AdMob.showBanner();
+};
+
+const _origShowIntro=showIntro;
+window.showIntro=function(){
+  _origShowIntro();
+  AdMob.hideBanner();
+};
 
 window.addEventListener('load',()=>{
-  try {
-    document.getElementById('intro-screen').classList.remove('open');
-    fillBag();initGrid();draw();
-    loadAdsRemovedState();
-    try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
-    initDailyMode();
-    showIntro();
-    const ls=document.getElementById('loading-screen');
-    if(ls) ls.style.display='none';
-  } catch(err) {
-    // Show error on loading screen for debugging
-    const ls=document.getElementById('loading-screen');
-    if(ls){
-      ls.style.display='flex';
-      ls.innerHTML='<div style="color:#ff6b6b;font-family:monospace;padding:20px;font-size:.8rem;white-space:pre-wrap;max-width:90vw;">INIT ERROR:\n'+err.message+'\n\n'+err.stack+'</div>';
-    }
-    console.error('Init error:', err);
-  }
+  document.getElementById('intro-screen').classList.remove('open');
+  fillBag();initGrid();draw();
+  loadAdsRemovedState();
+  // Ask native to re-check owned purchases (handles reinstalls / new devices)
+  try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
+  showIntro();
+  // Dismiss loading screen
+  const ls=document.getElementById('loading-screen');
+  if(ls) ls.style.display='none';
 });
 </script>
 <script>
@@ -4913,595 +3985,6 @@ if('serviceWorker' in navigator){
   const swUrl = URL.createObjectURL(blob);
   navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
-</script>
-
-<script>
-// ══ RATE PROMPT ════════════════════════════════════════════════════════════
-let rateAsked = false;
-try { rateAsked = !!localStorage.getItem('lexitris_rated'); } catch(e){}
-
-function maybeShowRate(){
-  if(rateAsked) return;
-  if(lifetimeStats.gamesPlayed === 5 || lifetimeStats.gamesPlayed === 10){
-    setTimeout(()=> document.getElementById('rate-overlay').classList.add('show'), 1200);
-  }
-}
-
-function rateSelected(stars){
-  document.getElementById('rate-overlay').classList.remove('show');
-  try { localStorage.setItem('lexitris_rated','1'); } catch(e){}
-  rateAsked = true;
-  if(stars >= 4){
-    setTimeout(()=>{ window.open('https://play.google.com/store/apps/details?id=app.netlify.lexitris2.twa','_blank'); }, 300);
-    showToast('Thanks for the love! ⭐');
-  } else {
-    showToast('Thanks for the feedback!');
-  }
-}
-
-function dismissRate(){
-  document.getElementById('rate-overlay').classList.remove('show');
-  rateAsked = false;
-}
-
-// ══ ONBOARDING ══════════════════════════════════════════════════════════════
-let onboardStep = 0;
-let onboardSeen = false;
-try { onboardSeen = !!localStorage.getItem('lexitris_onboard'); } catch(e){}
-
-function maybeShowOnboard(){
-  if(onboardSeen) return;
-  onboardStep = 0;
-  showOnboardStep(0);
-  document.getElementById('onboard-overlay').classList.add('show');
-}
-
-function showOnboardStep(n){
-  document.querySelectorAll('.onboard-step').forEach((el,i)=>{
-    el.classList.toggle('active', i===n);
-  });
-  document.querySelectorAll('.onboard-dot').forEach((el,i)=>{
-    el.classList.toggle('active', i===n);
-  });
-  const btn = document.getElementById('onboard-next-btn');
-  if(btn) btn.textContent = n >= 2 ? "Let's Play! ▶" : "Next →";
-}
-
-function onboardNext(){
-  if(onboardStep >= 2){ dismissOnboard(); }
-  else { onboardStep++; showOnboardStep(onboardStep); }
-}
-
-function dismissOnboard(){
-  document.getElementById('onboard-overlay').classList.remove('show');
-  try { localStorage.setItem('lexitris_onboard','1'); } catch(e){}
-  onboardSeen = true;
-}
-</script>
-
-<!-- ═══ RATE PROMPT ════════════════════════════════════════════════════════ -->
-<div id="rate-overlay">
-  <div id="rate-card">
-    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;color:#fff;">Enjoying Lexitris?</div>
-    <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.58rem;color:rgba(200,210,255,0.65);">A quick rating helps others find the game ⭐</div>
-    <div id="rate-stars">
-      <span onclick="rateSelected(1)">⭐</span>
-      <span onclick="rateSelected(2)">⭐</span>
-      <span onclick="rateSelected(3)">⭐</span>
-      <span onclick="rateSelected(4)">⭐</span>
-      <span onclick="rateSelected(5)">⭐</span>
-    </div>
-    <button class="rate-btn" onclick="dismissRate()" style="background:rgba(255,255,255,0.05);color:rgba(200,210,255,0.5);margin-top:2px;">Not now</button>
-  </div>
-</div>
-
-<!-- ═══ ONBOARDING ══════════════════════════════════════════════════════════ -->
-<div id="onboard-overlay">
-  <div id="onboard-card">
-    <div class="onboard-step active" id="onboard-0">
-      <div class="onboard-emoji">🔤</div>
-      <div class="onboard-title">Letters Fall — You Spell</div>
-      <div class="onboard-body">Use ◀ ▶ to move the falling letter left and right.<br>Tap ▼ DROP or swipe down to drop it fast.</div>
-    </div>
-    <div class="onboard-step" id="onboard-1">
-      <div class="onboard-emoji">✨</div>
-      <div class="onboard-title">Spell Words to Clear Rows</div>
-      <div class="onboard-body">Words score points and clear the row they're in.<br>Words can go → horizontal, ↓ vertical, or ↘↗ diagonal.</div>
-    </div>
-    <div class="onboard-step" id="onboard-2">
-      <div class="onboard-emoji">⚡</div>
-      <div class="onboard-title">Chain Combos for Big Points</div>
-      <div class="onboard-body">Clear multiple rows in a row to build a combo multiplier up to ×8.<br>Longer words = more points. Don't let it stack to the top!</div>
-    </div>
-    <div class="onboard-dots">
-      <div class="onboard-dot active" id="odot-0"></div>
-      <div class="onboard-dot" id="odot-1"></div>
-      <div class="onboard-dot" id="odot-2"></div>
-    </div>
-    <button class="rate-btn" id="onboard-next-btn" onclick="onboardNext()" style="background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;">Next →</button>
-    <button class="rate-btn" onclick="dismissOnboard()" style="background:rgba(255,255,255,0.04);color:rgba(200,210,255,0.45);padding:8px;">Skip tutorial</button>
-  </div>
-</div>
-
-<style>
-.lx-mode-btn .lx-mode-name,
-.lx-mode-btn .lx-mode-name *,
-#mode-select-sheet .lx-mode-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-}
-</style>
-
-<!-- ═══ GEM TOAST ═══════════════════════════════════════════════════════════ -->
-<div id="gem-toast">
-  <span>💎</span><span id="gem-toast-text">+10 gems earned!</span>
-</div>
-
-<!-- ═══ GEM PURCHASE MODAL ══════════════════════════════════════════════════ -->
-
-<!-- ═══ GEM PACK MODAL ═══════════════════════════════════════════════════════ -->
-<div id="gem-pack-modal">
-  <div class="gpack-card">
-    <div style="font-size:2rem;">💎</div>
-    <div class="gpack-title">Purchase Gems</div>
-    <div class="gpack-amt" id="gpack-amt">+100</div>
-    <div class="gpack-note" id="gpack-gems-after">Balance after: 100 💎</div>
-    <div class="gpack-note" style="margin-top:-4px;">Payment processed via Google Play · <span id="gpack-price">$0.99</span></div>
-    <div style="display:flex;gap:8px;width:100%;">
-      <button class="gpm-btn gpm-cancel" style="flex:1;" onclick="closeGemPackModal()">Cancel</button>
-      <button class="gpm-btn gpm-confirm" style="flex:1;" onclick="confirmGemPack()">Buy Now</button>
-    </div>
-  </div>
-</div>
-
-<div id="gem-purchase-modal">
-  <div class="gpm-card">
-    <div class="gpm-icon" id="gpm-icon">🎨</div>
-    <div class="gpm-title" id="gpm-name">Item</div>
-    <div class="gpm-desc" id="gpm-desc">Description</div>
-    <div class="gpm-price">💎 <span id="gpm-price">50</span></div>
-    <div class="gpm-btns">
-      <button class="gpm-btn gpm-cancel" onclick="closeGemPurchaseModal()">Cancel</button>
-      <button class="gpm-btn gpm-confirm" onclick="confirmGemPurchase()">Buy Now</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ GEM COMPLETE MODAL ═══════════════════════════════════════════════════ -->
-<div id="gem-complete-modal">
-  <div class="gcm-card">
-    <div style="font-size:2rem;">🏆</div>
-    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#fff;">Daily Complete!</div>
-    <div class="gcm-total" id="gcm-total">+10</div>
-    <div class="gcm-lbl">gems earned</div>
-    <div class="gcm-breakdown" id="gcm-breakdown"></div>
-    <button class="gpm-btn gpm-confirm" style="width:100%;margin-top:4px;" onclick="closeGemCompleteModal()">Collect 💎</button>
-  </div>
-</div>
-
-<!-- ═══ GEM OVERLAY ══════════════════════════════════════════════════════════ -->
-<div id="gem-overlay">
-  <div class="gem-overlay-hdr">
-    <div class="gem-overlay-title">Gems</div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="gem-badge-home" style="pointer-events:none;">💎 <span id="gem-overlay-count">0</span></div>
-      <button class="hdr-btn" onclick="closeGemOverlay()" style="font-size:1rem;">✕</button>
-    </div>
-  </div>
-  <div class="gem-tabs">
-    <button class="gem-tab active" id="gtab-calendar" onclick="switchGemTab('calendar')">📅 Daily Calendar</button>
-    <button class="gem-tab" id="gtab-store" onclick="switchGemTab('store')">🛒 Store</button>
-  </div>
-  <div class="gem-content" id="gem-content-calendar">
-
-    <!-- Streak -->
-    <div class="streak-banner">
-      <div style="font-size:1.5rem;">🔥</div>
-      <div class="streak-info">
-        <div class="streak-num" id="gs-streak-num">0 day streak</div>
-        <div class="streak-lbl">Keep it going for bonus gems</div>
-      </div>
-      <div class="streak-bonus-pill" id="gs-streak-bonus">No bonus yet</div>
-    </div>
-
-    <!-- 7-day grid -->
-    <div class="week-grid" id="gs-week-grid"></div>
-
-    <!-- Reward breakdown -->
-    <div class="gem-rewards-card">
-      <div style="font-size:.5rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(200,210,255,0.4);margin-bottom:8px;">Daily Gem Rewards</div>
-      <div class="gem-rewards-row"><span class="gem-rewards-label">Complete daily challenge</span><span class="gem-rewards-val">💎 10</span></div>
-      <div class="gem-rewards-row"><span class="gem-rewards-label">3-day streak bonus</span><span class="gem-rewards-val">💎 +5</span></div>
-      <div class="gem-rewards-row"><span class="gem-rewards-label">7-day streak bonus</span><span class="gem-rewards-val">💎 +15</span></div>
-      <div class="gem-rewards-row"><span class="gem-rewards-label">Full week complete!</span><span class="gem-rewards-val" style="color:#f5a623;">💎 +25 bonus</span></div>
-    </div>
-
-    <button class="play-daily-btn" id="gs-play-btn" onclick="closeModeSelectSheet();closeGemOverlay();openModeDialog('daily')" style="width:100%;padding:14px;background:linear-gradient(135deg,#4ade80,#16a34a);border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.1em;color:#fff;cursor:pointer;text-transform:uppercase;box-shadow:0 5px 0 rgba(0,60,20,0.8);margin-bottom:8px;">▶ &nbsp;Play Today's Challenge</button>
-    <div style="font-size:.44rem;color:rgba(200,210,255,0.3);text-align:center;letter-spacing:.06em;">Resets at midnight · Same puzzle for everyone</div>
-
-  </div>
-  <div class="gem-content" id="gem-content-store" style="display:none;">
-
-    <div style="font-size:.5rem;color:rgba(200,210,255,0.38);margin-bottom:8px;">Earn gems by completing daily challenges, or buy them below</div>
-
-    <!-- Gem packs -->
-    <div class="store-section-hdr">💎 Buy Gems</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;" id="gs-gem-packs">
-      <div class="gem-pack-row" onclick="buyGemPack(100,'$0.99')">
-        <div class="gem-pack-icon">💎</div>
-        <div class="gem-pack-info"><div class="gem-pack-name">Handful</div><div class="gem-pack-amt">100 Gems</div></div>
-        <div class="gem-pack-price">$0.99</div>
-      </div>
-      <div class="gem-pack-row gem-pack-featured" onclick="buyGemPack(500,'$2.99')">
-        <div class="gem-pack-icon">💎💎</div>
-        <div class="gem-pack-info"><div class="gem-pack-name">Pouch <span class="gem-pack-badge">POPULAR</span></div><div class="gem-pack-amt">500 Gems</div></div>
-        <div class="gem-pack-price">$2.99</div>
-      </div>
-      <div class="gem-pack-row" onclick="buyGemPack(1000,'$4.99')">
-        <div class="gem-pack-icon">💎💎💎</div>
-        <div class="gem-pack-info"><div class="gem-pack-name">Treasure</div><div class="gem-pack-amt">1,000 Gems</div></div>
-        <div class="gem-pack-price">$4.99</div>
-      </div>
-    </div>
-
-    <div class="store-section-hdr">🎨 Tile Themes</div>
-    <div class="store-grid" id="gs-store-themes"></div>
-
-    <div class="store-section-hdr">✨ Drop Trails</div>
-    <div class="store-grid" id="gs-store-trails"></div>
-
-    <div class="store-section-hdr">💥 Word Clear Effects</div>
-    <div class="store-grid" id="gs-store-clears"></div>
-
-    <div class="store-section-hdr">🌌 Board Backgrounds</div>
-    <div class="store-grid" id="gs-store-bgs"></div>
-
-    <div class="store-section-hdr">🔷 Tile Shapes</div>
-    <div class="store-grid" id="gs-store-shapes"></div>
-
-    <div style="height:32px;"></div>
-  </div>
-</div>
-
-<script>
-// ══════════════════════════════════════════════════════════════════════════
-// GEM SYSTEM
-// ══════════════════════════════════════════════════════════════════════════
-let gemCount = 0;
-let gemStreak = 0;
-let gemWeekData = {};
-let gemOwned = new Set(['default']);
-let gemPendingPurchase = null;
-// Active cosmetic selections
-let activeTheme   = 'default';
-let activeTrail   = 'trail_none';
-let activeClear   = 'clear_default';
-let activeBg      = 'bg_void';
-let activeShape   = 'shape_square';
-
-try {
-  const gs = JSON.parse(localStorage.getItem('lx_gems') || '{}');
-  gemCount   = gs.gems || 0;
-  gemStreak  = gs.streak || 0;
-  gemWeekData= gs.weekData || {};
-  gemOwned   = new Set(gs.owned || ['default']);
-  activeTheme= gs.activeTheme  || 'default';
-  activeTrail= gs.activeTrail  || 'trail_none';
-  activeClear= gs.activeClear  || 'clear_default';
-  activeBg   = gs.activeBg     || 'bg_void';
-  activeShape= gs.activeShape  || 'shape_square';
-} catch(e) {}
-
-function saveGems() {
-  try {
-    localStorage.setItem('lx_gems', JSON.stringify({
-      gems: gemCount, streak: gemStreak,
-      weekData: gemWeekData, owned: [...gemOwned],
-      activeTheme, activeTrail, activeClear, activeBg, activeShape
-    }));
-  } catch(e) {}
-}
-
-const GEM_THEMES = [
-  { id:'default',  name:'Classic',     price:0,   icon:'🎨', vowel:'#3b82f6', cons:'#7c5cfc', rare:'#f5a623', desc:'The original Lexitris colors' },
-  { id:'neon',     name:'Neon Nights', price:200, icon:'🌃', vowel:'#00e5ff', cons:'#ff00e5', rare:'#ffe000', desc:'Electric colors that pop' },
-  { id:'forest',   name:'Deep Forest', price:200, icon:'🌲', vowel:'#4ade80', cons:'#86efac', rare:'#f59e0b', desc:'Earthy greens and warm ambers' },
-  { id:'ember',    name:'Ember',       price:350, icon:'🔥', vowel:'#ff6b35', cons:'#ff3b6b', rare:'#ffd700', desc:'Fiery reds and molten gold' },
-  { id:'ice',      name:'Arctic Ice',  price:350, icon:'🧊', vowel:'#bfdbfe', cons:'#60a5fa', rare:'#e0f2fe', desc:'Crisp blues and icy whites' },
-  { id:'galaxy',   name:'Galaxy',      price:600, icon:'🌌', vowel:'#c084fc', cons:'#818cf8', rare:'#2dd4bf', desc:'Deep space purples and cosmic teal' },
-];
-const GEM_TRAILS = [
-  { id:'trail_none',    name:'None',     price:0,   icon:'·',  desc:'Clean — no trail effect' },
-  { id:'trail_sparkle', name:'Sparkle',  price:200, icon:'✨', desc:'Tiny star particles follow the tile' },
-  { id:'trail_comet',   name:'Comet',    price:200, icon:'☄️', desc:'Glowing streak behind the tile' },
-  { id:'trail_ghost',   name:'Ghost',    price:350, icon:'👻', desc:'Fading ghost copies trail below' },
-  { id:'trail_matrix',  name:'Matrix',   price:350, icon:'🟩', desc:'Cascading green symbols' },
-  { id:'trail_fire',    name:'Fire',     price:600, icon:'🔥', desc:'Ember particles rise as you drop' },
-];
-const GEM_CLEARS = [
-  { id:'clear_default',  name:'Flash',    price:0,   icon:'⚡', desc:'Default quick flash' },
-  { id:'clear_shatter',  name:'Shatter',  price:200, icon:'💥', desc:'Tiles explode outward' },
-  { id:'clear_dissolve', name:'Dissolve', price:200, icon:'🌊', desc:'Tiles melt away in a wave' },
-  { id:'clear_lightning',name:'Lightning',price:350, icon:'🌩', desc:'Electric arc across the word' },
-  { id:'clear_aurora',   name:'Aurora',   price:600, icon:'🌈', desc:'Ripple of color across the row' },
-];
-const GEM_BGS = [
-  { id:'bg_void',     name:'Void',      price:0,   icon:'⬛', desc:'Pure dark — the classic look' },
-  { id:'bg_stars',    name:'Starfield', price:200, icon:'🌌', desc:'Slow drifting stars behind the grid' },
-  { id:'bg_rain',     name:'Rain',      price:200, icon:'🌧', desc:'Streaking vertical lines' },
-  { id:'bg_pulse',    name:'Pulse',     price:350, icon:'💜', desc:'Slow breathing glow from center' },
-  { id:'bg_grid',     name:'Grid',      price:350, icon:'📐', desc:'Faint geometric lines' },
-];
-const GEM_SHAPES = [
-  { id:'shape_square',  name:'Square',  price:0,   icon:'⬜', desc:'Default sharp corners' },
-  { id:'shape_rounded', name:'Rounded', price:200, icon:'▢',  desc:'Soft rounded corners' },
-  { id:'shape_gem',     name:'Gem Cut', price:500, icon:'💎', desc:'Slight faceted gem look' },
-];
-
-
-function getGemDateStr(offset=0){
-  const d=new Date(); d.setDate(d.getDate()+offset);
-  return d.toISOString().split('T')[0];
-}
-function getGemWeekDays(){
-  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const today=new Date();
-  const start=new Date(today); start.setDate(today.getDate()-today.getDay());
-  return Array.from({length:7},(_,i)=>{
-    const d=new Date(start); d.setDate(start.getDate()+i);
-    return {
-      label:days[d.getDay()], num:d.getDate(),
-      dateStr:d.toISOString().split('T')[0],
-      isToday:d.toDateString()===today.toDateString(),
-      isPast:d<new Date(today.toDateString())
-    };
-  });
-}
-
-function updateGemDisplays(){
-  ['home-gem-count','gem-overlay-count'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.textContent=gemCount.toLocaleString();
-  });
-}
-
-function showGemToast(text){
-  const t=document.getElementById('gem-toast');
-  if(!t) return;
-  document.getElementById('gem-toast-text').textContent=text;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-function openGemOverlay(){
-  document.getElementById('gem-overlay').classList.add('open');
-  renderGemCalendar();
-  renderGemStore();
-  updateGemDisplays();
-}
-function closeGemOverlay(){
-  document.getElementById('gem-overlay').classList.remove('open');
-}
-function switchGemTab(tab){
-  document.getElementById('gem-content-calendar').style.display=tab==='calendar'?'block':'none';
-  document.getElementById('gem-content-store').style.display=tab==='store'?'block':'none';
-  document.getElementById('gtab-calendar').classList.toggle('active',tab==='calendar');
-  document.getElementById('gtab-store').classList.toggle('active',tab==='store');
-}
-
-function renderGemCalendar(){
-  const weekDays=getGemWeekDays();
-  const grid=document.getElementById('gs-week-grid');
-  if(!grid) return;
-  grid.innerHTML=weekDays.map(day=>{
-    const done=!!gemWeekData[day.dateStr];
-    const cls=['day-card',done?'completed':'',day.isToday?'today':'',!day.isToday&&!day.isPast?'future':''].filter(Boolean).join(' ');
-    const status=done
-      ?`<div class="day-check">✓</div>`
-      :day.isToday?`<div style="font-size:.7rem;">📅</div>`
-      :day.isPast?`<div style="font-size:.6rem;opacity:0.3;">·</div>`
-      :`<div style="font-size:.5rem;color:#38bdf8;opacity:0.5;">💎</div>`;
-    return `<div class="${cls}">
-      <div class="day-label">${day.label}</div>
-      <div class="day-num">${day.num}</div>
-      <div class="day-status">${status}</div>
-      <div class="day-gem-lbl">${done||day.isToday?'💎10':''}</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('gs-streak-num').textContent=gemStreak+(gemStreak===1?' day streak':' day streak');
-  const bonus=gemStreak>=7?15:gemStreak>=3?5:0;
-  document.getElementById('gs-streak-bonus').textContent=bonus>0?`+${bonus} bonus`:'No bonus yet';
-
-  const btn=document.getElementById('gs-play-btn');
-  if(btn){
-    const todayDone=!!gemWeekData[getGemDateStr(0)];
-    btn.textContent=todayDone?'✓ Completed Today':'▶  Play Today\'s Challenge';
-    btn.disabled=todayDone;
-    btn.style.opacity=todayDone?'0.6':'1';
-  }
-}
-
-function awardDailyGems(){
-  const todayStr=getGemDateStr(0);
-  if(gemWeekData[todayStr]) return;
-  gemWeekData[todayStr]=true;
-  let base=10,streakBonus=0,weekBonus=0;
-  gemStreak++;
-  if(gemStreak>=7) streakBonus=15;
-  else if(gemStreak>=3) streakBonus=5;
-  const weekDays=getGemWeekDays();
-  if(weekDays.every(d=>gemWeekData[d.dateStr])) weekBonus=25;
-  const total=base+streakBonus+weekBonus;
-  gemCount+=total;
-  saveGems();
-  updateGemDisplays();
-  const breakdown=[];
-  breakdown.push({label:'Daily completion',val:base});
-  if(streakBonus>0) breakdown.push({label:gemStreak+'-day streak bonus',val:streakBonus});
-  if(weekBonus>0) breakdown.push({label:'🎉 Full week bonus!',val:weekBonus});
-  document.getElementById('gcm-total').textContent='+'+total;
-  document.getElementById('gcm-breakdown').innerHTML=breakdown.map(r=>
-    `<div class="gcm-row"><span class="gcm-row-lbl">${r.label}</span><span class="gcm-row-val">+${r.val} 💎</span></div>`
-  ).join('');
-  document.getElementById('gem-complete-modal').classList.add('show');
-}
-
-function closeGemCompleteModal(){
-  document.getElementById('gem-complete-modal').classList.remove('show');
-  const total=document.getElementById('gcm-total').textContent;
-  showGemToast(total+' gems collected!');
-  renderGemCalendar();
-}
-
-function makeStoreItem(item,type,extraInner){
-  extraInner=extraInner||'';
-  const isOwned=gemOwned.has(item.id);
-  const cantAfford=!isOwned&&gemCount<item.price;
-  const oc=isOwned||cantAfford?'':("openGemPurchase('"+type+"','"+item.id+"')");
-  return '<div class="store-item '+(isOwned?'owned':cantAfford?'cant-afford':'')+'" onclick="'+oc+'">'
-    +(isOwned?'<div class="store-owned-check">✓</div>':'')
-    +'<div class="store-item-icon">'+item.icon+'</div>'
-    +extraInner
-    +'<div class="store-item-name">'+item.name+'</div>'
-    +'<div class="store-item-desc">'+item.desc+'</div>'
-    +'<div class="store-item-price '+(isOwned?'owned-price':'')+'">'+( isOwned?'✓ Owned':item.price===0?'Free':'💎 '+item.price)+'</div>'
-    +'</div>';
-}
-function renderGemStore(){
-  const themesEl=document.getElementById('gs-store-themes');
-  if(!themesEl) return;
-  themesEl.innerHTML=GEM_THEMES.map(function(item){
-    return makeStoreItem(item,'theme',
-      '<div class="tile-pip-row">'
-      +'<div class="tile-pip" style="background:'+item.vowel+'"></div>'
-      +'<div class="tile-pip" style="background:'+item.cons+'"></div>'
-      +'<div class="tile-pip" style="background:'+item.rare+'"></div>'
-      +'</div>');
-  }).join('');
-  var trailsEl=document.getElementById('gs-store-trails');
-  if(trailsEl) trailsEl.innerHTML=GEM_TRAILS.map(function(i){return makeStoreItem(i,'trail');}).join('');
-  var clearsEl=document.getElementById('gs-store-clears');
-  if(clearsEl) clearsEl.innerHTML=GEM_CLEARS.map(function(i){return makeStoreItem(i,'clear');}).join('');
-  var bgsEl=document.getElementById('gs-store-bgs');
-  if(bgsEl) bgsEl.innerHTML=GEM_BGS.map(function(i){return makeStoreItem(i,'bg');}).join('');
-  var shapesEl=document.getElementById('gs-store-shapes');
-  if(shapesEl) shapesEl.innerHTML=GEM_SHAPES.map(function(i){return makeStoreItem(i,'shape');}).join('');
-}
-
-function openGemPurchase(type,id){
-  const all=[...GEM_THEMES,...GEM_TRAILS,...GEM_CLEARS,...GEM_BGS,...GEM_SHAPES];
-  const item=all.find(i=>i.id===id);
-  if(!item||gemCount<item.price) return;
-  gemPendingPurchase={type,id,item};
-  document.getElementById('gpm-icon').textContent=item.icon;
-  document.getElementById('gpm-name').textContent=item.name;
-  document.getElementById('gpm-desc').textContent=item.desc;
-  document.getElementById('gpm-price').textContent=item.price;
-  document.getElementById('gem-purchase-modal').classList.add('show');
-}
-function closeGemPurchaseModal(){
-  document.getElementById('gem-purchase-modal').classList.remove('show');
-  gemPendingPurchase=null;
-}
-function confirmGemPurchase(){
-  if(!gemPendingPurchase) return;
-  const{type,id,item}=gemPendingPurchase;
-  if(gemCount<item.price){closeGemPurchaseModal();return;}
-  gemCount-=item.price;
-  if(type==='theme'||type==='flair') gemOwned.add(id);
-  saveGems();
-  updateGemDisplays();
-  renderGemStore();
-  closeGemPurchaseModal();
-  showGemToast(item.icon+' '+item.name+' unlocked!');
-}
-
-function buyGemPack(amount, price){
-  document.getElementById('gpack-amt').textContent='+'+amount.toLocaleString();
-  document.getElementById('gpack-price').textContent=price;
-  document.getElementById('gpack-gems-after').textContent='Balance after: '+( gemCount+amount).toLocaleString()+' 💎';
-  window._pendingPackAmount=amount;
-  document.getElementById('gem-pack-modal').classList.add('show');
-}
-function closeGemPackModal(){
-  document.getElementById('gem-pack-modal').classList.remove('show');
-  window._pendingPackAmount=null;
-}
-function confirmGemPack(){
-  // In production this triggers Play Billing — here we just award for prototype
-  const amt=window._pendingPackAmount||0;
-  gemCount+=amt;
-  saveGems();
-  updateGemDisplays();
-  renderGemStore();
-  closeGemPackModal();
-  showGemToast('+'+amt.toLocaleString()+' gems added!');
-}
-
-updateGemDisplays();
-
-// ── COSMETICS SETTINGS ─────────────────────────────────────────────────────
-function switchSettingsTab(tab){
-  ['general','cosmetics'].forEach(function(t){
-    document.getElementById('stab-'+t).classList.toggle('active',t===tab);
-    document.getElementById('stab-content-'+t).classList.toggle('active',t===tab);
-  });
-  if(tab==='cosmetics') renderCosmSettings();
-}
-
-function renderCosmSettings(){
-  const el=document.getElementById('cosm-settings-inner');
-  if(!el||typeof GEM_THEMES==='undefined') return;
-
-  function makeCosmSection(label, items, activeId, setter){
-    const rows=items.map(function(item){
-      const isOwned=gemOwned.has(item.id)||(item.price===0);
-      const isActive=activeId===item.id;
-      let inner='<div class="cosm-item-icon">'+item.icon+'</div>';
-      if(item.vowel){
-        inner+='<div class="cosm-pip-row">'
-          +'<div class="cosm-pip" style="background:'+item.vowel+'"></div>'
-          +'<div class="cosm-pip" style="background:'+item.cons+'"></div>'
-          +'<div class="cosm-pip" style="background:'+item.rare+'"></div>'
-          +'</div>';
-      }
-      inner+='<div class="cosm-item-name">'+item.name+'</div>';
-      if(isActive) inner+='<div class="cosm-active-dot"></div>';
-      if(!isOwned) inner+='<div class="cosm-item-lock">🔒</div>';
-      const cls='cosm-item'+(isActive?' active':'')+(isOwned?'':' locked');
-      const click=isOwned?('selectCosm(\"'+setter+'\",\"'+item.id+'\")'):('openGemOverlay();switchGemTab(\"store\")');
-      return '<div class="'+cls+'" onclick="'+click+'">'+inner+'</div>';
-    });
-    return '<div class="cosm-section-lbl">'+label+'</div>'
-      +'<div class="cosm-grid">'+rows.join('')+'</div>';
-  }
-
-  el.innerHTML=
-    makeCosmSection('🎨 Tile Theme', GEM_THEMES, activeTheme, 'theme')
-    +makeCosmSection('✨ Drop Trail', GEM_TRAILS, activeTrail, 'trail')
-    +makeCosmSection('💥 Word Clear Effect', GEM_CLEARS, activeClear, 'clear')
-    +makeCosmSection('🌌 Board Background', GEM_BGS, activeBg, 'bg')
-    +makeCosmSection('🔷 Tile Shape', GEM_SHAPES, activeShape, 'shape')
-    +'<div style="height:8px;"></div>';
-}
-
-function selectCosm(type, id){
-  if(type==='theme')  activeTheme=id;
-  if(type==='trail')  activeTrail=id;
-  if(type==='clear')  activeClear=id;
-  if(type==='bg')     { activeBg=id; if(draw._stars) draw._stars=null; if(draw._rain) draw._rain=null; }
-  if(type==='shape')  activeShape=id;
-  saveGems();
-  renderCosmSettings();
-  // Refresh store selected states too
-  if(document.getElementById('gem-overlay').classList.contains('open')) renderGemStore();
-}
-
-window.addGems=function(n){n=n||100;gemCount+=n;saveGems();updateGemDisplays();renderGemStore();showGemToast('+'+n+' gems added!');};
 </script>
 </body>
 </html>
