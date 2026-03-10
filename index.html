@@ -1744,7 +1744,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
 <div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
-  <canvas id="intro-bg-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
+  <canvas id="intro-bg-canvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
   <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;position:relative;z-index:1;">
 
     <!-- Logo -->
@@ -1831,7 +1831,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
   </div>
-  </div><!-- end z-index:1 wrapper -->
 </div>
 
 <!-- ═══ MODE SELECT SHEET ═══════════════════════════════════════════ -->
@@ -4583,12 +4582,102 @@ function dismissOnboard(){
 </style>
 
 <script>
-// ── Intro screen falling letters screensaver ──────────────────────────────
+// ── Intro screen: falling letter tile screensaver ─────────────────────────
 (function(){
-  const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const COLORS = ['#7c5cfc','#a78bfa','#4ade80','#f5a623','#ee2266','#00e5cc'];
-  let canvas, ctx, cols, drops, sizes, speeds, chars, colors, animFrame;
-  let active = false;
+  const VOWELS = new Set(['A','E','I','O','U']);
+  const RARE = new Set(['Q','X','Z','J','K']);
+  const LETTERS = 'AAABBBCCCDDDEEEFFFGGGHHIIIIJJKKLLLMMMNNNOOOPPPQRRRRSSSSTTTTUUUVVVWWXYYZ'.split('');
+  const LPTS = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+  const TILE_COLORS = {
+    vowel: {fill:'#0d1e3a', stroke:'#1a7fd4', text:'#60bbff', dot:'#1a7fd4'},
+    cons:  {fill:'#160d2e', stroke:'#7c5cfc', text:'#b09aff', dot:'#7c5cfc'},
+    rare:  {fill:'#1e0d00', stroke:'#e07000', text:'#ffaa44', dot:'#e07000'},
+  };
+
+  function tileColor(l){
+    if(RARE.has(l)) return TILE_COLORS.rare;
+    if(VOWELS.has(l)) return TILE_COLORS.vowel;
+    return TILE_COLORS.cons;
+  }
+
+  function roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();
+  }
+
+  function drawTile(ctx, x, y, size, letter, alpha){
+    const c = tileColor(letter);
+    const pad = 2;
+    const r = Math.max(4, size * 0.18);
+    ctx.globalAlpha = alpha;
+
+    // Shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 6;
+    ctx.shadowOffsetY = 3;
+
+    // Fill
+    ctx.fillStyle = c.fill;
+    roundRect(ctx, x+pad, y+pad, size-pad*2, size-pad*2, r);
+    ctx.fill();
+
+    // Border
+    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    ctx.strokeStyle = c.stroke;
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, x+pad, y+pad, size-pad*2, size-pad*2, r);
+    ctx.stroke();
+
+    // Subtle top highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    roundRect(ctx, x+pad+1, y+pad+1, size-pad*2-2, (size-pad*2)*0.4, r);
+    ctx.fill();
+
+    // Letter
+    ctx.fillStyle = c.text;
+    ctx.font = `900 ${Math.floor(size * 0.46)}px 'Nunito', sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(letter, x + size/2, y + size/2 + 1);
+
+    // Point value
+    ctx.fillStyle = c.dot;
+    ctx.font = `700 ${Math.floor(size * 0.18)}px 'Space Mono', monospace`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(LPTS[letter] || '', x + size - 5, y + size - 3);
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+  }
+
+  let canvas, ctx, tiles, animFrame, active = false;
+
+  function randomLetter(){ return LETTERS[Math.floor(Math.random() * LETTERS.length)]; }
+
+  function initTiles(){
+    const tileSize = Math.floor(window.innerWidth / 14);
+    const cols = Math.ceil(window.innerWidth / (tileSize + 4)) + 1;
+    tiles = [];
+    for(let i = 0; i < cols; i++){
+      const size = tileSize * (0.7 + Math.random() * 0.5);
+      tiles.push({
+        x: i * (tileSize + 8) + Math.random() * 20 - 10,
+        y: Math.random() * -window.innerHeight * 1.2,
+        size: size,
+        letter: randomLetter(),
+        speed: 0.4 + Math.random() * 0.7,
+        alpha: 0.15 + Math.random() * 0.35,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.005 + Math.random() * 0.01,
+        rotation: (Math.random() - 0.5) * 0.3,
+      });
+    }
+  }
 
   function init(){
     canvas = document.getElementById('intro-bg-canvas');
@@ -4602,43 +4691,30 @@ function dismissOnboard(){
     if(!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const colW = 28;
-    const numCols = Math.ceil(canvas.width / colW);
-    cols = numCols;
-    drops = Array.from({length:numCols}, () => Math.random() * -canvas.height);
-    sizes = Array.from({length:numCols}, () => 11 + Math.random() * 10);
-    speeds = Array.from({length:numCols}, () => 0.6 + Math.random() * 1.2);
-    chars = Array.from({length:numCols}, () => LETTERS[Math.floor(Math.random()*LETTERS.length)]);
-    colors = Array.from({length:numCols}, () => COLORS[Math.floor(Math.random()*COLORS.length)]);
+    initTiles();
   }
 
   function draw(){
     if(!active || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for(let i = 0; i < cols; i++){
-      // Randomly change letter occasionally
-      if(Math.random() < 0.02) chars[i] = LETTERS[Math.floor(Math.random()*LETTERS.length)];
-      if(Math.random() < 0.005) colors[i] = COLORS[Math.floor(Math.random()*COLORS.length)];
 
-      const x = i * 28 + 14;
-      const y = drops[i];
+    for(let t of tiles){
+      t.y += t.speed;
+      t.wobble += t.wobbleSpeed;
+      const xOff = Math.sin(t.wobble) * 6;
 
-      // Draw with fade trail
-      ctx.font = `900 ${sizes[i]}px 'Space Mono', monospace`;
-      ctx.fillStyle = colors[i];
-      ctx.globalAlpha = 0.85;
-      ctx.fillText(chars[i], x, y);
+      ctx.save();
+      ctx.translate(t.x + t.size/2 + xOff, t.y + t.size/2);
+      ctx.rotate(t.rotation);
+      drawTile(ctx, -t.size/2, -t.size/2, t.size, t.letter, t.alpha);
+      ctx.restore();
 
-      // Faded trail letter above
-      ctx.globalAlpha = 0.2;
-      ctx.fillText(chars[i], x, y - sizes[i] * 1.4);
-      ctx.globalAlpha = 1;
-
-      drops[i] += speeds[i];
-      if(drops[i] > canvas.height + 40){
-        drops[i] = -sizes[i] * 2 - Math.random() * 200;
-        chars[i] = LETTERS[Math.floor(Math.random()*LETTERS.length)];
-        speeds[i] = 0.6 + Math.random() * 1.2;
+      if(t.y > canvas.height + t.size){
+        t.y = -t.size * 2 - Math.random() * 300;
+        t.letter = randomLetter();
+        t.alpha = 0.15 + Math.random() * 0.35;
+        t.speed = 0.4 + Math.random() * 0.7;
+        t.rotation = (Math.random() - 0.5) * 0.3;
       }
     }
     animFrame = requestAnimationFrame(draw);
@@ -4656,10 +4732,9 @@ function dismissOnboard(){
     if(ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  // Start/stop based on intro screen visibility
   const observer = new MutationObserver(() => {
-    const introOpen = document.getElementById('intro-screen')?.classList.contains('open');
-    if(introOpen) start(); else stop();
+    const open = document.getElementById('intro-screen')?.classList.contains('open');
+    if(open) start(); else stop();
   });
 
   window.addEventListener('load', () => {
