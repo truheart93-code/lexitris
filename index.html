@@ -1363,16 +1363,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   padding:10px 14px;
 }
 .md-last-word-label{
-  font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.44rem;
   color:rgba(200,215,255,0.72);letter-spacing:.06em;text-transform:uppercase;
   flex-shrink:0;
 }
 .md-last-word-val{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.88rem;color:#4ade80;letter-spacing:.06em;
+  font-size:.48rem;color:#4ade80;letter-spacing:.06em;
 }
 .md-last-word-pts{
-  font-family:'Nunito',sans-serif;font-weight:700;font-size:.7rem;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.4rem;
   color:#f5a623;margin-left:auto;
 }
 
@@ -4167,8 +4167,8 @@ async function loadHomeLb(mode){
     const rank = rankIcons[i] || (i+1);
     return '<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(124,92,252,0.08);">'
       + '<span style="font-size:.8rem;width:20px;text-align:center;">' + rank + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.78rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
-      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.82rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:700;font-size:.66rem;color:#d0d8f0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escLb(s.name) + '</span>'
+      + '<span style="font-family:Nunito,sans-serif;font-weight:900;font-size:.70rem;color:#a78bfa;">' + Number(s.score).toLocaleString() + '</span>'
       + '</div>';
   }).join('');
 }
