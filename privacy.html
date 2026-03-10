@@ -1,94 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy — Lexitris</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    background:#0a0e1a;color:#c8d4f0;
-    line-height:1.7;padding:40px 20px;
-  }
-  .wrap{max-width:680px;margin:0 auto;}
-  h1{
-    font-size:1.8rem;font-weight:900;letter-spacing:.06em;
-    background:linear-gradient(135deg,#c4b5fd,#7c5cfc);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;margin-bottom:6px;
-  }
-  .studio{font-size:.85rem;color:rgba(180,190,230,0.5);margin-bottom:32px;}
-  h2{
-    font-size:1rem;font-weight:700;color:#a78bfa;
-    margin:28px 0 10px;letter-spacing:.04em;text-transform:uppercase;
-    font-size:.8rem;
-  }
-  p{color:rgba(200,212,240,0.75);margin-bottom:12px;font-size:.95rem;}
-  a{color:#7c5cfc;text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  .card{
-    background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);
-    border-radius:14px;padding:20px 24px;margin-bottom:16px;
-  }
-  .updated{
-    font-size:.75rem;color:rgba(180,190,230,0.35);
-    margin-top:48px;padding-top:20px;
-    border-top:1px solid rgba(124,92,252,0.12);
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Lexitris</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+      background: #0a0e1a;
+      color: #c8d0e8;
+      line-height: 1.7;
+    }
+    h1 { color: #a78bfa; font-size: 1.6rem; margin-bottom: 4px; }
+    h2 { color: #7c5cfc; font-size: 1.05rem; margin-top: 36px; border-bottom: 1px solid rgba(124,92,252,0.2); padding-bottom: 6px; }
+    p, li { font-size: 0.95rem; color: #b0bcd8; }
+    ul { padding-left: 20px; }
+    a { color: #7c5cfc; }
+    .subtitle { color: rgba(180,190,230,0.55); font-size: 0.85rem; margin-bottom: 32px; }
+    .updated { color: rgba(180,190,230,0.4); font-size: 0.8rem; margin-top: 48px; }
+  </style>
 </head>
 <body>
-<div class="wrap">
 
   <h1>Privacy Policy</h1>
-  <div class="studio">Three Lanterns Studios · Lexitris</div>
+  <div class="subtitle">Three Lanterns Studios &middot; Lexitris</div>
 
-  <div class="card">
-    <h2>Overview</h2>
-    <p>Three Lanterns Studios ("we", "us", or "our") operates the Lexitris mobile game. This policy explains what data is collected when you play Lexitris and how it is used.</p>
-    <p>We are committed to protecting your privacy. We do not personally collect, store, or share any data ourselves. All data collection is handled by third-party services described below.</p>
-  </div>
+  <h2>Overview</h2>
+  <p>Three Lanterns Studios ("we", "us", or "our") operates the Lexitris mobile game and web app. This policy explains what data is collected when you play Lexitris and how it is used.</p>
+  <p>We are committed to protecting your privacy. We do not personally collect, store, or share any personally identifiable information. All data collection described below is handled by trusted third-party services.</p>
 
-  <div class="card">
-    <h2>Data We Do Not Collect</h2>
-    <p>We do not collect your name, email address, location, or any personally identifiable information. We do not run our own analytics or tracking systems. Your game progress and scores are stored locally on your device only.</p>
-  </div>
+  <h2>Data We Do Not Collect</h2>
+  <p>We do not collect your name, email address, precise location, or any personally identifiable information directly. We do not operate our own analytics or tracking systems. Your game progress and settings are stored locally on your device.</p>
 
-  <div class="card">
-    <h2>Advertising (Google AdMob)</h2>
-    <p>Lexitris displays ads provided by Google AdMob. AdMob may collect and use data to serve personalised ads, including device identifiers, IP address, and usage data. This is governed by Google's Privacy Policy.</p>
-    <p>You can opt out of personalised advertising by visiting: <a href="https://www.google.com/settings/ads" target="_blank">google.com/settings/ads</a></p>
-    <p>For more information on how Google uses data: <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
-  </div>
+  <h2>Leaderboard & Score Submission</h2>
+  <p>Lexitris includes an optional global leaderboard powered by Google Firebase Firestore. If you choose to submit a score, the following data is stored:</p>
+  <ul>
+    <li>Your chosen display name (auto-generated or entered by you, up to 16 characters)</li>
+    <li>Your score and game mode</li>
+    <li>The date of submission</li>
+  </ul>
+  <p>This data is stored in Google Firebase and is publicly visible on the leaderboard. No account or sign-in is required. Do not enter real personal information as your display name. Firebase data handling is governed by <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>.</p>
 
-  <div class="card">
-    <h2>In-App Purchases</h2>
-    <p>Lexitris offers an optional "Remove Ads" purchase processed through Google Play Billing. We do not handle or store any payment information. All transactions are managed by Google Play and subject to Google's Terms of Service.</p>
-  </div>
+  <h2>Advertising (Google AdMob)</h2>
+  <p>Lexitris displays advertisements provided by Google AdMob. AdMob may collect and use data to serve personalised ads, including:</p>
+  <ul>
+    <li>Device identifiers (Android Advertising ID)</li>
+    <li>IP address and general location</li>
+    <li>App usage and interaction data</li>
+  </ul>
+  <p>This data collection is governed by <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>. You can opt out of personalised advertising at any time by visiting <a href="https://www.google.com/settings/ads" target="_blank">google.com/settings/ads</a> or through your device's advertising settings.</p>
+  <p>Ads can be permanently removed via the "Remove Ads" in-app purchase.</p>
 
-  <div class="card">
-    <h2>Local Storage</h2>
-    <p>Lexitris stores your game progress, high scores, and settings locally on your device using your browser's local storage. This data never leaves your device and is not accessible to us.</p>
-  </div>
+  <h2>In-App Purchases</h2>
+  <p>Lexitris offers an optional "Remove Ads" purchase processed through Google Play Billing. We do not handle, store, or have access to any payment information. All transactions are managed entirely by Google Play and are subject to <a href="https://play.google.com/about/play-terms/" target="_blank">Google Play's Terms of Service</a>.</p>
 
-  <div class="card">
-    <h2>Children's Privacy</h2>
-    <p>Lexitris is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided personal information through our app, please contact us so we can take appropriate action.</p>
-  </div>
+  <h2>Local Storage</h2>
+  <p>Lexitris stores your game progress, high scores, settings, and preferences locally on your device using browser local storage. This data never leaves your device and is not accessible to us.</p>
 
-  <div class="card">
-    <h2>Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated date. Continued use of Lexitris after changes constitutes acceptance of the updated policy.</p>
-  </div>
+  <h2>Children's Privacy</h2>
+  <p>Lexitris is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you believe a child has submitted information through our leaderboard, please contact us and we will promptly remove it.</p>
 
-  <div class="card">
-    <h2>Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact Three Lanterns Studios via the contact information provided on our Google Play Store listing.</p>
-  </div>
+  <h2>Data Retention & Deletion</h2>
+  <p>Local game data can be cleared at any time by clearing your app or browser data. Leaderboard entries submitted to Firebase are retained indefinitely but contain no personally identifiable information. To request removal of a leaderboard entry, contact us with the display name and score.</p>
+
+  <h2>Third-Party Services</h2>
+  <p>Lexitris uses the following third-party services, each governed by their own privacy policies:</p>
+  <ul>
+    <li><a href="https://policies.google.com/privacy" target="_blank">Google AdMob</a> — Advertising</li>
+    <li><a href="https://policies.google.com/privacy" target="_blank">Google Firebase Firestore</a> — Leaderboard data</li>
+    <li><a href="https://play.google.com/about/play-terms/" target="_blank">Google Play Billing</a> — In-app purchases</li>
+  </ul>
+
+  <h2>Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated date. Continued use of Lexitris after changes constitutes acceptance of the updated policy.</p>
+
+  <h2>Contact Us</h2>
+  <p>If you have any questions about this Privacy Policy or wish to request data deletion, please contact Three Lanterns Studios via the contact information provided on our <a href="https://play.google.com/store/apps/details?id=app.netlify.lexitris2.twa" target="_blank">Google Play Store listing</a>.</p>
 
   <div class="updated">Last updated: March 2026</div>
 
-</div>
 </body>
 </html>
