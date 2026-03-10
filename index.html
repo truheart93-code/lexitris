@@ -275,6 +275,7 @@ body{
   font-weight:900;letter-spacing:.2em;
   background:linear-gradient(90deg,#a78bfa,#7c5cfc,#00e5cc);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  flex-shrink:0;white-space:nowrap;flex-grow:0;
 }
 .stats{display:flex;gap:8px;}
 .stat{text-align:center;}
@@ -1644,13 +1645,13 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="hdr">
   <div class="hdr-top">
     <h1>LEXITRIS<span id="mode-badge">📖 Classic</span></h1>
-    <div id="timer-bar-wrap" style="display:none;flex:1;margin:0 8px;">
-      <div id="timer-box" style="position:relative;background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:8px;overflow:hidden;height:28px;">
-        <div id="timer-bar" style="position:absolute;inset:0;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:8px;opacity:0.25;"></div>
-        <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:#e0d0ff;text-shadow:0 0 12px rgba(124,92,252,0.8);pointer-events:none;">3:00</div>
-      </div>
+    <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;flex-shrink:0;margin-left:auto;">⏸</button>
+  </div>
+  <div id="timer-bar-wrap" style="display:none;width:100%;padding:3px 10px 4px;box-sizing:border-box;">
+    <div id="timer-box" style="position:relative;background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.35);border-radius:8px;overflow:hidden;height:28px;width:100%;">
+      <div id="timer-bar" style="position:absolute;inset:0;background:linear-gradient(90deg,#7c5cfc,#00e5cc);width:100%;transition:none;border-radius:8px;opacity:0.35;"></div>
+      <div id="timer-label" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:#e0d0ff;text-shadow:0 0 12px rgba(124,92,252,0.8);pointer-events:none;">3:00</div>
     </div>
-    <button class="hdr-btn" id="btn-pause" title="Pause / Settings" style="font-size:1.3rem;width:36px;height:36px;margin-left:8px">⏸</button>
   </div>
   <div class="stats">
     <div class="stat"><span>Score</span><b class="gold" id="s-score">0</b></div>
@@ -3810,8 +3811,12 @@ function startGame(){
     document.getElementById('timer-bar-wrap').style.display='block';
     document.getElementById('timer-bar').style.width='100%';
     document.getElementById('timer-bar').style.background='linear-gradient(90deg,#7c5cfc,#00e5cc)';
+    const modeBadge = document.getElementById('mode-badge');
+    if(modeBadge) modeBadge.style.display='none';
   } else {
     document.getElementById('timer-bar-wrap').style.display='none';
+    const modeBadge2 = document.getElementById('mode-badge');
+    if(modeBadge2) modeBadge2.style.display='';
   }
 
   // Mode badge
