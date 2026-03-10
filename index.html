@@ -1534,7 +1534,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     const body = {
       fields: {
         name:  { stringValue: name.trim().substring(0,16) },
-        score: { integerValue: String(score) },
+        score: { integerValue: String(Math.floor(Number(score))) },
         mode:  { stringValue: mode },
         date:  { stringValue: date }
       }
