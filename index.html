@@ -2894,22 +2894,30 @@ cv.addEventListener('touchmove',e=>{
       swipeLocked=Math.abs(dx)>Math.abs(dy)?'h':'v';
   }
   if(swipeLocked==='h'){
-    // Move every CELL pixels of horizontal drag
     const moved=cx-lastSwipeX;
-    if(Math.abs(moved)>CELL*0.7){
+    if(Math.abs(moved)>CELL*0.75){
       if(moved<0)goLeft();else goRight();
       lastSwipeX=cx;
     }
+    // Always keep lastSwipeX from drifting too far, prevents snap-back at edges
+    if(Math.abs(cx-lastSwipeX)>CELL*2) lastSwipeX=cx;
   }
 },{passive:false});
+function resetTouchState(){
+  sx=0;sy=0;st=0;lastSwipeX=0;swipeLocked=null;
+}
 cv.addEventListener('touchend',e=>{
   e.preventDefault();
   const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;
-  // Tap = drop
-  if(Math.abs(dx)<12&&Math.abs(dy)<12&&dt<200){drop();return;}
-  // Swipe down = drop
-  if(swipeLocked==='v'&&dy>30)drop();
+  const wasTap=Math.abs(dx)<12&&Math.abs(dy)<12&&dt<200;
+  const wasSwipeDown=swipeLocked==='v'&&dy>30;
+  resetTouchState();
+  if(wasTap){drop();return;}
+  if(wasSwipeDown)drop();
 },{passive:false});
+cv.addEventListener('touchcancel',()=>resetTouchState(),{passive:true});
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) resetTouchState(); });
+window.addEventListener('blur',()=>resetTouchState());
 
 
 // ── Sound (Web Audio API) ──────────────────────────────────────────────────
@@ -3807,6 +3815,7 @@ function updateSpeed(){
 function startGame(){
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
+  resetTouchState();
   score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
   if(gameMode==='daily') window._dailyRand=seededRand(dailySeed);
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
