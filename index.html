@@ -1799,7 +1799,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <button class="lb-tab active" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
         <button class="lb-tab" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
-        <button class="lb-tab" id="home-lb-tab-zen" onclick="switchHomeLb('zen')" style="font-size:.52rem;padding:3px 7px;">Zen</button>
+
       </div>
       <div id="home-lb-list" style="background:rgba(255,255,255,0.03);border:1px solid rgba(124,92,252,0.1);border-radius:10px;overflow:hidden;">
         <div style="text-align:center;padding:12px;font-family:Nunito,sans-serif;font-size:.65rem;color:rgba(180,190,230,0.4);">Loading...</div>
@@ -1912,7 +1912,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       <div class="lb-mode-tabs">
         <button class="lb-tab active" onclick="switchLbTab('classic')">Classic</button>
         <button class="lb-tab" onclick="switchLbTab('timed')">Timed</button>
-        <button class="lb-tab" onclick="switchLbTab('zen')">Zen</button>
+        
         <button class="lb-tab" onclick="switchLbTab('daily')">Daily</button>
       </div>
     </div>
@@ -3780,6 +3780,7 @@ function openModeDialog(mode){
 function closeModeDialog(e){
   if(e&&e.target!==document.getElementById('mode-dialog-backdrop'))return;
   document.getElementById('mode-dialog-backdrop').classList.remove('open');
+  document.getElementById('mode-select-sheet').classList.add('open');
 }
 
 function confirmPlayMode(){
@@ -4212,8 +4213,18 @@ function openLeaderboard(submitScore, submitMode){
   // Show submit area if we have a score to submit
   const submitArea = document.getElementById('lb-submit-area');
   if(pendingLbScore > 0){
-    submitArea.classList.add('show');
-    document.getElementById('lb-name-input').value = playerName || generatePlayerName();
+    if(playerName){
+      // Already have a name — auto-submit silently, no need to show input
+      submitArea.classList.remove('show');
+      if(window.submitLeaderboardScore){
+        window.submitLeaderboardScore(playerName, pendingLbScore, pendingLbMode);
+      }
+      pendingLbScore = 0;
+    } else {
+      // First time — show name input
+      submitArea.classList.add('show');
+      document.getElementById('lb-name-input').value = generatePlayerName();
+    }
   } else {
     submitArea.classList.remove('show');
   }
