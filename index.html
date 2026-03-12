@@ -1003,6 +1003,38 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   .home-quick-sub{font-size:.28rem;}
 }
 
+#intro-screen{
+  justify-content:flex-start !important;
+  overflow-y:auto !important;
+  padding:8px 12px calc(12px + env(safe-area-inset-bottom)) !important;
+}
+#intro-home-stack{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:center;
+  padding-top:2px;
+}
+#home-banner-spacer{
+  width:100%;
+  height:0;
+  flex-shrink:0;
+  pointer-events:none;
+  transition:height .18s ease;
+}
+body.home-banner-visible #home-banner-spacer{
+  height:calc(74px + env(safe-area-inset-bottom));
+}
+body.home-banner-visible #intro-screen{
+  padding-bottom:calc(12px + env(safe-area-inset-bottom)) !important;
+}
+@media (max-width:420px){
+  body.home-banner-visible #home-banner-spacer{
+    height:calc(82px + env(safe-area-inset-bottom));
+  }
+}
+
 
 /* ══ LANDSCAPE / TV / XBOX ════════════════════════════════════════════════ */
 @media (min-width: 600px) {
@@ -1667,6 +1699,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   <style>@keyframes ldSpin{to{transform:rotate(360deg)}}</style>
 </div>
 
+<div id="studio-splash" style="position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);z-index:9997;opacity:0;transition:opacity .35s ease;pointer-events:none;padding:24px;text-align:center;">
+  <div style="width:min(86vw,420px);padding:28px 24px;border-radius:24px;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.22);box-shadow:0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,215,255,0.62);margin-bottom:12px;">Presented by</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(1.4rem,7vw,2.4rem);line-height:1.05;letter-spacing:.04em;background:linear-gradient(135deg,#a78bfa 0%,#7c5cfc 55%,#00e5cc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;">Three Lantern Studios</div>
+    <div style="width:84px;height:3px;border-radius:999px;margin:0 auto 12px;background:linear-gradient(90deg,rgba(167,139,250,0),rgba(167,139,250,.95),rgba(0,229,204,.95),rgba(0,229,204,0));"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,215,255,0.56);">A Lexitris presentation</div>
+  </div>
+</div>
+
 <!-- High score celebration overlay -->
 <div id="hs-celebration">
   <canvas id="hs-confetti-cv"></canvas>
@@ -1784,8 +1825,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
-  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
+<div id="intro-screen" class="lx-screen open">
+  <div id="intro-home-stack">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -1862,6 +1903,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <div class="home-quick-sub">Lifetime<br>progress</div>
       </button>
     </div>
+
+    <div id="home-banner-spacer" aria-hidden="true"></div>
 
   </div>
 </div>
@@ -3496,6 +3539,7 @@ document.addEventListener('visibilitychange', ()=>{
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
   // ads removed
+  pendingLbToken = currentRunLbToken || pendingLbToken || makeLeaderboardRunToken();
   gameOver=true;cancelAnimationFrame(animId);
   screenShake();
   savedState=null;
@@ -3575,7 +3619,7 @@ function endGame(){
     </div>
     <div class="go-actions">
       <button class="obtn obtn-primary full" onclick="openShare()">📤 Share</button>
-      <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}')">🏆 Leaderboard</button>
+      <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}','${pendingLbToken}')">🏆 Leaderboard</button>
       <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
     </div>
   `;
@@ -3626,6 +3670,17 @@ function loadSavedMeta(){
   }catch(e){return null;}
 }
 
+function setHomeBannerVisible(visible){
+  document.body.classList.toggle('home-banner-visible', !!visible);
+  try{
+    if(visible){
+      window.Android && window.Android.showBanner && window.Android.showBanner();
+    }else{
+      window.Android && window.Android.hideBanner && window.Android.hideBanner();
+    }
+  }catch(e){}
+}
+
 // ── Intro screen ──────────────────────────────────────────────────────────
 function showIntro(){
   const meta=loadSavedMeta();
@@ -3644,6 +3699,7 @@ function showIntro(){
   // Continue button visibility handled in openModeDialog (zen only)
 
   document.getElementById('intro-screen').classList.add('open');
+  setHomeBannerVisible(true);
   updateHomeStats();
   loadHomeLb(currentHomeLbMode);
   maybeShowOnboard();
@@ -3666,11 +3722,13 @@ function showModeSelect(){
 }
 
 function openModeSelectSheet(){
+  setHomeBannerVisible(false);
   document.getElementById('mode-select-sheet').classList.add('open');
 }
 
 function closeModeSelectSheet(){
   document.getElementById('mode-select-sheet').classList.remove('open');
+  if(document.getElementById('intro-screen').classList.contains('open')) setHomeBannerVisible(true);
 }
 
 function updateHomeStats(){
@@ -3974,6 +4032,9 @@ function updateSpeed(){
 
 // ── Updated startGame ─────────────────────────────────────────────────────
 function startGame(){
+  setHomeBannerVisible(false);
+  currentRunLbToken = makeLeaderboardRunToken();
+  pendingLbToken = '';
   resetTouchState();
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
@@ -4345,17 +4406,37 @@ async function loadHomeLb(mode){
 window.addEventListener('load', () => {
   setTimeout(()=>loadHomeLb('daily'), 800);
   setTimeout(updateHomeStats, 200);
-  // Banner removed from home screen
-  try{
-    if(window.Android && window.Android.showBanner) window.Android.showBanner();
-  }catch(e){}
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
 let currentLbMode = 'classic';
 let pendingLbScore = 0;
 let pendingLbMode = '';
+let pendingLbToken = '';
+let currentRunLbToken = '';
 let playerName = '';
+
+function makeLeaderboardRunToken(){
+  return 'lb_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,10);
+}
+function getSubmittedLeaderboardTokens(){
+  try{ return JSON.parse(localStorage.getItem('lexitris_lb_submitted_tokens')||'[]'); }catch(e){ return []; }
+}
+function saveSubmittedLeaderboardTokens(tokens){
+  try{ localStorage.setItem('lexitris_lb_submitted_tokens', JSON.stringify(tokens.slice(-80))); }catch(e){}
+}
+function isLeaderboardTokenSubmitted(token){
+  if(!token) return false;
+  return getSubmittedLeaderboardTokens().includes(token);
+}
+function markLeaderboardTokenSubmitted(token){
+  if(!token) return;
+  const tokens = getSubmittedLeaderboardTokens();
+  if(!tokens.includes(token)){
+    tokens.push(token);
+    saveSubmittedLeaderboardTokens(tokens);
+  }
+}
 
 const NAME_ADJS = ['Swift','Bold','Clever','Sly','Lucky','Brave','Quick','Sharp','Sneaky','Jolly','Grumpy','Calm','Witty','Loud','Quiet','Fierce','Gentle','Wild','Cool','Odd'];
 const NAME_NOUNS = ['Fox','Owl','Bear','Wolf','Hawk','Lynx','Frog','Crab','Mole','Wasp','Newt','Ibis','Dingo','Finch','Stoat','Vole','Wren','Puffin','Gecko','Moose'];
@@ -4378,20 +4459,26 @@ try {
   }
 } catch(e){ playerName = generatePlayerName(); }
 
-function openLeaderboard(submitScore, submitMode){
+function openLeaderboard(submitScore, submitMode, submitToken){
   pendingLbScore = submitScore || 0;
   pendingLbMode = submitMode || gameMode;
+  pendingLbToken = submitToken || pendingLbToken || currentRunLbToken || '';
   currentLbMode = pendingLbMode;
 
   const submitArea = document.getElementById('lb-submit-area');
   const savedName = localStorage.getItem('lexitris_player_name');
+  const alreadySubmitted = pendingLbScore > 0 && isLeaderboardTokenSubmitted(pendingLbToken);
 
-  if(pendingLbScore > 0 && savedName){
+  if(alreadySubmitted){
+    pendingLbScore = 0;
+    submitArea.classList.remove('show');
+  } else if(pendingLbScore > 0 && savedName){
     // Name already saved — auto-submit silently, skip the input UI
     submitArea.classList.remove('show');
     (async ()=>{
       if(window.submitLeaderboardScore){
         await window.submitLeaderboardScore(savedName, pendingLbScore, pendingLbMode);
+        markLeaderboardTokenSubmitted(pendingLbToken);
       }
       pendingLbScore = 0;
       loadLeaderboard(currentLbMode);
@@ -4463,6 +4550,12 @@ function cleanName(n){
 }
 
 async function submitScore(){
+  if(pendingLbScore <= 0 || isLeaderboardTokenSubmitted(pendingLbToken)){
+    document.getElementById('lb-submit-area').classList.remove('show');
+    pendingLbScore = 0;
+    loadLeaderboard(currentLbMode);
+    return;
+  }
   const nameInput = document.getElementById('lb-name-input');
   const raw = (nameInput.value || playerName).trim();
   const name = cleanName(raw) || playerName || generatePlayerName();
@@ -4473,6 +4566,7 @@ async function submitScore(){
   btn.disabled = true;
   if(window.submitLeaderboardScore){
     await window.submitLeaderboardScore(name, pendingLbScore, pendingLbMode);
+    markLeaderboardTokenSubmitted(pendingLbToken);
   }
   pendingLbScore = 0;
   document.getElementById('lb-submit-area').classList.remove('show');
@@ -4573,6 +4667,24 @@ function showToast(msg){
   el._t=setTimeout(()=>el.style.opacity='0',2800);
 }
 
+// ── Studio splash ─────────────────────────────────────────────────────────
+let studioSplashShown = false;
+function showStudioSplash(next){
+  if(studioSplashShown){ if(typeof next==='function') next(); return; }
+  studioSplashShown = true;
+  const splash = document.getElementById('studio-splash');
+  if(!splash){ if(typeof next==='function') next(); return; }
+  splash.style.display = 'flex';
+  requestAnimationFrame(()=>{ splash.style.opacity = '1'; });
+  setTimeout(()=>{
+    splash.style.opacity = '0';
+    setTimeout(()=>{
+      splash.style.display = 'none';
+      if(typeof next==='function') next();
+    }, 360);
+  }, 1650);
+}
+
 // ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
 // AdMob calls are inlined directly into endGame/startGame/showIntro below
 
@@ -4583,9 +4695,11 @@ window.addEventListener('load',()=>{
     loadAdsRemovedState();
     try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
     initDailyMode();
-    showIntro();
     const ls=document.getElementById('loading-screen');
     if(ls) ls.style.display='none';
+    showStudioSplash(()=>{
+      showIntro();
+    });
   } catch(err) {
     // Show error on loading screen for debugging
     const ls=document.getElementById('loading-screen');
