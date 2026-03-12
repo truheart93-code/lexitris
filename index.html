@@ -776,6 +776,58 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .hsr.top{color:#a78bfa;font-weight:700;}
 .hsr .hs{color:#f5a623;font-weight:700;}
 
+
+/* Compact revive / second chance card */
+.revive-card{
+  width:min(300px,88vw);
+  margin:12px 0 8px;
+  padding:12px 12px 10px;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(74,222,128,0.12),rgba(74,222,128,0.05));
+  border:1px solid rgba(74,222,128,0.28);
+  box-shadow:0 10px 28px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.revive-kicker{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.45rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(180,255,210,0.8);text-align:center;margin-bottom:4px;
+}
+.revive-title{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:.95rem;letter-spacing:.08em;text-align:center;color:#eafff0;
+  margin-bottom:4px;
+}
+.revive-sub{
+  font-family:'Nunito',sans-serif;font-weight:700;
+  font-size:.56rem;line-height:1.35;text-align:center;
+  color:rgba(220,255,232,0.8);margin-bottom:8px;
+}
+.revive-perks{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;}
+.revive-perk{
+  padding:6px 8px;border-radius:999px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(74,222,128,0.18);
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.5rem;letter-spacing:.04em;
+  color:#b9f7c7;
+}
+.revive-btn{
+  width:100%;margin-top:0 !important;
+  background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
+  box-shadow:0 5px 0 rgba(12,92,43,0.9),0 0 18px rgba(74,222,128,0.22);
+}
+.revive-btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(12,92,43,0.9);}
+.go-actions{width:min(300px,88vw);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.go-actions .obtn{width:100%;margin-top:0;padding:12px 14px;font-size:.75rem;letter-spacing:.08em;}
+.go-actions .obtn.full{grid-column:1 / -1;}
+@media(max-width:400px){
+  .revive-card{width:min(286px,90vw);padding:10px 10px 9px;margin:10px 0 6px;}
+  .revive-title{font-size:.86rem;}
+  .revive-sub{font-size:.52rem;}
+  .revive-perk{font-size:.46rem;padding:5px 7px;}
+  .go-actions{width:min(286px,90vw);gap:7px;}
+  .go-actions .obtn{font-size:.69rem;padding:11px 12px;}
+  .hs-wrap{width:min(286px,90vw);}
+}
+
 /* ── Settings / Pause overlay ── */
 #settings-backdrop{
   position:fixed;inset:0;
@@ -2142,6 +2194,7 @@ let lifetimeStats={
 let hallOfFame=[];
 // Session tracking
 let sessionWords=0, sessionBestCombo=1, sessionBestWord='', sessionBestWordPts=0;
+let reviveUsed=false, revivePending=false, reviveGranting=false;
 // Bonus letters on board: {r,c,type} — 'wild','x2','bomb'
 let bonusCells={};
 // Animation state for row-clear drop
@@ -3353,6 +3406,93 @@ document.getElementById('btn-pause').addEventListener('click',togglePause);
 // Keyboard pause
 document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key==='P')togglePause();});
 
+function canOfferRevive(){
+  return !reviveUsed && !adsRemoved && gameMode!=='daily' && gameMode!=='zen' && score>0;
+}
+
+function getTopOccupiedRows(limit){
+  const rows=[];
+  for(let r=0;r<ROWS;r++){
+    if(grid[r].some(Boolean)) rows.push(r);
+    if(rows.length>=limit) break;
+  }
+  return rows;
+}
+
+function getReviveRowsToClear(){
+  const occupied=getTopOccupiedRows(ROWS);
+  if(!occupied.length) return [];
+  const stackHeight = ROWS - occupied[0];
+  let target = stackHeight >= 10 ? 3 : stackHeight >= 7 ? 2 : 1;
+  target = Math.min(target, occupied.length);
+  return occupied.slice(0, target);
+}
+
+function clearReviveRows(rows){
+  if(!rows.length) return 0;
+  rows.forEach(r=>{
+    for(let c=0;c<COLS;c++) grid[r][c]=null;
+    flashRow(r);
+  });
+  return rows.length;
+}
+
+function grantRevive(){
+  if(reviveGranting || !revivePending) return;
+  reviveGranting=true;
+  revivePending=false;
+  reviveUsed=true;
+  const cleared = clearReviveRows(getReviveRowsToClear());
+  const ov=document.getElementById('overlay');
+  if(ov) ov.style.display='none';
+  gameOver=false;paused=false;
+  document.getElementById('settings-backdrop').classList.remove('open');
+  document.getElementById('btn-pause').textContent='⏸';
+  document.getElementById('combo-badge').classList.remove('show');
+  document.getElementById('cw').classList.remove('danger-pulse');
+  document.getElementById('danger-bar').style.background='transparent';
+  resetTouchState();
+  falling=null;
+  spawnFalling();
+  lastDropT=performance.now();
+  animId=requestAnimationFrame(loop);
+  saveState();
+  playStart();
+  hapticMed();
+  showToast(cleared>1 ? `Second chance! Cleared ${cleared} danger rows.` : 'Second chance! Cleared 1 danger row.');
+  reviveGranting=false;
+}
+
+function requestRevive(){
+  if(!canOfferRevive() || revivePending) return;
+  revivePending=true;
+  showToast('Finish the ad to continue');
+  try{
+    if(window.Android && window.Android.showRewarded){
+      AdMob.showRewarded(()=>grantRevive());
+      return;
+    }
+    if(window.Android && window.Android.showInterstitial){
+      window.Android.showInterstitial();
+      setTimeout(()=>{ if(revivePending) grantRevive(); }, 900);
+      return;
+    }
+  }catch(e){}
+  setTimeout(()=>{ if(revivePending) grantRevive(); }, 500);
+}
+
+window.addEventListener('focus', ()=>{
+  if(revivePending && !document.hidden && !(window.Android && window.Android.showRewarded)){
+    setTimeout(()=>{ if(revivePending) grantRevive(); }, 250);
+  }
+});
+
+document.addEventListener('visibilitychange', ()=>{
+  if(revivePending && document.visibilityState==='visible' && !(window.Android && window.Android.showRewarded)){
+    setTimeout(()=>{ if(revivePending) grantRevive(); }, 250);
+  }
+});
+
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
   // ads removed
@@ -3396,15 +3536,6 @@ function endGame(){
   // Update lifetime stats
   lifetimeStats.gamesPlayed++;
   maybeShowRate();
-  if(!adsRemoved){
-    AdMob._gamesBetweenInterstitials = (AdMob._gamesBetweenInterstitials || 0) + 1;
-    try{ localStorage.setItem('lexitris_interstitial_count', String(AdMob._gamesBetweenInterstitials)); }catch(e){}
-    if(AdMob._gamesBetweenInterstitials >= AdMob.INTERSTITIAL_EVERY){
-      AdMob._gamesBetweenInterstitials = 0;
-      try{ localStorage.setItem('lexitris_interstitial_count', '0'); }catch(e){}
-      requestInterstitialWithRetries('endGame');
-    }
-  }
   const today=new Date().toDateString();
   if(lifetimeStats.lastPlayDate===today){/* same day */}
   else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
@@ -3418,24 +3549,42 @@ function endGame(){
   }catch(e){}
   const isRecord=highScores.length>1&&highScores[0].score===score;
   const ov=document.getElementById('overlay');
+  const reviveRows = canOfferRevive() ? getReviveRowsToClear().length : 0;
+  const topHtml = highScores.slice(0,3).map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('');
   ov.innerHTML=`
     <h2>LEXITRIS</h2>
     ${isRecord?'<div class="record">✦ NEW HIGH SCORE ✦</div>':''}
     <div class="big-score">${score.toLocaleString()}</div>
     <p>Level ${level} · ${lines} lines · Best combo ×${combo}</p>
-    ${sessionBestWord?'<p style="margin-top:2px;font-size:.7rem;color:#a78bfa;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
+    ${sessionBestWord?'<p style="margin-top:2px;font-size:.68rem;color:#a78bfa;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
+    ${canOfferRevive()?`
+      <div class="revive-card">
+        <div class="revive-kicker">One Time Offer</div>
+        <div class="revive-title">SECOND CHANCE</div>
+        <div class="revive-sub">Watch an ad to keep this run alive and clear the danger at the top of the board.</div>
+        <div class="revive-perks">
+          <span class="revive-perk">Clear ${reviveRows} ${reviveRows===1?'row':'rows'}</span>
+          <span class="revive-perk">Resume instantly</span>
+          <span class="revive-perk">One use only</span>
+        </div>
+        <button class="obtn revive-btn" onclick="requestRevive()">▶ Watch Ad to Continue</button>
+      </div>`:''}
     <div class="hs-wrap">
       <h4>Top Scores</h4>
-      ${highScores.map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('')}
+      ${topHtml}
     </div>
-    <button class="obtn obtn-primary" onclick="openShare()">📤 Share</button>
-    <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}')">🏆 Leaderboard</button>
-    <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
+    <div class="go-actions">
+      <button class="obtn obtn-primary full" onclick="openShare()">📤 Share</button>
+      <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}')">🏆 Leaderboard</button>
+      <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
+    </div>
   `;
   ov.style.display='flex';
 }
 
 function goToIntro(){
+  revivePending=false;
+  reviveGranting=false;
   document.getElementById('overlay').style.display='none';
   showIntro();
 }
@@ -3457,6 +3606,7 @@ function saveState(){
     falling:falling?{...falling}:null,
     wordLog:[...wordLog],
     bag:[...bag],
+    reviveUsed,
   };
   // persist in localStorage so page refresh still shows continue
   try{
@@ -3493,8 +3643,6 @@ function showIntro(){
 
   // Continue button visibility handled in openModeDialog (zen only)
 
-  clearInterstitialRetries();
-  interstitialLikelyShowing = false;
   document.getElementById('intro-screen').classList.add('open');
   updateHomeStats();
   loadHomeLb(currentHomeLbMode);
@@ -3577,6 +3725,8 @@ function restoreState(){
   falling=s.falling?{...s.falling}:null;
   wordLog=[...s.wordLog];
   bag=[...s.bag];
+  reviveUsed=!!s.reviveUsed;
+  revivePending=false;reviveGranting=false;
   gameOver=false;paused=false;
   document.getElementById('s-score').textContent=score.toLocaleString();
   document.getElementById('s-level').textContent=level;
@@ -3824,14 +3974,13 @@ function updateSpeed(){
 
 // ── Updated startGame ─────────────────────────────────────────────────────
 function startGame(){
-  clearInterstitialRetries();
-  interstitialLikelyShowing = false;
   resetTouchState();
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
   score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
   if(gameMode==='daily') window._dailyRand=seededRand(dailySeed);
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
+  reviveUsed=false;revivePending=false;reviveGranting=false;
   consecutiveVowels=0;
 
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
@@ -4066,16 +4215,8 @@ const AdMob = {
     try{ window.Android && window.Android.hideBanner(); }catch(e){}
   },
   showInterstitial(){
-    if(adsRemoved)return false;
-    try{
-      if(window.Android && window.Android.showInterstitial){
-        window.Android.showInterstitial();
-        return true;
-      }
-    }catch(e){
-      console.log('[AdMob] showInterstitial failed', e);
-    }
-    return false;
+    if(adsRemoved)return;
+    try{ window.Android && window.Android.showInterstitial(); }catch(e){}
   },
   showRewarded(onEarned){
     AdMob._rewardCallback=onEarned||null;
@@ -4086,65 +4227,6 @@ const AdMob = {
   INTERSTITIAL_EVERY:3,
 };
 
-// ── Interstitial helpers ──────────────────────────────────────────────────
-let interstitialRetryTimers = [];
-let interstitialAttemptToken = 0;
-let interstitialLikelyShowing = false;
-
-function clearInterstitialRetries(){
-  interstitialRetryTimers.forEach(t=>clearTimeout(t));
-  interstitialRetryTimers = [];
-}
-
-function markInterstitialLikelyShowing(){
-  interstitialLikelyShowing = true;
-  clearInterstitialRetries();
-  setTimeout(()=>{ interstitialLikelyShowing = false; }, 4000);
-}
-
-function requestInterstitialWithRetries(reason='gameover'){
-  if(adsRemoved) return false;
-  if(interstitialLikelyShowing) return false;
-
-  const hasBridge = !!(window.Android && window.Android.showInterstitial);
-  console.log('[AdMob] interstitial request', { reason, hasBridge });
-
-  if(!hasBridge){
-    showToast('Interstitial bridge missing');
-    return false;
-  }
-
-  interstitialAttemptToken++;
-  const token = interstitialAttemptToken;
-  clearInterstitialRetries();
-
-  const delays = [250, 1400, 3200];
-  delays.forEach((delay, index) => {
-    const timer = setTimeout(() => {
-      if(token !== interstitialAttemptToken) return;
-      if(document.hidden) return;
-      if(interstitialLikelyShowing) return;
-
-      const ok = AdMob.showInterstitial();
-      console.log('[AdMob] interstitial attempt', index + 1, ok ? 'sent' : 'skipped');
-      if(ok && index === 0){
-        setTimeout(() => {
-          if(token === interstitialAttemptToken) markInterstitialLikelyShowing();
-        }, 250);
-      }
-    }, delay);
-    interstitialRetryTimers.push(timer);
-  });
-
-  return true;
-}
-
-window.forceInterstitial = function(){
-  adsRemoved = false;
-  try{ localStorage.removeItem('lexitris_no_ads'); }catch(e){}
-  requestInterstitialWithRetries('forced');
-};
-
 // ── Native → JS event handler ─────────────────────────────────────────────
 window.onAdEvent=function(event){
   switch(event){
@@ -4153,18 +4235,6 @@ window.onAdEvent=function(event){
         AdMob._rewardCallback();
         AdMob._rewardCallback=null;
       }
-      break;
-
-    case 'interstitial_opened':
-    case 'interstitial_shown':
-      markInterstitialLikelyShowing();
-      break;
-
-    case 'interstitial_closed':
-    case 'interstitial_dismissed':
-    case 'interstitial_failed':
-      interstitialLikelyShowing = false;
-      clearInterstitialRetries();
       break;
 
     case 'ads_removed':
@@ -4506,26 +4576,11 @@ function showToast(msg){
 // ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
 // AdMob calls are inlined directly into endGame/startGame/showIntro below
 
-document.addEventListener('visibilitychange', ()=>{
-  if(document.hidden){
-    clearInterstitialRetries();
-  }
-});
-
-window.addEventListener('blur', ()=>{
-  if(!document.hidden) clearInterstitialRetries();
-});
-
-
 window.addEventListener('load',()=>{
   try {
     document.getElementById('intro-screen').classList.remove('open');
     fillBag();initGrid();draw();
     loadAdsRemovedState();
-    try{
-      const savedInterstitialCount = parseInt(localStorage.getItem('lexitris_interstitial_count') || '0', 10);
-      AdMob._gamesBetweenInterstitials = Number.isFinite(savedInterstitialCount) ? Math.max(0, Math.min(savedInterstitialCount, AdMob.INTERSTITIAL_EVERY - 1)) : 0;
-    }catch(e){}
     try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
     initDailyMode();
     showIntro();
