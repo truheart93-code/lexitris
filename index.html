@@ -899,36 +899,19 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   width:100%;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:6px;
+  gap:8px;
 }
-#intro-screen.home-banner-safe{
-  justify-content:flex-start !important;
-  overflow-y:auto !important;
-  padding:6px 12px calc(78px + env(safe-area-inset-bottom)) !important;
-}
-#intro-screen.home-banner-safe > div{
-  width:min(100%,380px) !important;
-  gap:5px !important;
-  padding-top:0 !important;
-}
-#intro-screen.home-banner-safe .lx-logo{
-  font-size:clamp(1.55rem,6.2vw,2.45rem);
-}
-#intro-screen.home-banner-safe .lx-sub{
-  margin-bottom:2px;
-}
-
 .home-quick-card{
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(124,92,252,0.2);
   border-radius:14px;
-  padding:10px 8px;
+  padding:12px 10px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:5px;
-  min-height:82px;
+  gap:6px;
+  min-height:92px;
   color:#d0d8f0;
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
@@ -963,7 +946,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   text-align:center;
 }
 @media(max-width:360px){
-  .home-quick-card{min-height:76px;padding:9px 7px;}
+  .home-quick-card{min-height:84px;padding:10px 8px;}
   .home-quick-title{font-size:.42rem;}
   .home-quick-sub{font-size:.28rem;}
 }
@@ -1749,8 +1732,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open home-banner-safe" style="justify-content:flex-start;overflow-y:auto;padding:6px 12px calc(78px + env(safe-area-inset-bottom));">
-  <div style="width:min(100%,380px);display:flex;flex-direction:column;gap:5px;align-items:center;padding-top:0;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
+  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -1759,9 +1742,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
     <!-- Stats card -->
-    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
+    <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
       <!-- Daily Challenge strip -->
-      <div id="home-daily-strip" onclick="closeModeSelectSheet();openModeDialog('daily')" style="display:flex;align-items:center;gap:8px;padding-bottom:7px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:7px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+      <div id="home-daily-strip" onclick="closeModeSelectSheet();openModeDialog('daily')" style="display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
         <div id="home-daily-status-icon" style="font-size:1.5rem;line-height:1;flex-shrink:0;">📅</div>
         <div style="flex:1;min-width:0;">
           <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.62rem;color:#4ade80;text-transform:uppercase;letter-spacing:.08em;">Daily Challenge</div>
@@ -1789,16 +1772,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
     <!-- Play button -->
-    <button onclick="showModeSelect()" style="width:100%;padding:14px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.92rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 34px rgba(124,92,252,0.32);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
+    <button onclick="showModeSelect()" style="width:100%;padding:16px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
       ▶ &nbsp;Play
     </button>
 
     <!-- Mini leaderboard -->
-    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:10px 14px;">
-      <div style="text-align:center;margin-bottom:7px;">
+    <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
+      <div style="text-align:center;margin-bottom:8px;">
         <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
       </div>
-      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:7px;">
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
         <button class="lb-tab active" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
         <button class="lb-tab" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
         <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
@@ -1810,7 +1793,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     </div>
 
     <!-- Quick action cards -->
-    <div class="home-quick-grid" style="width:100%;margin-bottom:4px;">
+    <div class="home-quick-grid" style="width:100%;">
       <button class="home-quick-card" onclick="openHomeSettings()">
         <div class="home-quick-icon">⚙️</div>
         <div class="home-quick-title">Settings</div>
@@ -3413,6 +3396,15 @@ function endGame(){
   // Update lifetime stats
   lifetimeStats.gamesPlayed++;
   maybeShowRate();
+  if(!adsRemoved){
+    AdMob._gamesBetweenInterstitials = (AdMob._gamesBetweenInterstitials || 0) + 1;
+    try{ localStorage.setItem('lexitris_interstitial_count', String(AdMob._gamesBetweenInterstitials)); }catch(e){}
+    if(AdMob._gamesBetweenInterstitials >= AdMob.INTERSTITIAL_EVERY){
+      AdMob._gamesBetweenInterstitials = 0;
+      try{ localStorage.setItem('lexitris_interstitial_count', '0'); }catch(e){}
+      requestInterstitialWithRetries('endGame');
+    }
+  }
   const today=new Date().toDateString();
   if(lifetimeStats.lastPlayDate===today){/* same day */}
   else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
@@ -3501,8 +3493,9 @@ function showIntro(){
 
   // Continue button visibility handled in openModeDialog (zen only)
 
+  clearInterstitialRetries();
+  interstitialLikelyShowing = false;
   document.getElementById('intro-screen').classList.add('open');
-  AdMob.showBanner();
   updateHomeStats();
   loadHomeLb(currentHomeLbMode);
   maybeShowOnboard();
@@ -3597,7 +3590,6 @@ function restoreState(){
   document.getElementById('btn-pause').textContent='⏸';
   lastDropT=performance.now();
   animId=requestAnimationFrame(loop);
-  AdMob.hideBanner();
   playStart();
 }
 
@@ -3832,6 +3824,8 @@ function updateSpeed(){
 
 // ── Updated startGame ─────────────────────────────────────────────────────
 function startGame(){
+  clearInterstitialRetries();
+  interstitialLikelyShowing = false;
   resetTouchState();
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
@@ -4072,8 +4066,16 @@ const AdMob = {
     try{ window.Android && window.Android.hideBanner(); }catch(e){}
   },
   showInterstitial(){
-    if(adsRemoved)return;
-    try{ window.Android && window.Android.showInterstitial(); }catch(e){}
+    if(adsRemoved)return false;
+    try{
+      if(window.Android && window.Android.showInterstitial){
+        window.Android.showInterstitial();
+        return true;
+      }
+    }catch(e){
+      console.log('[AdMob] showInterstitial failed', e);
+    }
+    return false;
   },
   showRewarded(onEarned){
     AdMob._rewardCallback=onEarned||null;
@@ -4084,6 +4086,65 @@ const AdMob = {
   INTERSTITIAL_EVERY:3,
 };
 
+// ── Interstitial helpers ──────────────────────────────────────────────────
+let interstitialRetryTimers = [];
+let interstitialAttemptToken = 0;
+let interstitialLikelyShowing = false;
+
+function clearInterstitialRetries(){
+  interstitialRetryTimers.forEach(t=>clearTimeout(t));
+  interstitialRetryTimers = [];
+}
+
+function markInterstitialLikelyShowing(){
+  interstitialLikelyShowing = true;
+  clearInterstitialRetries();
+  setTimeout(()=>{ interstitialLikelyShowing = false; }, 4000);
+}
+
+function requestInterstitialWithRetries(reason='gameover'){
+  if(adsRemoved) return false;
+  if(interstitialLikelyShowing) return false;
+
+  const hasBridge = !!(window.Android && window.Android.showInterstitial);
+  console.log('[AdMob] interstitial request', { reason, hasBridge });
+
+  if(!hasBridge){
+    showToast('Interstitial bridge missing');
+    return false;
+  }
+
+  interstitialAttemptToken++;
+  const token = interstitialAttemptToken;
+  clearInterstitialRetries();
+
+  const delays = [250, 1400, 3200];
+  delays.forEach((delay, index) => {
+    const timer = setTimeout(() => {
+      if(token !== interstitialAttemptToken) return;
+      if(document.hidden) return;
+      if(interstitialLikelyShowing) return;
+
+      const ok = AdMob.showInterstitial();
+      console.log('[AdMob] interstitial attempt', index + 1, ok ? 'sent' : 'skipped');
+      if(ok && index === 0){
+        setTimeout(() => {
+          if(token === interstitialAttemptToken) markInterstitialLikelyShowing();
+        }, 250);
+      }
+    }, delay);
+    interstitialRetryTimers.push(timer);
+  });
+
+  return true;
+}
+
+window.forceInterstitial = function(){
+  adsRemoved = false;
+  try{ localStorage.removeItem('lexitris_no_ads'); }catch(e){}
+  requestInterstitialWithRetries('forced');
+};
+
 // ── Native → JS event handler ─────────────────────────────────────────────
 window.onAdEvent=function(event){
   switch(event){
@@ -4092,6 +4153,18 @@ window.onAdEvent=function(event){
         AdMob._rewardCallback();
         AdMob._rewardCallback=null;
       }
+      break;
+
+    case 'interstitial_opened':
+    case 'interstitial_shown':
+      markInterstitialLikelyShowing();
+      break;
+
+    case 'interstitial_closed':
+    case 'interstitial_dismissed':
+    case 'interstitial_failed':
+      interstitialLikelyShowing = false;
+      clearInterstitialRetries();
       break;
 
     case 'ads_removed':
@@ -4202,6 +4275,10 @@ async function loadHomeLb(mode){
 window.addEventListener('load', () => {
   setTimeout(()=>loadHomeLb('daily'), 800);
   setTimeout(updateHomeStats, 200);
+  // Banner removed from home screen
+  try{
+    if(window.Android && window.Android.showBanner) window.Android.showBanner();
+  }catch(e){}
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
@@ -4429,11 +4506,26 @@ function showToast(msg){
 // ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
 // AdMob calls are inlined directly into endGame/startGame/showIntro below
 
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){
+    clearInterstitialRetries();
+  }
+});
+
+window.addEventListener('blur', ()=>{
+  if(!document.hidden) clearInterstitialRetries();
+});
+
+
 window.addEventListener('load',()=>{
   try {
     document.getElementById('intro-screen').classList.remove('open');
     fillBag();initGrid();draw();
     loadAdsRemovedState();
+    try{
+      const savedInterstitialCount = parseInt(localStorage.getItem('lexitris_interstitial_count') || '0', 10);
+      AdMob._gamesBetweenInterstitials = Number.isFinite(savedInterstitialCount) ? Math.max(0, Math.min(savedInterstitialCount, AdMob.INTERSTITIAL_EVERY - 1)) : 0;
+    }catch(e){}
     try{ window.Android && window.Android.restorePurchases && window.Android.restorePurchases(); }catch(e){}
     initDailyMode();
     showIntro();
