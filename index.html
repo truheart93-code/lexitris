@@ -777,8 +777,95 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 @keyframes reviveSweep{0%{left:-38%;opacity:0;}20%{opacity:.85;}60%{left:112%;opacity:.2;}100%{left:112%;opacity:0;}}
 .go-actions{width:min(320px,88vw);display:flex;flex-direction:column;gap:10px;}
 .go-actions .obtn{width:100%;margin-top:0;}
-.hs-wrap{margin-top:12px;width:min(280px,86vw);
-  border-top:1px solid rgba(124,92,252,0.2);padding-top:10px;}
+
+/* Compact mobile-friendly game over / revive layout */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
+  display:none;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  z-index:50;
+  padding:0;
+}
+.overlay-content{
+  flex:1;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:18px 18px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.overlay-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:12px 16px calc(18px + env(safe-area-inset-bottom) + 70px);
+  border-top:1px solid rgba(124,92,252,0.12);
+  background:rgba(10,12,28,0.96);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.overlay-actions .obtn{
+  width:min(360px,100%);
+  margin:0 auto;
+  min-height:52px;
+}
+#overlay h2{margin-bottom:10px;font-size:clamp(1.15rem,5vw,1.9rem);line-height:1.05;text-align:center;}
+#overlay p{max-width:320px;line-height:1.35;margin-bottom:6px;}
+.big-score{margin:4px 0 8px;font-size:clamp(1.7rem,9vw,2.6rem);}
+.record{margin-bottom:6px;font-size:.66rem;}
+.revive-card{margin:10px 0 8px;width:min(340px,100%);padding:12px;border-radius:18px;}
+.revive-title{margin-bottom:6px;font-size:.48rem;}
+.revive-copy{margin-bottom:0;font-size:.82rem;line-height:1.2;}
+.revive-btn{margin-top:10px;min-height:54px;}
+.revive-btn.revive-pulse{animation:revivePulse 1.8s ease-in-out infinite;}
+.hs-wrap{margin-top:10px;width:min(320px,100%);padding-top:8px;}
+.hs-wrap h4{margin-bottom:4px;font-size:.42rem;}
+.hsr{padding:2px 0;font-size:.52rem;}
+
+/* Tighter leaderboard layout */
+#lb-panel{width:min(360px,94vw);max-height:min(88vh,760px);display:flex;flex-direction:column;}
+#lb-header{padding:12px 14px 8px;flex-shrink:0;}
+#lb-header h2{margin-bottom:6px;font-size:.74rem;}
+.lb-mode-tabs{gap:5px;}
+.lb-tab{padding:4px 10px;font-size:.58rem;}
+#lb-list{padding:10px 12px;overflow-y:auto;}
+.lb-row{padding:8px 10px;margin-bottom:5px;border-radius:11px;gap:8px;}
+.lb-rank{font-size:.78rem;width:20px;}
+.lb-name{font-size:.74rem;}
+.lb-score{font-size:.8rem;}
+#lb-actions{padding:0 12px 14px;gap:6px;flex-shrink:0;}
+#lb-submit-area{padding:10px 12px;border-radius:12px;}
+#lb-submit-area label{font-size:.62rem;margin-bottom:5px;}
+#lb-name-input{padding:9px 10px;font-size:.8rem;margin-bottom:6px;}
+#lb-submit-btn,#lb-close-btn{padding:11px;font-size:.78rem;}
+#lb-loading,.lb-empty{padding:18px 10px;font-size:.7rem;}
+
+/* Small-screen touch spacing */
+@media(max-width:430px){
+  .home-quick-grid{gap:6px;}
+  .home-quick-card{min-height:78px;padding:10px 8px;gap:4px;}
+  .home-quick-icon{font-size:1rem;}
+  .home-quick-title{font-size:.42rem;}
+  .home-quick-sub{display:none;}
+  .overlay-content{padding:14px 14px 8px;}
+  .overlay-actions{padding:10px 12px calc(16px + env(safe-area-inset-bottom) + 70px);gap:8px;}
+  .overlay-actions .obtn{min-height:50px;font-size:.82rem;letter-spacing:.08em;padding:12px 18px;}
+  #lb-panel{width:min(352px,94vw);border-radius:20px;}
+  #lb-header{padding:10px 12px 7px;}
+  #lb-list{padding:8px 10px;}
+  .lb-row{padding:7px 8px;gap:7px;}
+}
+
+@media(max-height:720px){
+  .overlay-content{padding-top:12px;}
+  .hs-wrap{margin-top:8px;}
+  .revive-card{padding:10px 12px;}
+}
 .hs-wrap h4{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:900;
   letter-spacing:.2em;color:rgba(200,215,255,0.65);text-transform:uppercase;text-align:center;margin-bottom:6px;}
 .hsr{display:flex;justify-content:space-between;font-size:.56rem;
@@ -3412,17 +3499,19 @@ function endGame(){
   const ov=document.getElementById('overlay');
   const canRevive = _goScore > 0 && !reviveUsed && _goMode !== 'daily' && _goMode !== 'zen';
   ov.innerHTML=`
-    <h2>LEXITRIS</h2>
-    ${isRecord?'<div class="record">✦ NEW HIGH SCORE ✦</div>':''}
-    <div class="big-score">${score.toLocaleString()}</div>
-    <p>Level ${level} · ${lines} lines · Best combo ×${combo}</p>
-    ${sessionBestWord?'<p style="margin-top:2px;font-size:.7rem;color:#a78bfa;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
-    ${canRevive ? '<div class="revive-card"><div class="revive-title">Second Chance</div><div class="revive-copy">Watch ad to continue the run</div><button id="revive-btn" class="obtn revive-btn revive-pulse" onclick="requestRevive()">Continue</button></div>' : ''}
-    <div class="hs-wrap">
-      <h4>Top Scores</h4>
-      ${highScores.slice(0,3).map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('')}
+    <div class="overlay-content">
+      <h2>LEXITRIS</h2>
+      ${isRecord?'<div class="record">✦ NEW HIGH SCORE ✦</div>':''}
+      <div class="big-score">${score.toLocaleString()}</div>
+      <p>Level ${level} · ${lines} lines · Best combo ×${combo}</p>
+      ${sessionBestWord?'<p style="margin-top:0;font-size:.66rem;color:#a78bfa;line-height:1.2;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
+      ${canRevive ? '<div class="revive-card"><div class="revive-title">Second Chance</div><div class="revive-copy">Watch ad to continue the run</div><button id="revive-btn" class="obtn revive-btn revive-pulse" onclick="requestRevive()">Continue</button></div>' : ''}
+      <div class="hs-wrap">
+        <h4>Top Scores</h4>
+        ${highScores.slice(0,3).map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('')}
+      </div>
     </div>
-    <div class="go-actions">
+    <div class="overlay-actions">
       <button class="obtn obtn-primary" onclick="openShare()">📤 Share</button>
       <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}','${_goSubmitKey}')">🏆 Leaderboard</button>
       <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
