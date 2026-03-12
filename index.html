@@ -767,6 +767,16 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   border:1px solid rgba(124,92,252,0.25);backdrop-filter:blur(8px);
   box-shadow:0 4px 0 rgba(0,0,0,0.3);}
 .obtn-ghost:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
+.revive-card{margin:14px 0 10px;width:min(320px,88vw);padding:14px 14px 12px;border-radius:16px;background:linear-gradient(180deg,rgba(74,222,128,0.12),rgba(74,222,128,0.05));border:1px solid rgba(74,222,128,0.28);box-shadow:0 10px 28px rgba(0,0,0,0.28),0 0 26px rgba(74,222,128,0.08),inset 0 1px 0 rgba(255,255,255,0.08);text-align:center;}
+.revive-title{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:rgba(220,255,235,0.72);margin-bottom:8px;}
+.revive-copy{font-family:'Nunito',sans-serif;font-size:.84rem;font-weight:900;line-height:1.28;color:#ecfff2;margin-bottom:10px;}
+.revive-btn{margin-top:0;width:100%;background:linear-gradient(135deg,#4ade80,#16a34a);box-shadow:0 5px 0 rgba(10,90,35,0.85),0 0 24px rgba(74,222,128,0.28);position:relative;overflow:hidden;}
+.revive-btn:before{content:'';position:absolute;inset:-40% auto -40% -35%;width:36%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.26),transparent);transform:skewX(-18deg);animation:reviveSweep 2.8s ease-in-out infinite;}
+.revive-btn.revive-pulse{animation:revivePulse 1.6s ease-in-out infinite;}
+@keyframes revivePulse{0%,100%{transform:translateY(0) scale(1);box-shadow:0 5px 0 rgba(10,90,35,0.85),0 0 18px rgba(74,222,128,0.20);}50%{transform:translateY(-1px) scale(1.02);box-shadow:0 6px 0 rgba(10,90,35,0.85),0 0 34px rgba(74,222,128,0.38);}}
+@keyframes reviveSweep{0%{left:-38%;opacity:0;}20%{opacity:.85;}60%{left:112%;opacity:.2;}100%{left:112%;opacity:0;}}
+.go-actions{width:min(320px,88vw);display:flex;flex-direction:column;gap:10px;}
+.go-actions .obtn{width:100%;margin-top:0;}
 .hs-wrap{margin-top:12px;width:min(280px,86vw);
   border-top:1px solid rgba(124,92,252,0.2);padding-top:10px;}
 .hs-wrap h4{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:900;
@@ -775,58 +785,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   padding:3px 0;border-bottom:1px solid rgba(124,92,252,0.1);color:rgba(200,215,255,0.72);}
 .hsr.top{color:#a78bfa;font-weight:700;}
 .hsr .hs{color:#f5a623;font-weight:700;}
-
-
-/* Compact revive / second chance card */
-.revive-card{
-  width:min(300px,88vw);
-  margin:12px 0 8px;
-  padding:12px 12px 10px;
-  border-radius:16px;
-  background:linear-gradient(180deg,rgba(74,222,128,0.12),rgba(74,222,128,0.05));
-  border:1px solid rgba(74,222,128,0.28);
-  box-shadow:0 10px 28px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.revive-kicker{
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.45rem;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(180,255,210,0.8);text-align:center;margin-bottom:4px;
-}
-.revive-title{
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:.95rem;letter-spacing:.08em;text-align:center;color:#eafff0;
-  margin-bottom:4px;
-}
-.revive-sub{
-  font-family:'Nunito',sans-serif;font-weight:700;
-  font-size:.56rem;line-height:1.35;text-align:center;
-  color:rgba(220,255,232,0.8);margin-bottom:8px;
-}
-.revive-perks{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap;}
-.revive-perk{
-  padding:6px 8px;border-radius:999px;
-  background:rgba(255,255,255,0.05);border:1px solid rgba(74,222,128,0.18);
-  font-family:'Nunito',sans-serif;font-weight:800;font-size:.5rem;letter-spacing:.04em;
-  color:#b9f7c7;
-}
-.revive-btn{
-  width:100%;margin-top:0 !important;
-  background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
-  box-shadow:0 5px 0 rgba(12,92,43,0.9),0 0 18px rgba(74,222,128,0.22);
-}
-.revive-btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(12,92,43,0.9);}
-.go-actions{width:min(300px,88vw);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
-.go-actions .obtn{width:100%;margin-top:0;padding:12px 14px;font-size:.75rem;letter-spacing:.08em;}
-.go-actions .obtn.full{grid-column:1 / -1;}
-@media(max-width:400px){
-  .revive-card{width:min(286px,90vw);padding:10px 10px 9px;margin:10px 0 6px;}
-  .revive-title{font-size:.86rem;}
-  .revive-sub{font-size:.52rem;}
-  .revive-perk{font-size:.46rem;padding:5px 7px;}
-  .go-actions{width:min(286px,90vw);gap:7px;}
-  .go-actions .obtn{font-size:.69rem;padding:11px 12px;}
-  .hs-wrap{width:min(286px,90vw);}
-}
 
 /* ── Settings / Pause overlay ── */
 #settings-backdrop{
@@ -1001,38 +959,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   .home-quick-card{min-height:84px;padding:10px 8px;}
   .home-quick-title{font-size:.42rem;}
   .home-quick-sub{font-size:.28rem;}
-}
-
-#intro-screen{
-  justify-content:flex-start !important;
-  overflow-y:auto !important;
-  padding:8px 12px calc(12px + env(safe-area-inset-bottom)) !important;
-}
-#intro-home-stack{
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  align-items:center;
-  padding-top:2px;
-}
-#home-banner-spacer{
-  width:100%;
-  height:0;
-  flex-shrink:0;
-  pointer-events:none;
-  transition:height .18s ease;
-}
-body.home-banner-visible #home-banner-spacer{
-  height:calc(74px + env(safe-area-inset-bottom));
-}
-body.home-banner-visible #intro-screen{
-  padding-bottom:calc(12px + env(safe-area-inset-bottom)) !important;
-}
-@media (max-width:420px){
-  body.home-banner-visible #home-banner-spacer{
-    height:calc(82px + env(safe-area-inset-bottom));
-  }
 }
 
 
@@ -1816,8 +1742,8 @@ body.home-banner-visible #intro-screen{
 </div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open">
-  <div id="intro-home-stack">
+<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
+  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -1859,20 +1785,8 @@ body.home-banner-visible #intro-screen{
     <button onclick="showModeSelect()" style="width:100%;padding:16px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.12em;color:#fff;cursor:pointer;background:linear-gradient(135deg,#7c5cfc,#5533cc);box-shadow:0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35);-webkit-tap-highlight-color:transparent;transition:transform .08s,box-shadow .08s;text-transform:uppercase;" onpointerdown="this.style.transform='translateY(3px)';this.style.boxShadow='0 2px 0 rgba(40,20,120,0.8),0 0 20px rgba(124,92,252,0.2)'" onpointerup="this.style.transform='';this.style.boxShadow='0 5px 0 rgba(40,20,120,0.8),0 0 40px rgba(124,92,252,0.35)'">
       ▶ &nbsp;Play
     </button>
-
     <!-- Leaderboard shortcut -->
-    <div id="home-leaderboard-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
-      <div style="text-align:center;margin-bottom:8px;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:.1em;color:rgba(200,210,255,0.65);text-transform:uppercase;">🏆 Leaderboard</div>
-        <div style="margin-top:4px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.56rem;color:rgba(180,190,230,0.58);">Choose a mode, then open the full board.</div>
-      </div>
-      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;">
-        <button class="lb-tab active" id="home-lb-tab-daily" onclick="switchHomeLb('daily')" style="font-size:.52rem;padding:3px 7px;">Daily</button>
-        <button class="lb-tab" id="home-lb-tab-classic" onclick="switchHomeLb('classic')" style="font-size:.52rem;padding:3px 7px;">Classic</button>
-        <button class="lb-tab" id="home-lb-tab-timed" onclick="switchHomeLb('timed')" style="font-size:.52rem;padding:3px 7px;">Timed</button>
-      </div>
-      <button onclick="openLeaderboard(0, currentHomeLbMode)" style="width:100%;padding:11px 12px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.72rem;letter-spacing:.05em;color:#fff;background:linear-gradient(135deg,#7c5cfc,#5533cc);border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 4px 0 rgba(40,20,120,0.8);">Open Leaderboard</button>
-    </div>
+    <button onclick="openLeaderboard(0, currentHomeLbMode)" style="width:100%;padding:12px 14px;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.72rem;letter-spacing:.12em;color:#e8ebff;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);text-transform:uppercase;">🏆 Open Leaderboard</button>
 
     <!-- Quick action cards -->
     <div class="home-quick-grid" style="width:100%;">
@@ -1892,8 +1806,6 @@ body.home-banner-visible #intro-screen{
         <div class="home-quick-sub">Lifetime<br>progress</div>
       </button>
     </div>
-
-    <div id="home-banner-spacer" aria-hidden="true"></div>
 
   </div>
 </div>
@@ -2210,6 +2122,9 @@ window.addEventListener('orientationchange',()=>setTimeout(resizeCv,150));
 let grid,falling,nextLetter,lastCol=null;
 let score=0,bestScore=0,level=1,lines=0,combo=1;
 let gameOver=false,paused=false;
+let reviveUsed=false, revivePending=false, reviveResumeOnFocus=false;
+let lastGameOverSubmitKey='';
+const submittedLeaderboardKeys=new Set();
 let dropMs=1000,lastDropT=0,animId=null;
 let wordLog=[],highScores=[];
 // Per-mode best scores
@@ -2226,7 +2141,6 @@ let lifetimeStats={
 let hallOfFame=[];
 // Session tracking
 let sessionWords=0, sessionBestCombo=1, sessionBestWord='', sessionBestWordPts=0;
-let reviveUsed=false, revivePending=false, reviveGranting=false;
 // Bonus letters on board: {r,c,type} — 'wild','x2','bomb'
 let bonusCells={};
 // Animation state for row-clear drop
@@ -3438,97 +3352,9 @@ document.getElementById('btn-pause').addEventListener('click',togglePause);
 // Keyboard pause
 document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key==='P')togglePause();});
 
-function canOfferRevive(){
-  return !reviveUsed && !adsRemoved && gameMode!=='daily' && gameMode!=='zen' && score>0;
-}
-
-function getTopOccupiedRows(limit){
-  const rows=[];
-  for(let r=0;r<ROWS;r++){
-    if(grid[r].some(Boolean)) rows.push(r);
-    if(rows.length>=limit) break;
-  }
-  return rows;
-}
-
-function getReviveRowsToClear(){
-  const occupied=getTopOccupiedRows(ROWS);
-  if(!occupied.length) return [];
-  const stackHeight = ROWS - occupied[0];
-  let target = stackHeight >= 10 ? 3 : stackHeight >= 7 ? 2 : 1;
-  target = Math.min(target, occupied.length);
-  return occupied.slice(0, target);
-}
-
-function clearReviveRows(rows){
-  if(!rows.length) return 0;
-  rows.forEach(r=>{
-    for(let c=0;c<COLS;c++) grid[r][c]=null;
-    flashRow(r);
-  });
-  return rows.length;
-}
-
-function grantRevive(){
-  if(reviveGranting || !revivePending) return;
-  reviveGranting=true;
-  revivePending=false;
-  reviveUsed=true;
-  const cleared = clearReviveRows(getReviveRowsToClear());
-  const ov=document.getElementById('overlay');
-  if(ov) ov.style.display='none';
-  gameOver=false;paused=false;
-  document.getElementById('settings-backdrop').classList.remove('open');
-  document.getElementById('btn-pause').textContent='⏸';
-  document.getElementById('combo-badge').classList.remove('show');
-  document.getElementById('cw').classList.remove('danger-pulse');
-  document.getElementById('danger-bar').style.background='transparent';
-  resetTouchState();
-  falling=null;
-  spawnFalling();
-  lastDropT=performance.now();
-  animId=requestAnimationFrame(loop);
-  saveState();
-  playStart();
-  hapticMed();
-  showToast(cleared>1 ? `Second chance! Cleared ${cleared} danger rows.` : 'Second chance! Cleared 1 danger row.');
-  reviveGranting=false;
-}
-
-function requestRevive(){
-  if(!canOfferRevive() || revivePending) return;
-  revivePending=true;
-  showToast('Finish the ad to continue');
-  try{
-    if(window.Android && window.Android.showRewarded){
-      AdMob.showRewarded(()=>grantRevive());
-      return;
-    }
-    if(window.Android && window.Android.showInterstitial){
-      window.Android.showInterstitial();
-      setTimeout(()=>{ if(revivePending) grantRevive(); }, 900);
-      return;
-    }
-  }catch(e){}
-  setTimeout(()=>{ if(revivePending) grantRevive(); }, 500);
-}
-
-window.addEventListener('focus', ()=>{
-  if(revivePending && !document.hidden && !(window.Android && window.Android.showRewarded)){
-    setTimeout(()=>{ if(revivePending) grantRevive(); }, 250);
-  }
-});
-
-document.addEventListener('visibilitychange', ()=>{
-  if(revivePending && document.visibilityState==='visible' && !(window.Android && window.Android.showRewarded)){
-    setTimeout(()=>{ if(revivePending) grantRevive(); }, 250);
-  }
-});
-
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
   // ads removed
-  pendingLbToken = currentRunLbToken || pendingLbToken || makeLeaderboardRunToken();
   gameOver=true;cancelAnimationFrame(animId);
   screenShake();
   savedState=null;
@@ -3545,6 +3371,8 @@ function endGame(){
   if(isNewBest && score > 0) setTimeout(()=>showHighScoreCelebration(score), 600);
   // Store pending score for leaderboard button
   const _goScore = score, _goMode = gameMode;
+  const _goSubmitKey = 'run|' + _goMode + '|' + _goScore + '|' + level + '|' + lines + '|' + sessionWords + '|' + bestScore;
+  lastGameOverSubmitKey = _goSubmitKey;
   if(_goMode==='daily'){
     saveDailyResult(_goScore);
     dailyCompleted=true;
@@ -3582,42 +3410,98 @@ function endGame(){
   }catch(e){}
   const isRecord=highScores.length>1&&highScores[0].score===score;
   const ov=document.getElementById('overlay');
-  const reviveRows = canOfferRevive() ? getReviveRowsToClear().length : 0;
-  const topHtml = highScores.slice(0,3).map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('');
+  const canRevive = _goScore > 0 && !reviveUsed && _goMode !== 'daily' && _goMode !== 'zen';
   ov.innerHTML=`
     <h2>LEXITRIS</h2>
     ${isRecord?'<div class="record">✦ NEW HIGH SCORE ✦</div>':''}
     <div class="big-score">${score.toLocaleString()}</div>
     <p>Level ${level} · ${lines} lines · Best combo ×${combo}</p>
-    ${sessionBestWord?'<p style="margin-top:2px;font-size:.68rem;color:#a78bfa;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
-    ${canOfferRevive()?`
-      <div class="revive-card">
-        <div class="revive-kicker">One Time Offer</div>
-        <div class="revive-title">SECOND CHANCE</div>
-        <div class="revive-sub">Watch an ad to keep this run alive and clear the danger at the top of the board.</div>
-        <div class="revive-perks">
-          <span class="revive-perk">Clear ${reviveRows} ${reviveRows===1?'row':'rows'}</span>
-          <span class="revive-perk">Resume instantly</span>
-          <span class="revive-perk">One use only</span>
-        </div>
-        <button class="obtn revive-btn" onclick="requestRevive()">▶ Watch Ad to Continue</button>
-      </div>`:''}
+    ${sessionBestWord?'<p style="margin-top:2px;font-size:.7rem;color:#a78bfa;">Best word: <b>'+sessionBestWord+'</b> (+'+sessionBestWordPts+')</p>':''}
+    ${canRevive ? '<div class="revive-card"><div class="revive-title">Second Chance</div><div class="revive-copy">Watch ad to continue the run</div><button id="revive-btn" class="obtn revive-btn revive-pulse" onclick="requestRevive()">Continue</button></div>' : ''}
     <div class="hs-wrap">
       <h4>Top Scores</h4>
-      ${topHtml}
+      ${highScores.slice(0,3).map((h,i)=>`<div class="hsr ${i===0?'top':''}"><span>#${i+1}</span><span>Lv ${h.level}</span><span class="hs">${h.score.toLocaleString()}</span></div>`).join('')}
     </div>
     <div class="go-actions">
-      <button class="obtn obtn-primary full" onclick="openShare()">📤 Share</button>
-      <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}','${pendingLbToken}')">🏆 Leaderboard</button>
+      <button class="obtn obtn-primary" onclick="openShare()">📤 Share</button>
+      <button class="obtn obtn-ghost" onclick="openLeaderboard(${_goScore},'${_goMode}','${_goSubmitKey}')">🏆 Leaderboard</button>
       <button class="obtn obtn-ghost" onclick="goToIntro()">▶ Play Again</button>
     </div>
   `;
   ov.style.display='flex';
 }
 
+function requestRevive(){
+  if(reviveUsed || revivePending || gameMode==='daily' || gameMode==='zen' || gameOver!==true) return;
+  revivePending = true;
+  const btn = document.getElementById('revive-btn');
+  if(btn){ btn.disabled = true; btn.classList.remove('revive-pulse'); btn.textContent = 'Loading…'; }
+
+  const hasRewarded = !!(window.Android && window.Android.showRewarded);
+  const hasInterstitial = !!(window.Android && window.Android.showInterstitial);
+
+  if(hasRewarded){
+    try{
+      AdMob.showRewarded(()=>grantRevive());
+      return;
+    }catch(e){}
+  }
+
+  if(hasInterstitial){
+    reviveResumeOnFocus = true;
+    try{ AdMob.showInterstitial(); return; }catch(e){}
+  }
+
+  setTimeout(grantRevive, 250);
+}
+
+function grantRevive(){
+  if(!revivePending && !reviveResumeOnFocus) return;
+  revivePending = false;
+  reviveResumeOnFocus = false;
+  reviveUsed = true;
+
+  let occupiedRows = [];
+  for(let r=0;r<ROWS;r++){
+    if(grid[r].some(cell => cell)) occupiedRows.push(r);
+  }
+  let rowsToClear = 0;
+  if(occupiedRows.length >= 8) rowsToClear = 3;
+  else if(occupiedRows.length >= 4) rowsToClear = 2;
+  else rowsToClear = 1;
+  occupiedRows.slice(0, rowsToClear).forEach(r=>{
+    for(let c=0;c<COLS;c++) grid[r][c] = null;
+  });
+
+  falling = null;
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('settings-backdrop').classList.remove('open');
+  resetTouchState();
+  gameOver = false;
+  paused = false;
+  const pauseBtn = document.getElementById('btn-pause');
+  if(pauseBtn) pauseBtn.textContent = '⏸';
+  draw();
+  spawnFalling();
+  lastDropT = performance.now();
+  cancelAnimationFrame(animId);
+  animId = requestAnimationFrame(loop);
+  showToast('Second chance!');
+}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden) return;
+  if(reviveResumeOnFocus && gameOver){
+    setTimeout(()=>{ if(reviveResumeOnFocus && gameOver) grantRevive(); }, 180);
+  }
+});
+window.addEventListener('focus',()=>{
+  if(reviveResumeOnFocus && gameOver){
+    setTimeout(()=>{ if(reviveResumeOnFocus && gameOver) grantRevive(); }, 180);
+  }
+});
+
 function goToIntro(){
-  revivePending=false;
-  reviveGranting=false;
   document.getElementById('overlay').style.display='none';
   showIntro();
 }
@@ -3639,7 +3523,6 @@ function saveState(){
     falling:falling?{...falling}:null,
     wordLog:[...wordLog],
     bag:[...bag],
-    reviveUsed,
   };
   // persist in localStorage so page refresh still shows continue
   try{
@@ -3657,17 +3540,6 @@ function loadSavedMeta(){
     if(!s)return null;
     return JSON.parse(s);
   }catch(e){return null;}
-}
-
-function setHomeBannerVisible(visible){
-  document.body.classList.toggle('home-banner-visible', !!visible);
-  try{
-    if(visible){
-      window.Android && window.Android.showBanner && window.Android.showBanner();
-    }else{
-      window.Android && window.Android.hideBanner && window.Android.hideBanner();
-    }
-  }catch(e){}
 }
 
 // ── Intro screen ──────────────────────────────────────────────────────────
@@ -3688,7 +3560,6 @@ function showIntro(){
   // Continue button visibility handled in openModeDialog (zen only)
 
   document.getElementById('intro-screen').classList.add('open');
-  setHomeBannerVisible(true);
   updateHomeStats();
   maybeShowOnboard();
 }
@@ -3710,13 +3581,11 @@ function showModeSelect(){
 }
 
 function openModeSelectSheet(){
-  setHomeBannerVisible(false);
   document.getElementById('mode-select-sheet').classList.add('open');
 }
 
 function closeModeSelectSheet(){
   document.getElementById('mode-select-sheet').classList.remove('open');
-  if(document.getElementById('intro-screen').classList.contains('open')) setHomeBannerVisible(true);
 }
 
 function updateHomeStats(){
@@ -3771,9 +3640,11 @@ function restoreState(){
   falling=s.falling?{...s.falling}:null;
   wordLog=[...s.wordLog];
   bag=[...s.bag];
-  reviveUsed=!!s.reviveUsed;
-  revivePending=false;reviveGranting=false;
   gameOver=false;paused=false;
+  reviveUsed=false;
+  revivePending=false;
+  reviveResumeOnFocus=false;
+  lastGameOverSubmitKey='';
   document.getElementById('s-score').textContent=score.toLocaleString();
   document.getElementById('s-level').textContent=level;
   document.getElementById('s-lines').textContent=lines;
@@ -4020,16 +3891,16 @@ function updateSpeed(){
 
 // ── Updated startGame ─────────────────────────────────────────────────────
 function startGame(){
-  setHomeBannerVisible(false);
-  currentRunLbToken = makeLeaderboardRunToken();
-  pendingLbToken = '';
   resetTouchState();
   cancelAnimationFrame(animId);
   gameOver=false;paused=false;
+  reviveUsed=false;
+  revivePending=false;
+  reviveResumeOnFocus=false;
+  lastGameOverSubmitKey='';
   score=0;level=1;lines=0;combo=1;wordLog=[];lastCol=null;
   if(gameMode==='daily') window._dailyRand=seededRand(dailySeed);
   sessionWords=0;sessionBestCombo=1;sessionBestWord='';sessionBestWordPts=0;
-  reviveUsed=false;revivePending=false;reviveGranting=false;
   consecutiveVowels=0;
 
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
@@ -4357,51 +4228,25 @@ function saveDailyResult(score){
   }catch(e){}
 }
 
-// ── Home Leaderboard Shortcut ──────────────────────────────────────────────
+// ── Home Leaderboard Preview ───────────────────────────────────────────────
 let currentHomeLbMode = 'daily';
 
-function switchHomeLb(mode){
-  if(currentHomeLbMode === mode) return;
-  currentHomeLbMode = mode;
-  ['classic','timed','zen','daily'].forEach(m => {
-    const tab = document.getElementById('home-lb-tab-'+m);
-    if(tab) tab.classList.toggle('active', m === mode);
-  });
-}
+function switchHomeLb(mode){ currentHomeLbMode = mode || 'daily'; }
+function loadHomeLb(){}
 
 window.addEventListener('load', () => {
   setTimeout(updateHomeStats, 200);
+  try{
+    if(window.Android && window.Android.showBanner) window.Android.showBanner();
+  }catch(e){}
 });
 
 // ── Leaderboard ────────────────────────────────────────────────────────────
 let currentLbMode = 'classic';
 let pendingLbScore = 0;
 let pendingLbMode = '';
-let pendingLbToken = '';
-let currentRunLbToken = '';
+let pendingLbSubmissionKey = '';
 let playerName = '';
-
-function makeLeaderboardRunToken(){
-  return 'lb_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,10);
-}
-function getSubmittedLeaderboardTokens(){
-  try{ return JSON.parse(localStorage.getItem('lexitris_lb_submitted_tokens')||'[]'); }catch(e){ return []; }
-}
-function saveSubmittedLeaderboardTokens(tokens){
-  try{ localStorage.setItem('lexitris_lb_submitted_tokens', JSON.stringify(tokens.slice(-80))); }catch(e){}
-}
-function isLeaderboardTokenSubmitted(token){
-  if(!token) return false;
-  return getSubmittedLeaderboardTokens().includes(token);
-}
-function markLeaderboardTokenSubmitted(token){
-  if(!token) return;
-  const tokens = getSubmittedLeaderboardTokens();
-  if(!tokens.includes(token)){
-    tokens.push(token);
-    saveSubmittedLeaderboardTokens(tokens);
-  }
-}
 
 const NAME_ADJS = ['Swift','Bold','Clever','Sly','Lucky','Brave','Quick','Sharp','Sneaky','Jolly','Grumpy','Calm','Witty','Loud','Quiet','Fierce','Gentle','Wild','Cool','Odd'];
 const NAME_NOUNS = ['Fox','Owl','Bear','Wolf','Hawk','Lynx','Frog','Crab','Mole','Wasp','Newt','Ibis','Dingo','Finch','Stoat','Vole','Wren','Puffin','Gecko','Moose'];
@@ -4424,31 +4269,26 @@ try {
   }
 } catch(e){ playerName = generatePlayerName(); }
 
-function openLeaderboard(submitScore, submitMode, submitToken){
+function openLeaderboard(submitScore, submitMode, submitKey){
   pendingLbScore = submitScore || 0;
   pendingLbMode = submitMode || gameMode;
-  pendingLbToken = submitToken || pendingLbToken || currentRunLbToken || '';
+  pendingLbSubmissionKey = submitKey || (pendingLbMode + '|' + pendingLbScore + '|' + level + '|' + lines);
   currentLbMode = pendingLbMode;
 
   const submitArea = document.getElementById('lb-submit-area');
   const savedName = localStorage.getItem('lexitris_player_name');
-  const alreadySubmitted = pendingLbScore > 0 && isLeaderboardTokenSubmitted(pendingLbToken);
 
-  if(alreadySubmitted){
-    pendingLbScore = 0;
-    submitArea.classList.remove('show');
-  } else if(pendingLbScore > 0 && savedName){
-    // Name already saved — auto-submit silently, skip the input UI
+  if(pendingLbScore > 0 && savedName && !submittedLeaderboardKeys.has(pendingLbSubmissionKey)){
     submitArea.classList.remove('show');
     (async ()=>{
       if(window.submitLeaderboardScore){
         await window.submitLeaderboardScore(savedName, pendingLbScore, pendingLbMode);
-        markLeaderboardTokenSubmitted(pendingLbToken);
+        submittedLeaderboardKeys.add(pendingLbSubmissionKey);
       }
       pendingLbScore = 0;
       loadLeaderboard(currentLbMode);
     })();
-  } else if(pendingLbScore > 0){
+  } else if(pendingLbScore > 0 && !submittedLeaderboardKeys.has(pendingLbSubmissionKey)){
     // First time — show name entry
     submitArea.classList.add('show');
     document.getElementById('lb-name-input').value = playerName || generatePlayerName();
@@ -4515,23 +4355,18 @@ function cleanName(n){
 }
 
 async function submitScore(){
-  if(pendingLbScore <= 0 || isLeaderboardTokenSubmitted(pendingLbToken)){
-    document.getElementById('lb-submit-area').classList.remove('show');
-    pendingLbScore = 0;
-    loadLeaderboard(currentLbMode);
-    return;
-  }
   const nameInput = document.getElementById('lb-name-input');
   const raw = (nameInput.value || playerName).trim();
   const name = cleanName(raw) || playerName || generatePlayerName();
   playerName = name;
   try { localStorage.setItem('lexitris_player_name', name); } catch(e){}
+  if(submittedLeaderboardKeys.has(pendingLbSubmissionKey)) return;
   const btn = document.getElementById('lb-submit-btn');
   btn.textContent = 'Submitting...';
   btn.disabled = true;
   if(window.submitLeaderboardScore){
     await window.submitLeaderboardScore(name, pendingLbScore, pendingLbMode);
-    markLeaderboardTokenSubmitted(pendingLbToken);
+    submittedLeaderboardKeys.add(pendingLbSubmissionKey);
   }
   pendingLbScore = 0;
   document.getElementById('lb-submit-area').classList.remove('show');
