@@ -1547,142 +1547,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   -webkit-background-clip: unset !important;
   background-clip: unset !important;
 }
-
-/* ══ ADVENTURE MODE ══════════════════════════════════════════════════════ */
-#adv-map-header{
-  padding:10px 14px 8px;flex-shrink:0;width:100%;
-  background:rgba(10,12,28,0.95);
-  border-bottom:1px solid rgba(124,92,252,0.18);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  display:flex;align-items:center;justify-content:space-between;
-}
-#adv-map-scroll{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:20px 16px 40px;
-  display:flex;flex-direction:column;align-items:center;
-  -webkit-overflow-scrolling:touch;
-}
-#adv-map-path{
-  display:flex;flex-direction:column;align-items:center;
-  width:100%;max-width:360px;
-}
-.adv-connector{
-  width:3px;height:24px;
-  background:linear-gradient(180deg,rgba(124,92,252,0.25),rgba(124,92,252,0.08));
-  border-radius:2px;flex-shrink:0;
-}
-.adv-connector.done{background:linear-gradient(180deg,#7c5cfc,rgba(124,92,252,0.25));}
-.adv-node{
-  width:100%;display:flex;align-items:center;gap:12px;
-  padding:11px 14px;border-radius:16px;
-  border:1.5px solid rgba(124,92,252,0.18);
-  background:rgba(255,255,255,0.03);
-  cursor:pointer;
-  transition:transform .1s,border-color .15s,box-shadow .15s;
-  -webkit-tap-highlight-color:transparent;
-}
-.adv-node:active{transform:scale(0.97);}
-.adv-node.locked{opacity:.38;cursor:default;border-color:rgba(124,92,252,0.1);}
-.adv-node.unlocked{border-color:rgba(124,92,252,0.32);background:rgba(124,92,252,0.05);box-shadow:0 3px 16px rgba(124,92,252,0.1);}
-.adv-node.completed{border-color:rgba(74,222,128,0.28);background:rgba(74,222,128,0.04);}
-.adv-node.current{
-  border-color:rgba(124,92,252,0.65);background:rgba(124,92,252,0.1);
-  box-shadow:0 0 22px rgba(124,92,252,0.22),0 3px 16px rgba(124,92,252,0.14);
-  animation:advNodePulse 2.2s ease-in-out infinite;
-}
-@keyframes advNodePulse{
-  0%,100%{box-shadow:0 0 22px rgba(124,92,252,0.22),0 3px 16px rgba(124,92,252,0.14);}
-  50%{box-shadow:0 0 36px rgba(124,92,252,0.42),0 3px 22px rgba(124,92,252,0.24);}
-}
-.adv-node.type-word{border-color:rgba(245,166,35,0.3);background:rgba(245,166,35,0.04);}
-.adv-node.type-word.current{border-color:rgba(245,166,35,0.65);box-shadow:0 0 22px rgba(245,166,35,0.18);}
-.adv-node.type-speed{border-color:rgba(255,59,107,0.3);background:rgba(255,59,107,0.04);}
-.adv-node.type-speed.current{border-color:rgba(255,59,107,0.65);box-shadow:0 0 22px rgba(255,59,107,0.18);}
-.adv-node.type-boss{border-color:rgba(0,229,204,0.3);background:rgba(0,229,204,0.04);}
-.adv-node.type-boss.current{border-color:rgba(0,229,204,0.65);box-shadow:0 0 22px rgba(0,229,204,0.18);}
-.adv-node-badge{
-  width:42px;height:42px;border-radius:12px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:1.15rem;
-  background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.22);
-}
-.adv-node.completed .adv-node-badge{background:rgba(74,222,128,0.12);border-color:rgba(74,222,128,0.28);}
-.adv-node.type-word .adv-node-badge{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.22);}
-.adv-node.type-speed .adv-node-badge{background:rgba(255,59,107,0.1);border-color:rgba(255,59,107,0.22);}
-.adv-node.type-boss .adv-node-badge{background:rgba(0,229,204,0.1);border-color:rgba(0,229,204,0.22);}
-.adv-node-info{flex:1;min-width:0;}
-.adv-node-num{font-family:'Nunito',sans-serif;font-weight:700;font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,210,255,0.5);margin-bottom:1px;}
-.adv-node-name{font-family:'Nunito',sans-serif;font-weight:900;font-size:.72rem;color:#d0d8f0;line-height:1.2;}
-.adv-node-goals{font-family:'Space Mono',monospace;font-size:.36rem;color:rgba(180,190,230,0.5);margin-top:3px;line-height:1.7;}
-.adv-node-stars{display:flex;gap:2px;font-size:.68rem;flex-shrink:0;}
-
-/* Level intro card */
-#adv-level-card{
-  width:100%;max-width:390px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1.5px solid rgba(124,92,252,0.25);
-  border-radius:22px;padding:20px 18px;
-  animation:mdSlideUp .3s cubic-bezier(.22,.68,0,1.2);
-}
-.alc-eyebrow{font-family:'Nunito',sans-serif;font-weight:700;font-size:.45rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,210,255,0.55);margin-bottom:3px;}
-.alc-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:12px;letter-spacing:.04em;}
-.alc-goals{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
-.alc-goal{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.14);
-  border-radius:11px;padding:9px 12px;
-}
-.alc-goal-icon{font-size:.95rem;flex-shrink:0;}
-.alc-goal-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:.68rem;color:#d0d8f0;flex:1;}
-.alc-goal-val{font-family:'Nunito',sans-serif;font-weight:900;font-size:.78rem;color:#a78bfa;flex-shrink:0;}
-.alc-hint{font-family:'Space Mono',monospace;font-size:.4rem;color:rgba(200,210,255,0.5);margin-bottom:14px;line-height:1.7;padding:0 2px;}
-.alc-btn{
-  width:100%;padding:13px;border:none;border-radius:13px;
-  font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;
-  letter-spacing:.07em;cursor:pointer;margin-bottom:7px;
-  -webkit-tap-highlight-color:transparent;
-  transition:transform .08s,box-shadow .08s;
-}
-.alc-primary{background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;box-shadow:0 5px 0 rgba(40,20,120,0.8);}
-.alc-primary:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(40,20,120,0.8);}
-.alc-ghost{background:rgba(255,255,255,0.04);color:rgba(160,170,210,0.7);border:1px solid rgba(124,92,252,0.18);}
-
-/* Objective chips */
-.adv-chip{
-  flex-shrink:0;display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);
-  border-radius:8px;padding:4px 8px;
-  transition:border-color .2s,background .2s;
-}
-.adv-chip.done{border-color:rgba(74,222,128,0.5);background:rgba(74,222,128,0.08);}
-.adv-chip-icon{font-size:.68rem;}
-.adv-chip-label{font-family:'Nunito',sans-serif;font-weight:900;font-size:.46rem;color:rgba(200,210,255,0.6);white-space:nowrap;}
-.adv-chip.done .adv-chip-label{color:#4ade80;}
-.adv-chip-prog{font-family:'Nunito',sans-serif;font-weight:900;font-size:.5rem;color:#d0d8f0;white-space:nowrap;}
-.adv-chip.done .adv-chip-prog{color:#4ade80;}
-
-/* Result card */
-#adv-result-card{
-  width:100%;max-width:360px;
-  background:linear-gradient(160deg,#111428,#0e0d1f);
-  border:1.5px solid rgba(124,92,252,0.25);
-  border-radius:22px;padding:22px 18px;
-  text-align:center;
-  animation:mdSlideUp .3s cubic-bezier(.22,.68,0,1.2);
-}
-.arc-emoji{font-size:2.8rem;margin-bottom:6px;}
-.arc-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.25rem;color:#fff;margin-bottom:3px;}
-.arc-sub{font-family:'Space Mono',monospace;font-size:.42rem;color:rgba(200,210,255,0.55);margin-bottom:14px;}
-.arc-stars{font-size:1.7rem;letter-spacing:.1em;margin-bottom:14px;}
-.arc-goals{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;text-align:left;}
-.arc-goal-row{
-  display:flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,0.03);border-radius:9px;padding:7px 11px;
-}
-.arc-goal-icon{font-size:.82rem;flex-shrink:0;}
-.arc-goal-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:.62rem;color:rgba(200,210,255,0.65);flex:1;}
-.arc-goal-status{font-family:'Nunito',sans-serif;font-weight:900;font-size:.68rem;flex-shrink:0;}
-.arc-goal-status.pass{color:#4ade80;}
-.arc-goal-status.fail{color:#ff3b6b;}
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -2050,11 +1914,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <span class="lx-mode-icon">🧘</span>
         <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Zen</span><span class="lx-mode-desc">No game over · relax and spell</span></span>
         <span class="lx-mode-arrow">›</span>
-      </button>
-      <button class="lx-mode-btn" style="box-shadow:0 0 28px rgba(245,166,35,0.45),inset 0 0 20px rgba(245,166,35,0.06);border-color:rgba(245,166,35,0.4);background:rgba(245,166,35,0.07);color:#fff;" onclick="closeModeSelectSheet();openAdventureMap()">
-        <span class="lx-mode-icon">🗺️</span>
-        <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Adventure</span><span class="lx-mode-desc">10 levels · goals · stars · new!</span></span>
-        <span class="lx-mode-arrow" style="color:rgba(245,166,35,0.6);">›</span>
       </button>
     </div>
     <button onclick="closeModeSelectSheet()" style="width:100%;max-width:380px;margin-top:16px;padding:13px;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;color:rgba(160,170,210,0.6);background:transparent;border:1px solid rgba(124,92,252,0.15);cursor:pointer;-webkit-tap-highlight-color:transparent;">Cancel</button>
@@ -2518,7 +2377,6 @@ function checkWords(){
     if(pts>lifetimeStats.longestWordPts){lifetimeStats.longestWordPts=pts;lifetimeStats.longestWord=res.word;}
     sessionBestCombo=Math.max(sessionBestCombo,combo);
     lifetimeStats.bestCombo=Math.max(lifetimeStats.bestCombo,combo);
-    if(advActive) advOnWord(res.word);
     // Hall of fame
     hallOfFame.push({word:res.word,pts,date:new Date().toLocaleDateString()});
     hallOfFame.sort((a,b)=>b.pts-a.pts);
@@ -2576,7 +2434,6 @@ function updateHUD(){
   document.getElementById('s-combo').textContent='×'+combo;
   updateComboBadge();
   updateDangerBar();
-  if(advActive) advUpdateStrip();
 }
 
 function dirArrow(dr,dc){
@@ -2848,7 +2705,6 @@ function lock(){
   grid[falling.row][falling.col]=falling.l;
   playLand();
   falling=null;
-  if(advActive) advOnPieceLanded();
   checkWords();
   if(!gameOver){if(spawnFalling())saveState();}
 }
@@ -3505,8 +3361,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key=
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
   gameOver=true;cancelAnimationFrame(animId);
-  // Adventure mode handles its own end screen
-  if(advActive){ advOnGameOver(); return; }
   // Show interstitial every N games
   if(!adsRemoved){
     AdMob._gamesBetweenInterstitials++;
@@ -4232,7 +4086,11 @@ let adsRemoved=false;
 
 // Detect console/non-mobile platforms — no ads on Xbox, PlayStation, or desktop
 function isAdFreeplatform(){
-  if(window.location.search.includes('adfree=1')) return true;
+  const ua = navigator.userAgent || '';
+  if(/Xbox|XBOX/i.test(ua)) return true;           // Xbox PWA
+  if(/PlayStation|PSP|PS4|PS5/i.test(ua)) return true; // PlayStation
+  if(/Windows NT|Macintosh|Linux/i.test(ua) && !/Android/i.test(ua)) return true; // Desktop
+  if(window.location.search.includes('adfree=1')) return true; // Manual override
   return false;
 }
 
@@ -4613,325 +4471,6 @@ function showToast(msg){
   el._t=setTimeout(()=>el.style.opacity='0',2800);
 }
 
-// ══════════════════════════════════════════════════════════════════════════
-// ██████╗  ADVENTURE MODE
-// ══════════════════════════════════════════════════════════════════════════
-const ADV_LEVELS = [
-  {id:1,name:'First Words',type:'normal',icon:'📖',
-   goals:[{type:'score',target:300,label:'Score 300 pts',icon:'🏆'}],
-   stars:[300,420,600],hint:'Spell any 4-letter words to score. Longer words = more points.',dropMs:1100},
-  {id:2,name:'Line Breaker',type:'normal',icon:'🔷',
-   goals:[{type:'lines',target:2,label:'Clear 2 lines',icon:'🔷'}],
-   stars:[2,3,4],starType:'lines',hint:'Fill a complete row of 6 letters to clear it.',dropMs:1000},
-  {id:3,name:'Double Duty',type:'normal',icon:'⚡',
-   goals:[{type:'score',target:400,label:'Score 400 pts',icon:'🏆'},{type:'lines',target:2,label:'Clear 2 lines',icon:'🔷'}],
-   stars:[400,600,900],hint:'Both objectives required. Scoring and clearing compete — plan carefully.',dropMs:950},
-  {id:4,name:'Word Hunt',type:'word',icon:'🔍',
-   goals:[{type:'find_word',target:'QUIZ',label:'Find the word QUIZ',icon:'🔍'}],
-   stars:[1,1,1],starType:'word_hunt',hint:'Q·U·I·Z will appear in the bag. Spell QUIZ before the board fills!',dropMs:900,seedWord:'QUIZ'},
-  {id:5,name:'Pressure Test',type:'normal',icon:'📈',
-   goals:[{type:'score',target:600,label:'Score 600 pts',icon:'🏆'},{type:'lines',target:3,label:'Clear 3 lines',icon:'🔷'}],
-   stars:[600,850,1100],hint:'Speed is picking up. Stay composed and chain combos.',dropMs:900},
-  {id:6,name:'Line Machine',type:'normal',icon:'🏗️',
-   goals:[{type:'lines',target:5,label:'Clear 5 lines',icon:'🔷'}],
-   stars:[5,7,9],starType:'lines',hint:'Forget score. Pack letters tight and clear row after row.',dropMs:850},
-  {id:7,name:'Big Words',type:'word',icon:'✨',
-   goals:[{type:'score',target:800,label:'Score 800 pts',icon:'🏆'},{type:'long_word',target:6,label:'Find a 6-letter word',icon:'✨'}],
-   stars:[800,1000,1400],hint:'Long words score massive points. Hunt for 6-letter plays.',dropMs:820},
-  {id:8,name:'Speed Run',type:'speed',icon:'⚡',
-   goals:[{type:'survive',target:30,label:'Survive 30 pieces',icon:'⚡'}],
-   stars:[30,30,30],starType:'speed',hint:'MAX SPEED from piece 1. Survive 30 drops. No score needed — just don\'t die.',dropMs:180},
-  {id:9,name:'Triple Threat',type:'normal',icon:'💎',
-   goals:[{type:'score',target:500,label:'Score 500 pts',icon:'🏆'},{type:'lines',target:4,label:'Clear 4 lines',icon:'🔷'},{type:'long_word',target:5,label:'Find a 5-letter word',icon:'✨'}],
-   stars:[500,750,1000],hint:'Three objectives. All must be completed to pass.',dropMs:800},
-  {id:10,name:'Boss Level',type:'boss',icon:'👑',
-   goals:[{type:'score',target:1200,label:'Score 1200 pts',icon:'🏆'},{type:'lines',target:6,label:'Clear 6 lines',icon:'🔷'}],
-   stars:[1200,1600,2200],hint:'The hardest level. Both goals required. No revive. No mercy.',dropMs:750},
-];
-
-// Adventure state
-let advLevelProgress = {};
-let advCurrentIdx = 0;
-let advActive = false;
-let advPiecesDropped = 0;
-let advFoundWords = new Set();
-let advLongestWord = 0;
-
-try{ const s=localStorage.getItem('lexitris_adv_progress'); if(s) advLevelProgress=JSON.parse(s); }catch(e){}
-function advSaveProgress(){ try{ localStorage.setItem('lexitris_adv_progress',JSON.stringify(advLevelProgress)); }catch(e){} }
-
-// ── Map ────────────────────────────────────────────────────────────────────
-function openAdventureMap(){
-  advBuildMap();
-  document.getElementById('adv-map-screen').classList.add('open');
-}
-function closeAdventureMap(){
-  document.getElementById('adv-map-screen').classList.remove('open');
-}
-
-function advBuildMap(){
-  const path = document.getElementById('adv-map-path');
-  path.innerHTML = '';
-  let total = 0;
-  Object.values(advLevelProgress).forEach(p=>total+=p.stars||0);
-  document.getElementById('adv-stars-total').textContent = `★ ${total} / 30`;
-
-  ADV_LEVELS.forEach((lvl,idx)=>{
-    const prog = advLevelProgress[idx]||{stars:0};
-    const done = prog.stars > 0;
-    const unlocked = idx===0 || (advLevelProgress[idx-1]&&advLevelProgress[idx-1].stars>0);
-    const current = unlocked && !done;
-
-    if(idx>0){
-      const conn = document.createElement('div');
-      conn.className = 'adv-connector'+(done?' done':'');
-      path.appendChild(conn);
-    }
-
-    const node = document.createElement('div');
-    node.className = `adv-node type-${lvl.type}`+(done?' completed':unlocked?current?' current':' unlocked':' locked');
-
-    const starStr = done
-      ? '⭐'.repeat(prog.stars)+'☆'.repeat(3-prog.stars)
-      : '☆☆☆';
-
-    node.innerHTML = `
-      <div class="adv-node-badge">${done?'✅':unlocked?lvl.icon:'🔒'}</div>
-      <div class="adv-node-info">
-        <div class="adv-node-num">Level ${lvl.id} · ${lvl.type.toUpperCase()}</div>
-        <div class="adv-node-name">${lvl.name}</div>
-        <div class="adv-node-goals">${lvl.goals.map(g=>g.label).join(' &nbsp;·&nbsp; ')}</div>
-      </div>
-      <div class="${unlocked?'adv-node-stars':''}">
-        ${unlocked ? starStr : '<span style="font-size:.9rem;color:rgba(180,190,230,0.35)">🔒</span>'}
-      </div>`;
-
-    if(unlocked) node.addEventListener('click',()=>advOpenLevelIntro(idx));
-    path.appendChild(node);
-  });
-}
-
-// ── Level intro ────────────────────────────────────────────────────────────
-function advOpenLevelIntro(idx){
-  advCurrentIdx = idx;
-  const lvl = ADV_LEVELS[idx];
-  const prog = advLevelProgress[idx]||{stars:0};
-
-  document.getElementById('alc-eyebrow').textContent = `Level ${lvl.id} · ${lvl.type.charAt(0).toUpperCase()+lvl.type.slice(1)}`;
-  document.getElementById('alc-title').textContent = lvl.name;
-
-  document.getElementById('alc-goals').innerHTML = lvl.goals.map(g=>`
-    <div class="alc-goal">
-      <div class="alc-goal-icon">${g.icon}</div>
-      <div class="alc-goal-text">${g.label}</div>
-      <div class="alc-goal-val">${g.type==='find_word'?g.target:g.type==='long_word'?g.target+'+ letters':g.type==='survive'?g.target+' pieces':g.target}</div>
-    </div>`).join('');
-
-  const existing = prog.stars>0 ? `Your best: ${'⭐'.repeat(prog.stars)} &nbsp;·&nbsp; ` : '';
-  document.getElementById('alc-hint').innerHTML = `💡 ${lvl.hint}`;
-
-  document.getElementById('adv-level-intro').style.display='flex';
-}
-function closeAdvLevelIntro(){
-  document.getElementById('adv-level-intro').style.display='none';
-}
-
-// ── Start level (hooks into existing game engine) ─────────────────────────
-function advStartLevel(){
-  closeAdvLevelIntro();
-  closeAdventureMap();
-
-  const lvl = ADV_LEVELS[advCurrentIdx];
-  advActive = true;
-  advPiecesDropped = 0;
-  advFoundWords = new Set();
-  advLongestWord = 0;
-
-  // Set gameMode so existing engine runs correctly
-  gameMode = 'adventure';
-
-  // Override dropMs for this level
-  dropMs = lvl.dropMs;
-
-  // Show obj strip inside the header
-  const wrap = document.getElementById('adv-obj-strip-wrap');
-  wrap.style.display = 'block';
-  document.getElementById('hdr').appendChild(wrap);
-
-  advBuildObjStrip();
-
-  // Speed alert
-  if(lvl.type==='speed'){
-    const al = document.getElementById('adv-speed-alert');
-    al.style.display='block';
-    al.style.animation='none';
-    setTimeout(()=>{ al.style.animation=''; al.style.display='none'; },1800);
-  }
-
-  // Seed word hunt bag
-  if(lvl.seedWord){
-    fillBag();
-    advSeedWord(lvl.seedWord);
-  }
-
-  startGame();
-}
-
-function advSeedWord(word){
-  word.split('').forEach((l,i)=>{
-    const pos = i*4+2;
-    if(pos<bag.length) bag.splice(pos,0,l); else bag.push(l);
-  });
-}
-
-// ── Obj strip ─────────────────────────────────────────────────────────────
-function advBuildObjStrip(){
-  const strip = document.getElementById('adv-obj-strip');
-  const lvl = ADV_LEVELS[advCurrentIdx];
-  strip.innerHTML = lvl.goals.map((g,i)=>`
-    <div class="adv-chip" id="adv-chip-${i}">
-      <span class="adv-chip-icon">${g.icon}</span>
-      <span class="adv-chip-label">${advChipLabel(g)}</span>
-      <span class="adv-chip-prog" id="adv-prog-${i}">${advChipProg(g)}</span>
-    </div>`).join('');
-}
-
-function advChipLabel(g){
-  if(g.type==='score') return 'Score';
-  if(g.type==='lines') return 'Lines';
-  if(g.type==='find_word') return g.target;
-  if(g.type==='long_word') return g.target+'+ ltrs';
-  if(g.type==='survive') return 'Survive';
-  return '';
-}
-function advChipProg(g){
-  if(g.type==='score') return `${score}/${g.target}`;
-  if(g.type==='lines') return `${lines}/${g.target}`;
-  if(g.type==='find_word') return advFoundWords.has(g.target)?'✓':'—';
-  if(g.type==='long_word') return advLongestWord>=g.target?'✓':`${advLongestWord}/${g.target}`;
-  if(g.type==='survive') return `${advPiecesDropped}/${g.target}`;
-  return '';
-}
-function advUpdateStrip(){
-  if(!advActive) return;
-  const lvl = ADV_LEVELS[advCurrentIdx];
-  lvl.goals.forEach((g,i)=>{
-    const chip=document.getElementById(`adv-chip-${i}`);
-    const prog=document.getElementById(`adv-prog-${i}`);
-    if(!chip||!prog) return;
-    chip.classList.toggle('done', advGoalMet(g));
-    prog.textContent = advChipProg(g);
-  });
-}
-function advGoalMet(g){
-  if(g.type==='score') return score>=g.target;
-  if(g.type==='lines') return lines>=g.target;
-  if(g.type==='find_word') return advFoundWords.has(g.target);
-  if(g.type==='long_word') return advLongestWord>=g.target;
-  if(g.type==='survive') return advPiecesDropped>=g.target;
-  return false;
-}
-function advAllMet(){ return ADV_LEVELS[advCurrentIdx].goals.every(advGoalMet); }
-
-// ── Hooks into existing engine events ─────────────────────────────────────
-// Called from checkWords after a word is scored
-function advOnWord(word){
-  if(!advActive) return;
-  advFoundWords.add(word);
-  if(word.length > advLongestWord) advLongestWord = word.length;
-  advUpdateStrip();
-  if(advAllMet()) advEndSuccess();
-}
-// Called from lock() after a piece lands
-function advOnPieceLanded(){
-  if(!advActive) return;
-  advPiecesDropped++;
-  advUpdateStrip();
-  if(advAllMet()) advEndSuccess();
-}
-// Called from endGame() (board overflow)
-function advOnGameOver(){
-  if(!advActive) return;
-  advActive = false;
-  advEndFail();
-}
-
-// ── End ───────────────────────────────────────────────────────────────────
-function advEndSuccess(){
-  if(!advActive) return;
-  advActive = false;
-  gameOver = true;
-  cancelAnimationFrame(animId);
-  advHideStrip();
-
-  const lvl = ADV_LEVELS[advCurrentIdx];
-  const stars = advCalcStars(lvl);
-  const existing = advLevelProgress[advCurrentIdx]||{stars:0};
-  advLevelProgress[advCurrentIdx] = {stars:Math.max(existing.stars,stars),score};
-  advSaveProgress();
-
-  setTimeout(()=>advShowResult(true,stars,lvl), 400);
-}
-
-function advEndFail(){
-  advHideStrip();
-  setTimeout(()=>advShowResult(false,0,ADV_LEVELS[advCurrentIdx]),300);
-}
-
-function advCalcStars(lvl){
-  const s=lvl.stars, st=lvl.starType||'score';
-  if(st==='lines'){ return lines>=s[2]?3:lines>=s[1]?2:1; }
-  if(st==='speed'||st==='word_hunt'){ return 1; }
-  return score>=s[2]?3:score>=s[1]?2:1;
-}
-
-function advHideStrip(){
-  const wrap=document.getElementById('adv-obj-strip-wrap');
-  wrap.style.display='none';
-  document.body.appendChild(wrap); // move back out of hdr
-  gameMode='classic'; // reset so existing UI doesn't break
-}
-
-function advShowResult(success,stars,lvl){
-  document.getElementById('arc-emoji').textContent = success?(stars===3?'🏆':stars===2?'⭐':'✅'):'💀';
-  document.getElementById('arc-title').textContent = success?(stars===3?'Perfect!':stars===2?'Great!':'Level Clear!'):'Failed!';
-  document.getElementById('arc-sub').textContent = success
-    ?`Score: ${score.toLocaleString()} · Lines: ${lines}`
-    :'So close — give it another shot!';
-  document.getElementById('arc-stars').textContent = success?'⭐'.repeat(stars)+'☆'.repeat(3-stars):'☆☆☆';
-
-  document.getElementById('arc-goals').innerHTML = lvl.goals.map(g=>{
-    const met=advGoalMet(g);
-    return `<div class="arc-goal-row">
-      <span class="arc-goal-icon">${g.icon}</span>
-      <span class="arc-goal-label">${g.label}</span>
-      <span class="arc-goal-status ${met?'pass':'fail'}">${met?'✓ Done':'✗ Missed'}</span>
-    </div>`;
-  }).join('');
-
-  const nextBtn=document.getElementById('arc-next-btn');
-  nextBtn.style.display = (success && advCurrentIdx<ADV_LEVELS.length-1)?'block':'none';
-
-  document.getElementById('adv-result').style.display='flex';
-}
-
-function advNextLevel(){
-  document.getElementById('adv-result').style.display='none';
-  advCurrentIdx++;
-  advOpenLevelIntro(advCurrentIdx);
-}
-function advRetry(){
-  document.getElementById('adv-result').style.display='none';
-  advStartLevel();
-}
-function advGoToMap(){
-  document.getElementById('adv-result').style.display='none';
-  advBuildMap();
-  openAdventureMap();
-  goToIntro();
-}
-// ── End Adventure Mode ─────────────────────────────────────────────────────
-
 // ── Game lifecycle hooks (inlined to avoid recursion) ────────────────────
 // AdMob calls are inlined directly into endGame/startGame/showIntro below
 
@@ -5118,59 +4657,5 @@ function dismissOnboard(){
   </div>
 </div>
 
-<!-- ═══ ADVENTURE MAP ══════════════════════════════════════════════════════ -->
-<div id="adv-map-screen" class="lx-screen" style="padding:0;justify-content:flex-start;overflow:hidden;">
-  <div id="adv-map-header">
-    <div>
-      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,210,255,0.6);margin-bottom:1px;">Adventure</div>
-      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.12em;background:linear-gradient(90deg,#f5a623,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Level Select</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="text-align:right;">
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.75rem;color:#f5a623;" id="adv-stars-total">★ 0 / 30</div>
-        <div style="font-family:'Space Mono',monospace;font-size:.35rem;color:rgba(200,210,255,0.5);">total stars</div>
-      </div>
-      <button class="hdr-btn" style="width:34px;height:34px;font-size:.7rem;" onclick="closeAdventureMap()">✕</button>
-    </div>
-  </div>
-  <div id="adv-map-scroll">
-    <div id="adv-map-path"></div>
-  </div>
-</div>
 
-<!-- ═══ ADVENTURE LEVEL INTRO ════════════════════════════════════════════ -->
-<div id="adv-level-intro" style="position:fixed;inset:0;z-index:450;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:16px;">
-  <div id="adv-level-card">
-    <div class="alc-eyebrow" id="alc-eyebrow">Level 1 · Normal</div>
-    <div class="alc-title" id="alc-title">—</div>
-    <div class="alc-goals" id="alc-goals"></div>
-    <div class="alc-hint" id="alc-hint"></div>
-    <button class="alc-btn alc-primary" onclick="advStartLevel()">▶ &nbsp;Play Level</button>
-    <button class="alc-btn alc-ghost" onclick="closeAdvLevelIntro()">← Back to Map</button>
-  </div>
-</div>
-
-<!-- ═══ ADVENTURE OBJ STRIP (injected into existing hdr during play) ════ -->
-<div id="adv-obj-strip-wrap" style="display:none;width:100%;padding:4px 10px 4px;border-top:1px solid rgba(124,92,252,0.12);">
-  <div id="adv-obj-strip" style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:1px;"></div>
-</div>
-
-<!-- ═══ ADVENTURE RESULT ═════════════════════════════════════════════════ -->
-<div id="adv-result" style="position:fixed;inset:0;z-index:450;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:20px;">
-  <div id="adv-result-card">
-    <div class="arc-emoji" id="arc-emoji">🏆</div>
-    <div class="arc-title" id="arc-title">Level Clear!</div>
-    <div class="arc-sub" id="arc-sub">—</div>
-    <div class="arc-stars" id="arc-stars">⭐⭐⭐</div>
-    <div class="arc-goals" id="arc-goals"></div>
-    <button class="alc-btn alc-primary" id="arc-next-btn" onclick="advNextLevel()" style="display:none;">Next Level →</button>
-    <button class="alc-btn alc-primary" onclick="advRetry()">↺ Try Again</button>
-    <button class="alc-btn alc-ghost" onclick="advGoToMap()">← Map</button>
-  </div>
-</div>
-
-<!-- ═══ SPEED ALERT ══════════════════════════════════════════════════════ -->
-<div id="adv-speed-alert" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:500;pointer-events:none;font-family:'Nunito',sans-serif;font-weight:900;font-size:1.6rem;color:#ff3b6b;letter-spacing:.1em;text-shadow:0 0 20px rgba(255,59,107,0.8);display:none;">⚡ SPEED RUN!</div>
-
-</body>
 </html>
