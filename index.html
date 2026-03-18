@@ -4245,13 +4245,6 @@ let currentHomeLbMode = 'daily';
 function switchHomeLb(mode){ currentHomeLbMode = mode || 'daily'; }
 function loadHomeLb(){}
 
-window.addEventListener('load', () => {
-  setTimeout(updateHomeStats, 200);
-  try{
-    if(window.Android && window.Android.showBanner) window.Android.showBanner();
-  }catch(e){}
-});
-
 // ── Leaderboard ────────────────────────────────────────────────────────────
 let currentLbMode = 'classic';
 let pendingLbScore = 0;
@@ -4486,9 +4479,11 @@ window.addEventListener('load',()=>{
     document.getElementById('intro-screen').classList.remove('open');
     fillBag();initGrid();draw();
     loadAdsRemovedState();
+    AdMob.showBanner();
     try{ window.Android && window.Android.restorePurchases && void(0); }catch(e){}
     initDailyMode();
     showIntro();
+    setTimeout(updateHomeStats, 200);
     const ls=document.getElementById('loading-screen');
     if(ls) ls.style.display='none';
   } catch(err) {
