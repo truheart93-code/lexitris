@@ -446,8 +446,9 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 #overlay{
   position:fixed;inset:0;
   background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:50;padding:24px;
+  display:none;
+  flex-direction:column;align-items:stretch;justify-content:flex-start;
+  z-index:50;padding:0;
 }
 #overlay h2{
   font-family:'Nunito',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);
@@ -649,7 +650,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   letter-spacing:.12em;text-align:center;margin-bottom:2px;
 }
 .lx-modal-sub{
-  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);
+  font-family:'Space Mono',monospace;font-size:.38rem;
   color:rgba(200,215,255,0.7);text-align:center;margin-bottom:8px;
 }
 .lx-modal-box{
@@ -661,7 +662,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .lx-bullet{
   display:flex;gap:8px;
-  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);color:rgba(180,190,230,0.6);
+  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(180,190,230,0.6);
 }
 .lx-bullet::before{content:'·';color:#7c5cfc;font-size:.6rem;flex-shrink:0;}
 .lx-section{
@@ -731,14 +732,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   box-shadow:0 4px 0 rgba(0,0,0,0.3);backdrop-filter:blur(8px);}
 .lx-share-btn.g:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
 
-/* Game-over overlay reuses lx-screen */
-#overlay{
-  position:fixed;inset:0;
-  background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
-  display:none;
-  flex-direction:column;align-items:center;justify-content:center;
-  z-index:50;padding:24px;
-}
+/* Game-over overlay */
 #overlay h2{font-family:'Nunito',sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);
   font-weight:900;letter-spacing:.15em;
   background:linear-gradient(90deg,#a78bfa,#7c5cfc);
@@ -779,17 +773,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .go-actions .obtn{width:100%;margin-top:0;}
 
 /* Compact mobile-friendly game over / revive layout */
-#overlay{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(160deg,#0a0e1a 0%,#0d1128 40%,#0e0d1f 100%);
-  display:none;
-  flex-direction:column;
-  align-items:stretch;
-  justify-content:flex-start;
-  z-index:50;
-  padding:0;
-}
 .overlay-content{
   flex:1;
   overflow-y:auto;
@@ -1482,7 +1465,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 .hdr-btn:active{background:rgba(124,92,252,0.25);}
 .tip-row{
-  font-family:'Space Mono',monospace;font-size:.38rem;color:rgba(210,220,255,0.75);
+  font-family:'Space Mono',monospace;font-size:.38rem;
   color:rgba(180,190,230,0.55);line-height:2.1;
 }
 .tip-row b{color:#7c5cfc;}
@@ -1555,6 +1538,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 .onboard-dots{display:flex;gap:6px;justify-content:center;}
 .onboard-dot{width:6px;height:6px;border-radius:50%;background:rgba(124,92,252,0.3);}
 .onboard-dot.active{background:#7c5cfc;}
+.lx-mode-btn .lx-mode-name,
+.lx-mode-btn .lx-mode-name *,
+#mode-select-sheet .lx-mode-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
 </style>
 <!-- Firebase via REST API (no external SDK needed) -->
 <script>
@@ -2177,6 +2169,8 @@ function drawL(){
 const COLS=6, ROWS=12;
 const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
+const cwEl=document.getElementById('cw');
+const nextBoxEl=document.getElementById('next-box');
 
 function calcCell(){
   const hdrH=document.getElementById('hdr').offsetHeight||48;
@@ -2228,17 +2222,13 @@ let lifetimeStats={
 let hallOfFame=[];
 // Session tracking
 let sessionWords=0, sessionBestCombo=1, sessionBestWord='', sessionBestWordPts=0;
-// Bonus letters on board: {r,c,type} — 'wild','x2','bomb'
-let bonusCells={};
-// Animation state for row-clear drop
-let clearAnim=null;
 
 function initGrid(){grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));}
 
 function spawnFalling(){
   const l=nextLetter||drawL();
   nextLetter=drawL();
-  const nb=document.getElementById('next-box');
+  const nb=nextBoxEl;
   nb.textContent=nextLetter;
   // Color-code the next letter preview
   const nc=lc(nextLetter);
@@ -2369,7 +2359,6 @@ function checkWords(){
   if(!found.length){combo=Math.max(1,combo-1);updateHUD();return;}
 
   const rowsToClear=new Set();
-  const cellsToClear=new Set();
 
   for(const res of found){
     const pts=wordPts(res.word)*combo;
@@ -2386,7 +2375,6 @@ function checkWords(){
       playBestWord();
     }
     if(pts>lifetimeStats.longestWordPts){lifetimeStats.longestWordPts=pts;lifetimeStats.longestWord=res.word;}
-    if(res.word.length>=(lifetimeStats.longestWord||'').length){}
     sessionBestCombo=Math.max(sessionBestCombo,combo);
     lifetimeStats.bestCombo=Math.max(lifetimeStats.bestCombo,combo);
     // Hall of fame
@@ -2408,11 +2396,6 @@ function checkWords(){
     // Every scored word clears the entire row of every cell it touches
     res.cells.forEach(({r})=>rowsToClear.add(r));
   }
-
-  cellsToClear.forEach(key=>{
-    const [r,c]=key.split(',').map(Number);
-    if(!rowsToClear.has(r))grid[r][c]=null;
-  });
 
   if(rowsToClear.size>0){
     rowsToClear.forEach(r=>flashRow(r));
@@ -2469,7 +2452,7 @@ function logWord(word,pts,dr,dc){
 }
 
 function showPopup(pts,x,y){
-  const cw=document.getElementById('cw');
+  const cw=cwEl;
   const el=document.createElement('div');
   el.className='popup';
   el.textContent='+'+pts.toLocaleString();
@@ -2481,7 +2464,7 @@ function showPopup(pts,x,y){
 }
 
 function spawnParticles(x,y,pts){
-  const cw=document.getElementById('cw');
+  const cw=cwEl;
   const count=Math.min(4+Math.floor(pts/50),12);
   const colors=['#7c5cfc','#a78bfa','#f5a623','#ff3b6b','#00e5cc','#4ade80'];
   for(let i=0;i<count;i++){
@@ -2503,7 +2486,7 @@ function spawnParticles(x,y,pts){
 }
 
 function screenShake(){
-  const el=document.getElementById('cw');
+  const el=cwEl;
   el.classList.remove('shaking');
   void el.offsetWidth;
   el.classList.add('shaking');
@@ -2511,7 +2494,7 @@ function screenShake(){
 }
 
 function flashRow(r){
-  const cw=document.getElementById('cw');
+  const cw=cwEl;
   const el=document.createElement('div');
   el.className='flash';
   el.style.top=r*CELL+'px';el.style.left='0';
@@ -2523,20 +2506,10 @@ function flashRow(r){
   const pColor = midCell ? lc(midCell.letter).stroke : colors[Math.floor(Math.random()*colors.length)];
   spawnRowParticles(r, pColor);
 }
-function flashCells(cells){
-  const cw=document.getElementById('cw');
-  cells.forEach(({r,c})=>{
-    const el=document.createElement('div');
-    el.className='flash';
-    el.style.top=r*CELL+'px';el.style.left=c*CELL+'px';
-    el.style.width=CELL+'px';el.style.height=CELL+'px';
-    cw.appendChild(el);setTimeout(()=>el.remove(),460);
-  });
-}
 
 // Word found cell glow — highlights cells that formed a word
 function glowWordCells(cells){
-  const cw=document.getElementById('cw');
+  const cw=cwEl;
   cells.forEach(({r,c},i)=>{
     setTimeout(()=>{
       const el=document.createElement('div');
@@ -2733,7 +2706,7 @@ function lock(){
   playLand();
   falling=null;
   checkWords();
-  if(!gameOver){spawnFalling();saveState();}
+  if(!gameOver){if(spawnFalling())saveState();}
 }
 
 function getStackHeight(){
@@ -2747,7 +2720,7 @@ function updateDangerBar(){
   const h=getStackHeight();
   const pct=h/ROWS;
   const bar=document.getElementById('danger-bar');
-  const cw=document.getElementById('cw');
+  const cw=cwEl;
   if(pct>0.5){
     const intensity=Math.min(1,(pct-0.5)/0.4);
     const r=Math.round(85+170*intensity),g=Math.round(51-51*intensity),b=Math.round(238-238*intensity);
@@ -3062,38 +3035,6 @@ function stopCrackle(){
   crackleNode=null;crackleGain=null;
 }
 
-// ── Lo-fi beat engine ─────────────────────────────────────────────────────
-// Kick: short sine burst. Snare: filtered noise burst. Hi-hat: high noise.
-function makeKick(ac,t,master){
-  const o=ac.createOscillator(),g=ac.createGain();
-  o.type='sine';o.frequency.setValueAtTime(140,t);
-  o.frequency.exponentialRampToValueAtTime(40,t+0.08);
-  g.gain.setValueAtTime(0.7,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
-  o.connect(g);g.connect(master);o.start(t);o.stop(t+0.2);
-}
-function makeSnare(ac,t,master){
-  const buf=ac.createBuffer(1,ac.sampleRate*0.15,ac.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
-  const src=ac.createBufferSource();src.buffer=buf;
-  const filt=ac.createBiquadFilter();filt.type='bandpass';filt.frequency.value=1800;filt.Q.value=0.8;
-  const g=ac.createGain();
-  g.gain.setValueAtTime(0.28,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.15);
-  src.connect(filt);filt.connect(g);g.connect(master);
-  src.start(t);
-}
-function makeHat(ac,t,master,vol=0.08){
-  const buf=ac.createBuffer(1,ac.sampleRate*0.04,ac.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
-  const src=ac.createBufferSource();src.buffer=buf;
-  const filt=ac.createBiquadFilter();filt.type='highpass';filt.frequency.value=8000;
-  const g=ac.createGain();
-  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.04);
-  src.connect(filt);filt.connect(g);g.connect(master);
-  src.start(t);
-}
-
 // ── Dark Tension Music ───────────────────────────────────────────────────
 // Minor key drone, slow pulse, creeping bassline. One style only.
 let musicOn = true, musicStarted = false;
@@ -3208,6 +3149,10 @@ function stopMusic(){
   if(darkTimer) clearTimeout(darkTimer); darkTimer = null;
   masterOut = null; masterFilter = null;
   musicStarted = false;
+  if(audioCtx && audioCtx.state !== 'closed'){
+    audioCtx.close().catch(()=>{});
+    audioCtx = null;
+  }
 }
 
 function startMusic(){
@@ -3317,58 +3262,30 @@ function hapticStrong(){haptic([20,10,20]);}
 // (driven by checkbox in settings panel)
 
 // ── Pause / Settings ──────────────────────────────────────────────────────
-function syncHomeSettingsUI(){
-  const soundText=document.getElementById('home-sound-text');
-  const soundIcon=document.getElementById('home-sound-icon');
-  const soundCard=document.getElementById('home-sound-card');
-  const hapticText=document.getElementById('home-haptic-text');
-  const hapticIcon=document.getElementById('home-haptic-icon');
-  const hapticCard=document.getElementById('home-haptic-card');
-  const adsText=document.getElementById('home-remove-ads-text');
-
-  if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
-  if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
-
-  if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
-  if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
-
-  if(adsText){
-    adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
-    adsText.style.color = adsRemoved ? '#4ade80' : 'rgba(200,210,240,0.65)';
-  }
-}
-function syncGameSettingsUI(){
-  const soundText=document.getElementById('game-sound-text');
-  const soundIcon=document.getElementById('game-sound-icon');
-  const soundCard=document.getElementById('game-sound-card');
-  const hapticText=document.getElementById('game-haptic-text');
-  const hapticIcon=document.getElementById('game-haptic-icon');
-  const hapticCard=document.getElementById('game-haptic-card');
-  const adsText=document.getElementById('game-remove-ads-text');
-  const adsBtn=document.getElementById('btn-remove-ads');
-
-  if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
-  if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
-  if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
-
-  if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
-  if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
-  if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
-
-  if(adsText){
-    adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time';
-    adsText.style.color = adsRemoved ? '#4ade80' : 'rgba(200,210,240,0.65)';
-  }
-  if(adsBtn){
-    adsBtn.style.borderColor = adsRemoved ? 'rgba(74,222,128,0.25)' : 'rgba(245,166,35,0.25)';
-  }
-}
 function syncAllSettingsUI(){
-  syncGameSettingsUI();
-  syncHomeSettingsUI();
+  // Update all sound/haptic/ads UI elements across both home and game settings panels
+  const prefixes = ['home', 'game'];
+  prefixes.forEach(p => {
+    const soundText  = document.getElementById(p+'-sound-text');
+    const soundIcon  = document.getElementById(p+'-sound-icon');
+    const soundCard  = document.getElementById(p+'-sound-card');
+    const hapticText = document.getElementById(p+'-haptic-text');
+    const hapticIcon = document.getElementById(p+'-haptic-icon');
+    const hapticCard = document.getElementById(p+'-haptic-card');
+    const adsText    = document.getElementById(p+'-remove-ads-text');
+    if(soundText) soundText.textContent = soundOn ? 'On' : 'Off';
+    if(soundIcon) soundIcon.textContent = soundOn ? '🔊' : '🔇';
+    if(soundCard){ soundCard.style.borderColor = soundOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; soundCard.style.background = soundOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+    if(hapticText) hapticText.textContent = hapticOn ? 'On' : 'Off';
+    if(hapticIcon) hapticIcon.textContent = hapticOn ? '📳' : '📴';
+    if(hapticCard){ hapticCard.style.borderColor = hapticOn ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.12)'; hapticCard.style.background = hapticOn ? 'rgba(124,92,252,0.18)' : 'rgba(255,255,255,0.04)'; }
+    if(adsText){ adsText.textContent = adsRemoved ? 'Purchased' : '$0.99 one-time'; adsText.style.color = adsRemoved ? '#4ade80' : 'rgba(200,210,240,0.65)'; }
+  });
+  const adsBtn = document.getElementById('btn-remove-ads');
+  if(adsBtn){ adsBtn.style.borderColor = adsRemoved ? 'rgba(74,222,128,0.25)' : 'rgba(245,166,35,0.25)'; }
 }
+function syncGameSettingsUI(){ syncAllSettingsUI(); }
+function syncHomeSettingsUI(){ syncAllSettingsUI(); }
 function openHomeSettings(){
   syncAllSettingsUI();
   document.getElementById('home-settings-overlay').classList.add('open');
@@ -3416,7 +3333,7 @@ function resumeGame(){
 function togglePause(){if(paused)resumeGame();else openSettings();}
 function openStatsFromSettings(){
   document.getElementById('settings-backdrop').classList.remove('open');
-  document.getElementById('stats-overlay').classList.add('open');
+  openStats();
 }
 function newGameFromSettings(){
   document.getElementById('settings-backdrop').classList.remove('open');
@@ -3443,8 +3360,15 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='p'||e.key=
 
 // ── End / Start ────────────────────────────────────────────────────────────
 function endGame(){
-  // ads removed
   gameOver=true;cancelAnimationFrame(animId);
+  // Show interstitial every N games
+  if(!adsRemoved){
+    AdMob._gamesBetweenInterstitials++;
+    if(AdMob._gamesBetweenInterstitials>=AdMob.INTERSTITIAL_EVERY){
+      AdMob._gamesBetweenInterstitials=0;
+      setTimeout(()=>AdMob.showInterstitial(),800);
+    }
+  }
   screenShake();
   savedState=null;
   try{localStorage.removeItem('lexitris_save');}catch(e){}
@@ -3499,7 +3423,7 @@ function endGame(){
   }catch(e){}
   const isRecord=highScores.length>1&&highScores[0].score===score;
   const ov=document.getElementById('overlay');
-  const canRevive = _goScore > 0 && !reviveUsed && _goMode !== 'daily' && _goMode !== 'zen';
+  const canRevive = _goScore >= 100 && !reviveUsed && _goMode !== 'daily' && _goMode !== 'zen';
   ov.innerHTML=`
     <div class="overlay-content">
       <h2>LEXITRIS</h2>
@@ -3742,7 +3666,7 @@ function restoreState(){
   document.getElementById('s-combo').textContent='×'+combo;
   document.getElementById('word-log').innerHTML=
     wordLog.map(e=>`<div class="wle"><span class="w">${e.word||''}</span><span class="p">+${e.pts||0}</span></div>`).join('');
-  document.getElementById('next-box').textContent=nextLetter||'?';
+  nextBoxEl.textContent=nextLetter||'?';
   document.getElementById('overlay').style.display='none';
   document.getElementById('settings-backdrop').classList.remove('open');
   document.getElementById('btn-pause').textContent='⏸';
@@ -3972,8 +3896,6 @@ function confirmPlayMode(){
   introNewGame();
 }
 
-function selectMode(mode){ gameMode=mode; }
-function playMode(mode){ openModeDialog(mode); }
 
 function updateSpeed(){
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
@@ -3997,6 +3919,7 @@ function startGame(){
   const cfg=MODE_CONFIG[gameMode]||MODE_CONFIG.classic;
   dropMs=cfg.startMs;
 
+  const modeBadge = document.getElementById('mode-badge');
   // Timed mode setup
   if(gameMode==='timed'){
     timedStart=performance.now();
@@ -4004,17 +3927,14 @@ function startGame(){
     document.getElementById('timer-bar-wrap').style.display='block';
     document.getElementById('timer-bar').style.width='100%';
     document.getElementById('timer-bar').style.background='linear-gradient(90deg,#7c5cfc,#00e5cc)';
-    const modeBadge = document.getElementById('mode-badge');
     if(modeBadge) modeBadge.style.display='none';
   } else {
     document.getElementById('timer-bar-wrap').style.display='none';
-    const modeBadge2 = document.getElementById('mode-badge');
-    if(modeBadge2) modeBadge2.style.display='';
+    if(modeBadge) modeBadge.style.display='';
   }
 
   // Mode badge
-  const badge=document.getElementById('mode-badge');
-  if(badge){badge.textContent=cfg.icon+' '+cfg.label;}
+  if(modeBadge){modeBadge.textContent=cfg.icon+' '+cfg.label;}
 
   document.getElementById('s-score').textContent='0';
   document.getElementById('s-level').textContent='1';
@@ -4025,7 +3945,7 @@ function startGame(){
   document.getElementById('settings-backdrop').classList.remove('open');
   document.getElementById('btn-pause').textContent='⏸';
   document.getElementById('danger-bar').style.background='transparent';
-  document.getElementById('cw').classList.remove('danger-pulse');
+  cwEl.classList.remove('danger-pulse');
   document.getElementById('combo-badge').classList.remove('show');
   fillBag();initGrid();
   nextLetter=drawL();
@@ -4148,7 +4068,7 @@ function closeStats(e){
 //     hideBanner()          — hide banner ad
 //     showInterstitial()    — load + show interstitial
 //     showRewarded()        — load + show rewarded ad
-//     purchaseRemoveAds()   — launch Play Billing for product "remove_ads"
+//     buyRemoveAds()        — launch Play Billing for product "remove_ads"
 //     restorePurchases()    — re-query owned purchases on launch
 //
 //   2. After any async event, call back via:
@@ -4188,7 +4108,7 @@ function applyAdsRemovedUI(){
     if(el) el.style.display = adFree ? 'none' : '';
   });
   // Also hide the home settings remove-ads card
-  const homeAdsBtn = document.querySelector('[onclick*="purchaseRemoveAds"]');
+  const homeAdsBtn = document.getElementById('home-remove-ads-btn') || document.querySelector('[onclick*="buyRemoveAds"],[onclick*="purchaseRemoveAds"]');
   if(homeAdsBtn) homeAdsBtn.style.display = adFree ? 'none' : '';
 
   const btn=document.getElementById('btn-remove-ads');
@@ -4211,7 +4131,7 @@ function purchaseRemoveAds(){
       window.Android.buyRemoveAds();
     } else {
       // Dev/browser fallback — simulate for testing
-      console.log('[AdMob] purchaseRemoveAds called — no Android bridge present');
+      console.log('[AdMob] buyRemoveAds called — no Android bridge present');
     }
   }catch(e){}
 }
@@ -4630,7 +4550,18 @@ try { rateAsked = !!localStorage.getItem('lexitris_rated'); } catch(e){}
 function maybeShowRate(){
   if(rateAsked) return;
   if(lifetimeStats.gamesPlayed === 5 || lifetimeStats.gamesPlayed === 10){
-    setTimeout(()=> document.getElementById('rate-overlay').classList.add('show'), 1200);
+    // On Android use the native in-app review flow; otherwise fall back to star prompt
+    // Delay longer than interstitial so they don't stack on screen
+    const delay = (!adsRemoved && AdMob._gamesBetweenInterstitials === 0) ? 4500 : 1200;
+    setTimeout(()=>{
+      if(window.Android && window.Android.requestReview){
+        try{ window.Android.requestReview(); }catch(e){}
+        try{ localStorage.setItem('lexitris_rated','1'); }catch(e){}
+        rateAsked = true;
+      } else {
+        document.getElementById('rate-overlay').classList.add('show');
+      }
+    }, delay);
   }
 }
 
@@ -4648,7 +4579,8 @@ function rateSelected(stars){
 
 function dismissRate(){
   document.getElementById('rate-overlay').classList.remove('show');
-  rateAsked = false;
+  // Don't reset rateAsked — "Not now" should suppress future prompts this session
+  rateAsked = true;
 }
 
 // ══ ONBOARDING ══════════════════════════════════════════════════════════════
@@ -4730,16 +4662,5 @@ function dismissOnboard(){
   </div>
 </div>
 
-<style>
-.lx-mode-btn .lx-mode-name,
-.lx-mode-btn .lx-mode-name *,
-#mode-select-sheet .lx-mode-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-}
-</style>
-</body>
+
 </html>
