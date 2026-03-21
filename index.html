@@ -977,7 +977,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 
 /* Lantern icons row */
 .splash-lanterns{
-  display:flex;gap:28px;margin-bottom:20px;
+  display:flex;gap:16px;margin-bottom:14px;
   opacity:0;
   animation:splashLanternsIn 0.7s ease 0.3s forwards;
 }
@@ -1011,20 +1011,23 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   to{opacity:1;transform:translateY(0);}
 }
 
-/* Studio name with falling letters */
+/* Studio name with falling letters — stacked vertically, one word per line */
 .splash-studio-name{
-  display:flex;gap:3px;align-items:flex-end;
-  margin-bottom:6px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  margin-bottom:8px;
+}
+.splash-word-row{
+  display:flex;gap:2px;align-items:baseline;justify-content:center;
 }
 .splash-letter{
   font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:clamp(1.4rem,6vw,2rem);
-  letter-spacing:.04em;
+  font-size:clamp(1.1rem,7vw,1.6rem);
+  letter-spacing:.06em;
   color:#fff;
   display:inline-block;
   opacity:0;
-  transform:translateY(-60px);
-  text-shadow:0 0 18px rgba(245,166,35,0.4);
+  transform:translateY(-50px);
+  text-shadow:0 0 14px rgba(245,166,35,0.3);
 }
 /* Letter coloring — gold accent on key letters */
 .splash-letter.accent{
@@ -1036,9 +1039,6 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   background:linear-gradient(180deg,#c4b5fd,#7c5cfc);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-/* Space between words */
-.splash-space{width:.6em;display:inline-block;}
-
 /* Tagline under studio name */
 .splash-tagline{
   font-family:'Space Mono',monospace;
@@ -4719,34 +4719,32 @@ window.addEventListener('load',()=>{
     ['','','accent','','','accent','']         // STUDIO
   ];
 
-  const row = document.getElementById('splash-name-row');
+  const container = document.getElementById('splash-name-row');
   const letters = [];
 
   WORDS.forEach((word, wi) => {
-    // Add space between words
-    if(wi > 0){
-      const sp = document.createElement('span');
-      sp.className = 'splash-space';
-      row.appendChild(sp);
-    }
+    // Each word gets its own row div — stacked vertically
+    const wordRow = document.createElement('div');
+    wordRow.className = 'splash-word-row';
+    container.appendChild(wordRow);
+
     word.split('').forEach((ch, li) => {
       const el = document.createElement('span');
       el.className = 'splash-letter' + (STYLES[wi][li] ? ' ' + STYLES[wi][li] : '');
       el.textContent = ch;
-      row.appendChild(el);
+      wordRow.appendChild(el);
       letters.push(el);
     });
   });
 
   // Animate each letter falling in with staggered delays
-  // Start after lanterns (0.3s) + "presented by" (0.9s) ≈ 1.05s
   const BASE_DELAY = 1050;
-  const LETTER_GAP = 80; // ms between each letter
+  const LETTER_GAP = 70;
 
   letters.forEach((el, i) => {
     const delay = BASE_DELAY + i * LETTER_GAP;
     setTimeout(() => {
-      el.style.transition = 'opacity 0.25s ease, transform 0.45s cubic-bezier(.22,.68,0,1.25)';
+      el.style.transition = 'opacity 0.25s ease, transform 0.4s cubic-bezier(.22,.68,0,1.25)';
       el.style.opacity = '1';
       el.style.transform = 'translateY(0)';
     }, delay);
