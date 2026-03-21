@@ -957,6 +957,110 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 }
 
 
+/* ══ THREE LANTERN STUDIO SPLASH SCREEN ══════════════════════════════════ */
+#studio-splash{
+  position:fixed;inset:0;
+  z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#050810 0%,#080b1c 50%,#060819 100%);
+  overflow:hidden;
+  pointer-events:none;
+  opacity:1;
+  transition:opacity 0.6s ease;
+}
+#studio-splash.fade-out{
+  opacity:0;
+}
+#studio-splash.hidden{
+  display:none;
+}
+
+/* Lantern icons row */
+.splash-lanterns{
+  display:flex;gap:28px;margin-bottom:20px;
+  opacity:0;
+  animation:splashLanternsIn 0.7s ease 0.3s forwards;
+}
+.splash-lantern{
+  filter:drop-shadow(0 0 10px rgba(245,166,35,0.55)) drop-shadow(0 0 3px rgba(245,140,20,0.4));
+  animation:splashLanternFloat 2.5s ease-in-out infinite;
+  flex-shrink:0;
+}
+.splash-lantern:nth-child(2){animation-delay:0.4s;}
+.splash-lantern:nth-child(3){animation-delay:0.8s;}
+@keyframes splashLanternFloat{
+  0%,100%{transform:translateY(0) rotate(-4deg);}
+  50%{transform:translateY(-7px) rotate(4deg);}
+}
+@keyframes splashLanternsIn{
+  from{opacity:0;transform:translateY(16px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* "Presented by" label */
+.splash-presented{
+  font-family:'Space Mono',monospace;
+  font-size:.46rem;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(200,215,255,0.5);
+  margin-bottom:10px;
+  opacity:0;
+  animation:splashFadeUp 0.5s ease 0.9s forwards;
+}
+@keyframes splashFadeUp{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Studio name with falling letters */
+.splash-studio-name{
+  display:flex;gap:3px;align-items:flex-end;
+  margin-bottom:6px;
+}
+.splash-letter{
+  font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:clamp(1.4rem,6vw,2rem);
+  letter-spacing:.04em;
+  color:#fff;
+  display:inline-block;
+  opacity:0;
+  transform:translateY(-60px);
+  text-shadow:0 0 18px rgba(245,166,35,0.4);
+}
+/* Letter coloring — gold accent on key letters */
+.splash-letter.accent{
+  background:linear-gradient(180deg,#f5c84a,#f5a623);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 8px rgba(245,166,35,0.6));
+}
+.splash-letter.purple{
+  background:linear-gradient(180deg,#c4b5fd,#7c5cfc);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+/* Space between words */
+.splash-space{width:.6em;display:inline-block;}
+
+/* Tagline under studio name */
+.splash-tagline{
+  font-family:'Space Mono',monospace;
+  font-size:.38rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(200,215,255,0.35);
+  opacity:0;
+  animation:splashFadeUp 0.5s ease 2.1s forwards;
+}
+
+/* Particle glow dots */
+.splash-glow{
+  position:absolute;border-radius:50%;pointer-events:none;
+}
+.splash-glow-1{
+  width:300px;height:300px;top:-80px;right:-80px;
+  background:radial-gradient(circle,rgba(124,92,252,0.08) 0%,transparent 70%);
+}
+.splash-glow-2{
+  width:250px;height:250px;bottom:-60px;left:-60px;
+  background:radial-gradient(circle,rgba(245,166,35,0.07) 0%,transparent 70%);
+}
+
 /* Keep old intro-btn alias for continue button */
 .intro-btn{
   width:min(300px,88vw);padding:15px;border:none;border-radius:12px;
@@ -1686,6 +1790,109 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </script>
 </head>
 <body>
+
+<!-- ═══ THREE LANTERN STUDIO SPLASH SCREEN ══════════════════════════════ -->
+<div id="studio-splash">
+  <div class="splash-glow splash-glow-1"></div>
+  <div class="splash-glow splash-glow-2"></div>
+
+  <!-- Three kerosene lanterns (SVG illustrated) -->
+  <div class="splash-lanterns">
+
+    <!-- Lantern 1 -->
+    <svg class="splash-lantern" viewBox="0 0 54 90" width="46" height="76" xmlns="http://www.w3.org/2000/svg">
+      <!-- Hanging bail wire -->
+      <path d="M20 4 Q27 0 34 4" fill="none" stroke="#8a7a60" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Top cap -->
+      <rect x="15" y="4" width="24" height="5" rx="2" fill="#6b5e42"/>
+      <rect x="18" y="8" width="18" height="3" rx="1" fill="#7a6a4a"/>
+      <!-- Vent ring -->
+      <ellipse cx="27" cy="11" rx="10" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <!-- Upper metal collar -->
+      <rect x="16" y="11" width="22" height="6" rx="1.5" fill="#7a6a4a"/>
+      <!-- Glass globe body -->
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="#d4891a" opacity="0.18"/>
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="none" stroke="#9a8050" stroke-width="1.2"/>
+      <!-- Glass highlight -->
+      <path d="M19 20 Q15 38 17 54" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+      <!-- Flame glow inside glass -->
+      <ellipse cx="27" cy="42" rx="7" ry="10" fill="#f5a020" opacity="0.28"/>
+      <!-- Flame -->
+      <path d="M27 28 Q24 34 25 38 Q26 42 27 40 Q28 42 29 38 Q30 34 27 28Z" fill="#f5c040" opacity="0.9"/>
+      <path d="M27 31 Q25.5 36 26 39 Q27 41 28 39 Q28.5 36 27 31Z" fill="#fff8e0" opacity="0.7"/>
+      <!-- Wick tube -->
+      <rect x="24" y="48" width="6" height="5" rx="1" fill="#6b5e42"/>
+      <!-- Wick adjuster knob -->
+      <circle cx="23" cy="50" r="2.5" fill="#7a6a4a" stroke="#5a4e32" stroke-width="0.8"/>
+      <!-- Lower collar -->
+      <rect x="16" y="64" width="22" height="5" rx="1.5" fill="#7a6a4a"/>
+      <!-- Font ring detail -->
+      <ellipse cx="27" cy="69" rx="11" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <!-- Oil font / base reservoir -->
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="#6b5e42"/>
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="none" stroke="#4a3e28" stroke-width="0.8"/>
+      <!-- Base foot -->
+      <ellipse cx="27" cy="83" rx="12" ry="3" fill="#5a4e32"/>
+      <rect x="15" y="83" width="24" height="3" rx="1.5" fill="#4a3e28"/>
+    </svg>
+
+    <!-- Lantern 2 (center, slightly larger) -->
+    <svg class="splash-lantern" viewBox="0 0 54 90" width="52" height="86" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4 Q27 0 34 4" fill="none" stroke="#8a7a60" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="15" y="4" width="24" height="5" rx="2" fill="#6b5e42"/>
+      <rect x="18" y="8" width="18" height="3" rx="1" fill="#7a6a4a"/>
+      <ellipse cx="27" cy="11" rx="10" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <rect x="16" y="11" width="22" height="6" rx="1.5" fill="#7a6a4a"/>
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="#d4891a" opacity="0.18"/>
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="none" stroke="#9a8050" stroke-width="1.2"/>
+      <path d="M19 20 Q15 38 17 54" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="27" cy="42" rx="7" ry="10" fill="#f5a020" opacity="0.32"/>
+      <path d="M27 28 Q24 34 25 38 Q26 42 27 40 Q28 42 29 38 Q30 34 27 28Z" fill="#f5c040" opacity="0.9"/>
+      <path d="M27 31 Q25.5 36 26 39 Q27 41 28 39 Q28.5 36 27 31Z" fill="#fff8e0" opacity="0.7"/>
+      <rect x="24" y="48" width="6" height="5" rx="1" fill="#6b5e42"/>
+      <circle cx="23" cy="50" r="2.5" fill="#7a6a4a" stroke="#5a4e32" stroke-width="0.8"/>
+      <rect x="16" y="64" width="22" height="5" rx="1.5" fill="#7a6a4a"/>
+      <ellipse cx="27" cy="69" rx="11" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="#6b5e42"/>
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="none" stroke="#4a3e28" stroke-width="0.8"/>
+      <ellipse cx="27" cy="83" rx="12" ry="3" fill="#5a4e32"/>
+      <rect x="15" y="83" width="24" height="3" rx="1.5" fill="#4a3e28"/>
+    </svg>
+
+    <!-- Lantern 3 -->
+    <svg class="splash-lantern" viewBox="0 0 54 90" width="46" height="76" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4 Q27 0 34 4" fill="none" stroke="#8a7a60" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="15" y="4" width="24" height="5" rx="2" fill="#6b5e42"/>
+      <rect x="18" y="8" width="18" height="3" rx="1" fill="#7a6a4a"/>
+      <ellipse cx="27" cy="11" rx="10" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <rect x="16" y="11" width="22" height="6" rx="1.5" fill="#7a6a4a"/>
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="#d4891a" opacity="0.18"/>
+      <path d="M16 17 Q10 35 13 54 Q16 64 27 65 Q38 64 41 54 Q44 35 38 17 Z" fill="none" stroke="#9a8050" stroke-width="1.2"/>
+      <path d="M19 20 Q15 38 17 54" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="27" cy="42" rx="7" ry="10" fill="#f5a020" opacity="0.28"/>
+      <path d="M27 28 Q24 34 25 38 Q26 42 27 40 Q28 42 29 38 Q30 34 27 28Z" fill="#f5c040" opacity="0.9"/>
+      <path d="M27 31 Q25.5 36 26 39 Q27 41 28 39 Q28.5 36 27 31Z" fill="#fff8e0" opacity="0.7"/>
+      <rect x="24" y="48" width="6" height="5" rx="1" fill="#6b5e42"/>
+      <circle cx="23" cy="50" r="2.5" fill="#7a6a4a" stroke="#5a4e32" stroke-width="0.8"/>
+      <rect x="16" y="64" width="22" height="5" rx="1.5" fill="#7a6a4a"/>
+      <ellipse cx="27" cy="69" rx="11" ry="2.5" fill="none" stroke="#6b5e42" stroke-width="1.2"/>
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="#6b5e42"/>
+      <path d="M18 69 Q14 72 15 77 Q16 82 27 83 Q38 82 39 77 Q40 72 36 69 Z" fill="none" stroke="#4a3e28" stroke-width="0.8"/>
+      <ellipse cx="27" cy="83" rx="12" ry="3" fill="#5a4e32"/>
+      <rect x="15" y="83" width="24" height="3" rx="1.5" fill="#4a3e28"/>
+    </svg>
+
+  </div>
+
+  <!-- "Presented by" -->
+  <div class="splash-presented">Presented by</div>
+
+  <!-- Studio name — letters fall into place -->
+  <div class="splash-studio-name" id="splash-name-row"></div>
+
+  <!-- Tagline -->
+  <div class="splash-tagline">games with purpose</div>
+</div>
 
 <!-- No JavaScript fallback -->
 <noscript>
@@ -3386,6 +3593,16 @@ function endGame(){
   const _goScore = score, _goMode = gameMode;
   const _goSubmitKey = 'run|' + _goMode + '|' + _goScore + '|' + level + '|' + lines + '|' + sessionWords + '|' + bestScore;
   lastGameOverSubmitKey = _goSubmitKey;
+
+  // Auto-submit score silently using saved/generated name
+  if(_goScore > 0 && !submittedLeaderboardKeys.has(_goSubmitKey)){
+    const autoName = playerName || generatePlayerName();
+    if(window.submitLeaderboardScore){
+      window.submitLeaderboardScore(autoName, _goScore, _goMode).then(()=>{
+        submittedLeaderboardKeys.add(_goSubmitKey);
+      }).catch(()=>{});
+    }
+  }
   if(_goMode==='daily'){
     saveDailyResult(_goScore);
     dailyCompleted=true;
@@ -4279,25 +4496,19 @@ function openLeaderboard(submitScore, submitMode, submitKey){
   pendingLbSubmissionKey = submitKey || (pendingLbMode + '|' + pendingLbScore + '|' + level + '|' + lines);
   currentLbMode = pendingLbMode;
 
-  const submitArea = document.getElementById('lb-submit-area');
-  const savedName = localStorage.getItem('lexitris_player_name');
+  // Always hide manual submit area — scores auto-submit using saved name
+  document.getElementById('lb-submit-area').classList.remove('show');
 
-  if(pendingLbScore > 0 && savedName && !submittedLeaderboardKeys.has(pendingLbSubmissionKey)){
-    submitArea.classList.remove('show');
+  if(pendingLbScore > 0 && !submittedLeaderboardKeys.has(pendingLbSubmissionKey)){
+    const nameToUse = playerName || generatePlayerName();
     (async ()=>{
       if(window.submitLeaderboardScore){
-        await window.submitLeaderboardScore(savedName, pendingLbScore, pendingLbMode);
+        await window.submitLeaderboardScore(nameToUse, pendingLbScore, pendingLbMode);
         submittedLeaderboardKeys.add(pendingLbSubmissionKey);
       }
       pendingLbScore = 0;
       loadLeaderboard(currentLbMode);
     })();
-  } else if(pendingLbScore > 0 && !submittedLeaderboardKeys.has(pendingLbSubmissionKey)){
-    // First time — show name entry
-    submitArea.classList.add('show');
-    document.getElementById('lb-name-input').value = playerName || generatePlayerName();
-  } else {
-    submitArea.classList.remove('show');
   }
 
   // Set active tab
@@ -4497,6 +4708,63 @@ window.addEventListener('load',()=>{
   }
 });
 </script>
+<script>
+// ══ THREE LANTERN STUDIO SPLASH ══════════════════════════════════════════
+(function(){
+  const WORDS = ['THREE', 'LANTERN', 'STUDIO'];
+  // Per-letter styling: 'accent' = gold, 'purple' = purple, '' = white
+  const STYLES = [
+    ['','','accent','','accent'],             // THREE
+    ['purple','','','','','','purple'],        // LANTERN
+    ['','','accent','','','accent','']         // STUDIO
+  ];
+
+  const row = document.getElementById('splash-name-row');
+  const letters = [];
+
+  WORDS.forEach((word, wi) => {
+    // Add space between words
+    if(wi > 0){
+      const sp = document.createElement('span');
+      sp.className = 'splash-space';
+      row.appendChild(sp);
+    }
+    word.split('').forEach((ch, li) => {
+      const el = document.createElement('span');
+      el.className = 'splash-letter' + (STYLES[wi][li] ? ' ' + STYLES[wi][li] : '');
+      el.textContent = ch;
+      row.appendChild(el);
+      letters.push(el);
+    });
+  });
+
+  // Animate each letter falling in with staggered delays
+  // Start after lanterns (0.3s) + "presented by" (0.9s) ≈ 1.05s
+  const BASE_DELAY = 1050;
+  const LETTER_GAP = 80; // ms between each letter
+
+  letters.forEach((el, i) => {
+    const delay = BASE_DELAY + i * LETTER_GAP;
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.25s ease, transform 0.45s cubic-bezier(.22,.68,0,1.25)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, delay);
+  });
+
+  // Total animation time: BASE + all letters + little pause
+  const TOTAL = BASE_DELAY + letters.length * LETTER_GAP + 900;
+
+  setTimeout(() => {
+    const splash = document.getElementById('studio-splash');
+    splash.classList.add('fade-out');
+    setTimeout(() => {
+      splash.classList.add('hidden');
+    }, 650);
+  }, TOTAL);
+})();
+</script>
+
 <script>
 // ── PWA Service Worker registration ──────────────────────────────────────
 if('serviceWorker' in navigator){
