@@ -1760,17 +1760,54 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       const body = {
         structuredQuery: {
           from: [{ collectionId: "scores" }],
-          where: {
-            fieldFilter: {
-              field: { fieldPath: "mode" },
-              op: "EQUAL",
-              value: { stringValue: mode }
-            }
-          },
+          where: {},
           orderBy: [{ field: { fieldPath: "score" }, direction: "DESCENDING" }],
           limit: 10
         }
       };
+      
+      // For daily mode, filter by both mode AND today's date
+      if (mode === 'daily') {
+        const today = getDailyDate(); // Format: YYYY-MM-DD
+        body.structuredQuery.where = {
+          compositeFilter: {
+            op: "AND",
+            filters: [
+              {
+                fieldFilter: {
+                  field: { fieldPath: "mode" },
+                  op: "EQUAL",
+                  value: { stringValue: mode }
+                }
+              },
+              {
+                fieldFilter: {
+                  field: { fieldPath: "date" },
+                  op: "GREATER_THAN_OR_EQUAL",
+                  value: { stringValue: today + "T00:00:00" }
+                }
+              },
+              {
+                fieldFilter: {
+                  field: { fieldPath: "date" },
+                  op: "LESS_THAN",
+                  value: { stringValue: today + "T23:59:59" }
+                }
+              }
+            ]
+          }
+        };
+      } else {
+        // For all-time and zen modes, just filter by mode
+        body.structuredQuery.where = {
+          fieldFilter: {
+            field: { fieldPath: "mode" },
+            op: "EQUAL",
+            value: { stringValue: mode }
+          }
+        };
+      }
+      
       const res = await apiFetch(BASE + ":runQuery?key=" + API_KEY, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -2469,7 +2506,18 @@ const ACHIEVEMENTS = {
   comboKing: { name: "Combo Master", desc: "Get a 5× combo", check: (stats) => stats.bestCombo >= 5 },
 };
 
-// Theme & Gem System
+// ── Global Error Handler (prevents mobile WebView crashes) ────────────────
+window.addEventListener('error', function(e) {
+  console.error('Global error caught:', e.message, e.filename, e.lineno);
+  return true; // Prevent crash
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('Unhandled promise rejection:', e.reason);
+  e.preventDefault(); // Prevent crash
+});
+
+// ── Theme & Gem System ──────────────────────────────────────────────────────
 let gems = 0;
 let currentTheme = 'classic';
 let ownedThemes = ['classic', 'midnight', 'sunset']; // Free themes
@@ -4702,6 +4750,17 @@ function loadThemeData() {
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────
+// Wait for DOM to be ready before initializing (prevents mobile crashes)
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    loadThemeData();
+    updateGemDisplay();
+    loadAdsRemovedState();
+  } catch(e) {
+    console.error('Init error:', e);
+  }
+});
+
 // Force full screen fill on Android WebView
 (function(){
   function forceFullscreen(){
