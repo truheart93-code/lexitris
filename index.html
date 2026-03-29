@@ -2041,7 +2041,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div id="home-stats-card" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:14px;padding:12px 16px;">
       <!-- Daily Challenge strip -->
       <div id="home-daily-strip" onclick="closeModeSelectSheet();openModeDialog('daily')" style="display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid rgba(124,92,252,0.15);margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;">
-        <div id="home-daily-status-icon" style="font-size:1.5rem;line-height:1;flex-shrink:0;">📅</div>
+        <div id="home-daily-status-icon" style="font-size:1.5rem;line-height:1;flex-shrink:0;">☀️</div>
         <div style="flex:1;min-width:0;">
           <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.62rem;color:#4ade80;text-transform:uppercase;letter-spacing:.08em;">Daily Challenge</div>
           <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="home-daily-sub">Same puzzle · everyone · every day</div>
@@ -2063,6 +2063,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <div style="text-align:center;">
           <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#4ade80;" id="home-stat-combo">×1</div>
           <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Best Combo</div>
+        </div>
+        <div style="width:1px;background:rgba(124,92,252,0.2);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;color:#f5a623;" id="home-stat-streak">0🔥</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.5rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;">Streak</div>
         </div>
       </div>
     </div>
@@ -2091,6 +2096,21 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         <div class="home-quick-title">Stats</div>
         <div class="home-quick-sub">Lifetime<br>progress</div>
       </button>
+      <button class="home-quick-card" onclick="openAchievements()">
+        <div class="home-quick-icon">🏆</div>
+        <div class="home-quick-title">Achievements</div>
+        <div class="home-quick-sub"><span id="achievement-count">0</span>/<span id="achievement-total">10</span><br>unlocked</div>
+      </button>
+      <button class="home-quick-card" onclick="openThemeShop()">
+        <div class="home-quick-icon">🎨</div>
+        <div class="home-quick-title">Theme Shop</div>
+        <div class="home-quick-sub"><span id="theme-count">3</span>/<span id="theme-total">15</span><br>owned</div>
+      </button>
+      <button class="home-quick-card" style="background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.3);" onclick="openGemShop()">
+        <div class="home-quick-icon" style="font-size:1.4rem;">💎</div>
+        <div class="home-quick-title" style="color:#f5a623;">Gems</div>
+        <div class="home-quick-sub" style="font-size:.7rem;font-weight:900;color:#f5a623;" id="gem-balance">0</div>
+      </button>
     </div>
 
   </div>
@@ -2102,7 +2122,7 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.12em;color:rgba(200,210,255,0.7);text-transform:uppercase;text-align:center;margin-bottom:20px;">Choose Mode</div>
     <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;">
       <button class="lx-mode-btn" id="daily-mode-btn" style="box-shadow:0 0 28px rgba(74,222,128,0.55),inset 0 0 20px rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.07);color:#fff;" onclick="closeModeSelectSheet();openModeDialog('daily')">
-        <span class="lx-mode-icon">📅</span>
+        <span class="lx-mode-icon">☀️</span>
         <span class="lx-mode-text"><span class="lx-mode-name" style="color:#fff;-webkit-text-fill-color:#fff;background:none;">Daily</span><span class="lx-mode-desc">Same puzzle · everyone · every day</span></span>
         <span id="daily-check" style="display:none;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#16a34a);box-shadow:0 0 10px rgba(74,222,128,0.5);flex-shrink:0;display:none;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:900;">✓</span>
         <span class="lx-mode-arrow" id="daily-arrow">›</span>
@@ -2255,6 +2275,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 </div>
 
 <!-- ═══ HOW TO PLAY ══════════════════════════════════════════════════ -->
+<!-- Achievement Toast -->
+<div id="achievement-toast" style="position:fixed;top:-200px;left:50%;transform:translateX(-50%);z-index:1000;background:linear-gradient(135deg,#f5a623,#ff6b35);border-radius:16px;padding:14px 20px;box-shadow:0 12px 40px rgba(245,166,35,0.5);min-width:280px;max-width:90vw;transition:top 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);display:flex;align-items:center;gap:12px;">
+  <div style="font-size:2rem;line-height:1;">🏆</div>
+  <div style="flex:1;">
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:#fff;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;">Achievement Unlocked!</div>
+    <div id="achievement-text" style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.65rem;color:rgba(255,255,255,0.95);"></div>
+  </div>
+</div>
+
 <div id="help-overlay" class="lx-screen" onclick="if(event.target===this)this.classList.remove('open')">
   <div style="width:calc(100% - 24px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;">
 
@@ -2425,6 +2454,91 @@ let lifetimeStats={
   bestCombo:0, wordsFoundByLen:{},
   streak:0, lastPlayDate:'',
 };
+// Achievements tracking
+let unlockedAchievements = [];
+const ACHIEVEMENTS = {
+  firstGame: { name: "First Steps", desc: "Play your first game", check: (stats) => stats.gamesPlayed >= 1 },
+  tenGames: { name: "Getting Started", desc: "Play 10 games", check: (stats) => stats.gamesPlayed >= 10 },
+  hundredGames: { name: "Dedicated Player", desc: "Play 100 games", check: (stats) => stats.gamesPlayed >= 100 },
+  firstStreak: { name: "Coming Back", desc: "Build a 3-day streak", check: (stats) => stats.streak >= 3 },
+  weekStreak: { name: "Weekly Warrior", desc: "Build a 7-day streak", check: (stats) => stats.streak >= 7 },
+  hundredWords: { name: "Wordsmith", desc: "Find 100 total words", check: (stats) => stats.totalWords >= 100 },
+  thousandWords: { name: "Master Wordsmith", desc: "Find 1,000 total words", check: (stats) => stats.totalWords >= 1000 },
+  longWord: { name: "Big Brain", desc: "Make a 7+ letter word", check: (stats) => stats.longestWord.length >= 7 },
+  epicWord: { name: "Word Wizard", desc: "Make a 9+ letter word", check: (stats) => stats.longestWord.length >= 9 },
+  comboKing: { name: "Combo Master", desc: "Get a 5× combo", check: (stats) => stats.bestCombo >= 5 },
+};
+
+// Theme & Gem System
+let gems = 0;
+let currentTheme = 'classic';
+let ownedThemes = ['classic', 'midnight', 'sunset']; // Free themes
+
+const THEMES = {
+  // Free themes
+  classic: {
+    name: 'Classic', cost: 0, tier: 'free',
+    colors: ['#8566fc,#6b4dd6,#4a33a0', '#4ade80,#22c55e,#16a34a', '#00e5cc,#00b8a9,#008577', '#f5a623,#ef9f27,#ba7517', '#ff3b6b,#e24b4a,#a32d2d']
+  },
+  midnight: {
+    name: 'Midnight', cost: 0, tier: 'free',
+    colors: ['#5b4b8a,#3d3166,#2a1f4d', '#4a7a9e,#2f5873,#1e3a52', '#3d5a80,#293d57,#1a2633']
+  },
+  sunset: {
+    name: 'Sunset', cost: 0, tier: 'free',
+    colors: ['#f59e42,#d85a30,#993c1d', '#fbbf24,#f59e42,#d97706', '#ff6b6b,#ee5a52,#c92a2a']
+  },
+  // Gem shop themes
+  sakura: {
+    name: 'Sakura', cost: 150, tier: 'gem',
+    colors: ['#ffc9e3,#ffb3d9,#ff8bc2', '#ffe5f0,#ffd4e5,#ffb3d9', '#ffb3d9,#ff8bc2,#ff5c9e']
+  },
+  ocean: {
+    name: 'Ocean', cost: 120, tier: 'gem',
+    colors: ['#5dcaa5,#1d9e75,#0f6e56', '#60a5fa,#3b82f6,#2563eb', '#06b6d4,#0891b2,#0e7490']
+  },
+  forest: {
+    name: 'Forest', cost: 130, tier: 'gem',
+    colors: ['#86b15c,#639922,#3b6d11', '#92754f,#6b5637,#4a3a23', '#4d7c0f,#3f6212,#365314']
+  },
+  inferno: {
+    name: 'Inferno', cost: 180, tier: 'gem',
+    colors: ['#ff5c3d,#e24b4a,#a32d2d', '#fa9e3a,#ef9f27,#ba7517', '#ff6b35,#f7931e,#c87619']
+  },
+  neon: {
+    name: 'Neon', cost: 200, tier: 'gem', special: 'neon',
+    colors: ['#00e5cc', '#ff3b6b', '#a78bfa', '#4ade80', '#fbbf24']
+  },
+  candy: {
+    name: 'Candy', cost: 140, tier: 'gem',
+    colors: ['#f093fb,#f5576c,#c93966', '#a8edea,#fed6e3,#c9a9bc', '#fbc2eb,#a6c1ee,#8fa5d6']
+  },
+  space: {
+    name: 'Space', cost: 170, tier: 'gem',
+    colors: ['#4c1d95,#2e1065,#1e0a45', '#1e293b,#0f172a,#020617', '#312e81,#1e1b4b,#14112e']
+  },
+  wood: {
+    name: 'Wood', cost: 160, tier: 'gem', special: 'texture',
+    colors: ['#b8956a,#9e7a4d,#7a5e38', '#8b6f47,#6b5434,#4d3c24', '#a0826d,#81674f,#5d4a37']
+  },
+  gold: {
+    name: 'Gold', cost: 220, tier: 'gem', special: 'shine',
+    colors: ['#fbbf24,#f59e0b,#d97706', '#fef3c7,#fde68a,#fbbf24', '#fcd34d,#fbbf24,#f59e0b']
+  },
+  rainbow: {
+    name: 'Rainbow', cost: 250, tier: 'gem', special: 'rainbow',
+    colors: ['#ff0000,#ff8800,#ffff00', '#00ff00,#0088ff,#4400ff', '#8800ff,#ff0088,#ff4444', '#ffaa00,#00ffaa,#aa00ff']
+  },
+  carbon: {
+    name: 'Carbon', cost: 110, tier: 'gem', special: 'texture',
+    colors: ['#3f3f46,#27272a,#18181b', '#52525b,#3f3f46,#27272a', '#71717a,#52525b,#3f3f46']
+  },
+  gem: {
+    name: 'Gem', cost: 240, tier: 'gem', special: 'sparkle',
+    colors: ['#a78bfa,#7c3aed,#5b21b6', '#34d399,#10b981,#059669', '#f472b6,#ec4899,#db2777']
+  }
+};
+
 // Hall of fame — top 5 best words ever
 let hallOfFame=[];
 // Session tracking
@@ -2820,9 +2934,29 @@ const COLORS={
   rare:  {fill:'#1e0d00',stroke:'#e07000',text:'#ffaa44',dot:'#e07000'},
 };
 function lc(l){
-  if((LPTS[l]||1)>=8)return COLORS.rare;
-  if('AEIOU'.includes(l))return COLORS.vowel;
-  return COLORS.cons;
+  const theme = THEMES[currentTheme];
+  if (!theme || !theme.colors) {
+    // Fallback to default colors
+    if((LPTS[l]||1)>=8)return COLORS.rare;
+    if('AEIOU'.includes(l))return COLORS.vowel;
+    return COLORS.cons;
+  }
+  
+  // Determine which color set to use based on letter type
+  let colorIndex = 0;
+  if((LPTS[l]||1)>=8) colorIndex = 2; // Rare
+  else if('AEIOU'.includes(l)) colorIndex = 1; // Vowel
+  else colorIndex = 0; // Consonant
+  
+  const colorSet = theme.colors[colorIndex % theme.colors.length];
+  const [grad1, grad2, shadowColor] = colorSet.split(',');
+  
+  return {
+    fill: grad2 || grad1,
+    stroke: grad1,
+    text: '#ffffff',
+    dot: shadowColor || grad1
+  };
 }
 
 function drawCell(x,y,letter,alpha=1,ghost=false){
@@ -3259,89 +3393,89 @@ function scheduleDarkBar(startT) {
   if (!musicStarted) return;
   try {
     const ac = getAC(); const master = getMaster();
-    const bpm = 64; const beat = 60 / bpm; const bar = beat * 4;
+    const bpm = 58; const beat = 60 / bpm; const bar = beat * 4;
     const ch = DARK_CHORDS[darkChord % DARK_CHORDS.length];
 
-    // Low pad — warm drone foundation
+    // Low pad — warm drone foundation (softer volumes)
     ch.low.forEach((f, i) => {
       const o = ac.createOscillator(), g = ac.createGain();
       const filt = ac.createBiquadFilter();
-      filt.type = 'lowpass'; filt.frequency.value = 700;
-      o.type = 'triangle'; o.frequency.value = f;
-      o.detune.value = (i % 2 === 0 ? 4 : -4);
-      const vol = i === 0 ? 0.18 : 0.10;
+      filt.type = 'lowpass'; filt.frequency.value = 600;
+      o.type = 'sine'; o.frequency.value = f;
+      o.detune.value = (i % 2 === 0 ? 3 : -3);
+      const vol = i === 0 ? 0.10 : 0.06;
       g.gain.setValueAtTime(0, startT);
-      g.gain.linearRampToValueAtTime(vol, startT + 0.8);
-      g.gain.setValueAtTime(vol, startT + bar - 0.6);
-      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.2);
+      g.gain.linearRampToValueAtTime(vol, startT + 1.0);
+      g.gain.setValueAtTime(vol, startT + bar - 0.8);
+      g.gain.exponentialRampToValueAtTime(0.001, startT + bar + 0.3);
       o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(startT); o.stop(startT + bar + 0.3);
+      o.start(startT); o.stop(startT + bar + 0.4);
     });
 
-    // High melody — plucked notes on beats 1, 2.5, 3, 4
+    // High melody — plucked notes on beats 1, 2.5, 3, 4 (gentler)
     const melOffsets = [0, beat*1.5, beat*2, beat*3];
     const melFreqs   = [ch.mel[0], ch.mel[2], ch.mel[1], ch.mel[2]];
     melOffsets.forEach((offset, i) => {
       const o = ac.createOscillator(), g = ac.createGain();
       const filt = ac.createBiquadFilter();
-      filt.type = 'bandpass'; filt.frequency.value = 1800; filt.Q.value = 1.2;
+      filt.type = 'lowpass'; filt.frequency.value = 1400; filt.Q.value = 0.8;
       o.type = 'sine'; o.frequency.value = melFreqs[i];
       const t = startT + offset;
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.14, t + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, t + beat * 0.85);
+      g.gain.linearRampToValueAtTime(0.09, t + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, t + beat * 0.9);
       o.connect(filt); filt.connect(g); g.connect(master);
       o.start(t); o.stop(t + beat);
     });
 
-    // Sub kick — beat 1 and 3
+    // Sub kick — beat 1 and 3 (MUCH softer bass)
     [0, beat*2].forEach(offset => {
       const o = ac.createOscillator(), g = ac.createGain();
       const t = startT + offset;
       o.type = 'sine';
-      o.frequency.setValueAtTime(70, t);
-      o.frequency.exponentialRampToValueAtTime(28, t + 0.22);
-      g.gain.setValueAtTime(0.55, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.frequency.setValueAtTime(60, t);
+      o.frequency.exponentialRampToValueAtTime(30, t + 0.25);
+      g.gain.setValueAtTime(0.18, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
       o.connect(g); g.connect(master);
-      o.start(t); o.stop(t + 0.35);
+      o.start(t); o.stop(t + 0.4);
     });
 
-    // Snare — beat 2 and 4, light
+    // Snare — beat 2 and 4, very light
     [beat, beat*3].forEach(offset => {
       const buf = ac.createBuffer(1, ac.sampleRate * 0.12, ac.sampleRate);
       const d = buf.getChannelData(0);
       for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
       const src = ac.createBufferSource(); src.buffer = buf;
-      const filt = ac.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=1800; filt.Q.value=0.8;
-      const g = ac.createGain(); g.gain.setValueAtTime(0.09, startT+offset);
+      const filt = ac.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=1600; filt.Q.value=0.6;
+      const g = ac.createGain(); g.gain.setValueAtTime(0.05, startT+offset);
       src.connect(filt); filt.connect(g); g.connect(master);
       src.start(startT + offset);
     });
 
-    // Hi-hat — every half beat, subtle
+    // Hi-hat — every half beat, very subtle
     for(let i=0;i<8;i++){
       const buf = ac.createBuffer(1, ac.sampleRate*0.04, ac.sampleRate);
       const d = buf.getChannelData(0);
       for(let j=0;j<d.length;j++) d[j]=(Math.random()*2-1)*(1-j/d.length);
       const src = ac.createBufferSource(); src.buffer = buf;
-      const filt = ac.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=7000;
-      const g = ac.createGain(); g.gain.setValueAtTime(i%2===0?0.055:0.03, startT+i*beat*0.5);
+      const filt = ac.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=6500;
+      const g = ac.createGain(); g.gain.setValueAtTime(i%2===0?0.03:0.018, startT+i*beat*0.5);
       src.connect(filt); filt.connect(g); g.connect(master);
       src.start(startT + i*beat*0.5);
     }
 
-    // Deep bass note
+    // Deep bass note (MUCH reduced volume)
     (() => {
       const o = ac.createOscillator(), g = ac.createGain();
-      const filt = ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=180;
-      o.type='sawtooth'; o.frequency.value=ch.bass;
+      const filt = ac.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=150;
+      o.type='sine'; o.frequency.value=ch.bass;
       g.gain.setValueAtTime(0, startT+0.02);
-      g.gain.linearRampToValueAtTime(0.28, startT+0.05);
-      g.gain.setValueAtTime(0.22, startT+bar-0.3);
-      g.gain.exponentialRampToValueAtTime(0.001, startT+bar+0.1);
+      g.gain.linearRampToValueAtTime(0.08, startT+0.08);
+      g.gain.setValueAtTime(0.06, startT+bar-0.4);
+      g.gain.exponentialRampToValueAtTime(0.001, startT+bar+0.15);
       o.connect(filt); filt.connect(g); g.connect(master);
-      o.start(startT); o.stop(startT+bar+0.2);
+      o.start(startT); o.stop(startT+bar+0.25);
     })();
 
     darkChord++;
@@ -3632,9 +3766,18 @@ function endGame(){
   else if(lifetimeStats.lastPlayDate===new Date(Date.now()-864e5).toDateString())lifetimeStats.streak++;
   else lifetimeStats.streak=1;
   lifetimeStats.lastPlayDate=today;
+  checkAchievements();
+  
+  // Earn gems from gameplay
+  let gemsEarned = Math.floor(5 + Math.random() * 6); // 5-10 base gems
+  if (combo >= 5) gemsEarned += 5; // Bonus for 5+ combo
+  if (sessionBestWord && sessionBestWord.length >= 7) gemsEarned += 10; // Bonus for 7+ letter word
+  if (_goMode === 'daily') gemsEarned += 20; // Daily challenge bonus
+  earnGems(gemsEarned);
+  
   try{
     localStorage.setItem('lexitris_save',JSON.stringify({
-      bestScore,highScores,modeBests,modeLastGame,lifetimeStats,hallOfFame,
+      bestScore,highScores,modeBests,modeLastGame,lifetimeStats,hallOfFame,unlockedAchievements,
       hasState:false,score:0,level:1,lines:0
     }));
   }catch(e){}
@@ -3733,6 +3876,36 @@ window.addEventListener('focus',()=>{
   }
 });
 
+function checkAchievements() {
+  for (const [key, ach] of Object.entries(ACHIEVEMENTS)) {
+    if (!unlockedAchievements.includes(key) && ach.check(lifetimeStats)) {
+      unlockedAchievements.push(key);
+      showAchievement(ach.name, ach.desc);
+      // Save unlocked achievements
+      try {
+        localStorage.setItem('lexitris_achievements', JSON.stringify(unlockedAchievements));
+      } catch(e) {}
+    }
+  }
+}
+
+function showAchievement(name, desc) {
+  const toast = document.getElementById('achievement-toast');
+  const text = document.getElementById('achievement-text');
+  if (!toast || !text) return;
+  
+  text.textContent = name + ': ' + desc;
+  toast.style.top = '20px';
+  hapticMed();
+  sfx(440, 0.15, 0.08);
+  setTimeout(() => sfx(554, 0.15, 0.08), 100);
+  setTimeout(() => sfx(659, 0.15, 0.08), 200);
+  
+  setTimeout(() => {
+    toast.style.top = '-200px';
+  }, 4000);
+}
+
 function goToIntro(){
   document.getElementById('overlay').style.display='none';
   showIntro();
@@ -3786,13 +3959,16 @@ function showIntro(){
     modeLastGame=meta.modeLastGame||{classic:null,timed:null,zen:null};
     if(meta.lifetimeStats)Object.assign(lifetimeStats,meta.lifetimeStats);
     if(meta.hallOfFame)hallOfFame=meta.hallOfFame;
+    if(meta.unlockedAchievements)unlockedAchievements=meta.unlockedAchievements;
     document.getElementById('s-best').textContent=bestScore.toLocaleString();
   }
 
   // Continue button visibility handled in openModeDialog (zen only)
 
   document.getElementById('intro-screen').classList.add('open');
+  loadThemeData();
   updateHomeStats();
+  updateGemDisplay();
   maybeShowOnboard();
 }
 
@@ -3824,9 +4000,11 @@ function updateHomeStats(){
   const games = document.getElementById('home-stat-games');
   const words = document.getElementById('home-stat-words');
   const combo = document.getElementById('home-stat-combo');
+  const streak = document.getElementById('home-stat-streak');
   if(games) games.textContent = (lifetimeStats.gamesPlayed||0).toLocaleString();
   if(words) words.textContent = (lifetimeStats.totalWords||0).toLocaleString();
   if(combo) combo.textContent = '×'+(lifetimeStats.bestCombo||1);
+  if(streak) streak.textContent = (lifetimeStats.streak||0) + '🔥';
 
   // Daily challenge strip
   const dailySub = document.getElementById('home-daily-sub');
@@ -3843,7 +4021,7 @@ function updateHomeStats(){
       if(strip){ strip.style.borderColor='rgba(74,222,128,0.35)'; strip.style.background='rgba(74,222,128,0.05)'; }
     } else {
       // Not yet played — show calendar icon
-      if(statusIcon) statusIcon.textContent = '📅';
+      if(statusIcon) statusIcon.textContent = '☀️';
       if(dailySub) dailySub.textContent = 'Same puzzle · everyone · every day';
       if(dailyScoreEl) dailyScoreEl.style.display='none';
       if(strip){ strip.style.borderColor=''; strip.style.background=''; }
@@ -3921,7 +4099,7 @@ const MODE_CONFIG={
   classic:{ startMs:900,  minMs:160,  levelStep:75,  label:'Classic', icon:'📖' },
   timed:  { startMs:720,  minMs:150,  levelStep:65,  label:'Timed',   icon:'⏱'  },
   zen:    { startMs:1400, minMs:500,  levelStep:50,  label:'Zen',     icon:'🧘'  },
-  daily:  { startMs:780,  minMs:180,  levelStep:75,  label:'Daily',   icon:'📅'  },
+  daily:  { startMs:780,  minMs:180,  levelStep:75,  label:'Daily',   icon:'☀️'  },
 };
 
 // Mode metadata for dialog
@@ -3954,10 +4132,10 @@ const MODE_META={
     ]
   },
   daily:{
-    icon:'📅',name:'Daily Challenge',tagline:'One puzzle, everyone, every day',
+    icon:'☀️',name:'Daily Challenge',tagline:'One puzzle, everyone, every day',
     chips:[{val:'1×',label:'Per day'},{val:'4+',label:'Min letters'},{val:'🌍',label:'Global'}],
     features:[
-      {icon:'📅',text:'Same seed for all players every day'},
+      {icon:'☀️',text:'Same seed for all players every day'},
       {icon:'🏆',text:'Compare your score with the world'},
       {icon:'🔒',text:'One attempt only'},
     ]
@@ -4261,6 +4439,268 @@ function closeStats(e){
   document.getElementById('stats-overlay').classList.remove('open');
 }
 
+function openAchievements() {
+  const list = document.getElementById('achievements-list');
+  if (!list) return;
+  
+  let html = '';
+  for (const [key, ach] of Object.entries(ACHIEVEMENTS)) {
+    const unlocked = unlockedAchievements.includes(key);
+    html += `
+      <div style="background:${unlocked ? 'rgba(245,166,35,0.1)' : 'rgba(255,255,255,0.02)'};border:1px solid ${unlocked ? 'rgba(245,166,35,0.3)' : 'rgba(124,92,252,0.15)'};border-radius:12px;padding:12px;display:flex;align-items:center;gap:12px;">
+        <div style="font-size:1.8rem;opacity:${unlocked ? '1' : '0.3'};">🏆</div>
+        <div style="flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.65rem;color:${unlocked ? '#f5a623' : 'rgba(200,210,240,0.5)'};margin-bottom:2px;">${ach.name}</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.55rem;color:${unlocked ? 'rgba(200,210,240,0.8)' : 'rgba(200,210,240,0.35)'};">${ach.desc}</div>
+        </div>
+        ${unlocked ? '<div style="color:#4ade80;font-size:1.2rem;">✓</div>' : ''}
+      </div>
+    `;
+  }
+  list.innerHTML = html;
+  
+  // Update counter
+  const count = document.getElementById('achievement-count');
+  const total = document.getElementById('achievement-total');
+  if (count) count.textContent = unlockedAchievements.length;
+  if (total) total.textContent = Object.keys(ACHIEVEMENTS).length;
+  
+  document.getElementById('achievements-overlay').classList.add('open');
+}
+
+function closeAchievements() {
+  document.getElementById('achievements-overlay').classList.remove('open');
+}
+
+function openThemeShop() {
+  const list = document.getElementById('theme-shop-list');
+  const gemsEl = document.getElementById('theme-shop-gems');
+  if (!list || !gemsEl) return;
+  
+  gemsEl.textContent = gems;
+  
+  let html = '';
+  
+  // Free themes
+  html += '<div style="font-family:Nunito,sans-serif;font-weight:900;font-size:.55rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;">🎁 Free Themes</div>';
+  for (const [key, theme] of Object.entries(THEMES)) {
+    if (theme.tier !== 'free') continue;
+    const owned = ownedThemes.includes(key);
+    const active = currentTheme === key;
+    html += renderThemeCard(key, theme, owned, active);
+  }
+  
+  // Gem shop (all paid themes)
+  html += '<div style="font-family:Nunito,sans-serif;font-weight:900;font-size:.55rem;color:rgba(200,210,255,0.55);text-transform:uppercase;letter-spacing:.08em;margin-top:8px;">💎 Unlock with Gems</div>';
+  for (const [key, theme] of Object.entries(THEMES)) {
+    if (theme.tier !== 'gem') continue;
+    const owned = ownedThemes.includes(key);
+    const active = currentTheme === key;
+    html += renderThemeCard(key, theme, owned, active);
+  }
+  
+  list.innerHTML = html;
+  document.getElementById('theme-shop-overlay').classList.add('open');
+}
+
+function renderThemeCard(key, theme, owned, active) {
+  const colors = theme.colors.slice(0, 3);
+  let tilesHtml = '';
+  colors.forEach((colorSet, i) => {
+    const isNeon = theme.special === 'neon';
+    const isRainbow = theme.special === 'rainbow';
+    
+    if (isNeon) {
+      // Neon theme - solid color with bright glow
+      const neonColor = colorSet;
+      tilesHtml += `<div style="width:36px;height:36px;background:#0a0e1a;border:2px solid ${neonColor};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:${neonColor};box-shadow:0 0 8px ${neonColor},0 0 16px ${neonColor},0 0 24px ${neonColor},inset 0 0 12px rgba(0,229,204,0.1);position:relative;">
+        ${String.fromCharCode(65+i)}
+      </div>`;
+    } else if (isRainbow) {
+      // Rainbow theme - vibrant gradient
+      const [c1, c2, c3] = colorSet.split(',');
+      tilesHtml += `<div style="width:36px;height:36px;background:linear-gradient(145deg,${c1},${c2},${c3});border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;box-shadow:0 2px 0 rgba(0,0,0,0.3),0 3px 8px rgba(0,0,0,0.3);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.2),transparent);"></div>
+        ${String.fromCharCode(65+i)}
+      </div>`;
+    } else {
+      // Regular 3D gradient theme
+      const [grad1, grad2, shadow] = colorSet.split(',');
+      tilesHtml += `<div style="width:36px;height:36px;background:linear-gradient(145deg,${grad1},${grad2});border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;box-shadow:0 2px 0 ${shadow},0 3px 6px rgba(0,0,0,0.3);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.15),transparent);"></div>
+        ${String.fromCharCode(65+i)}
+      </div>`;
+    }
+  });
+  
+  const canBuy = theme.tier === 'gem' && gems >= theme.cost && !owned;
+  const cannotAfford = theme.tier === 'gem' && gems < theme.cost && !owned;
+  
+  let actionBtn = '';
+  if (active) {
+    actionBtn = '<div style="font-size:.5rem;padding:4px 10px;background:rgba(74,222,128,0.2);border-radius:12px;color:#4ade80;font-weight:700;">Active</div>';
+  } else if (owned) {
+    actionBtn = `<button onclick="applyTheme('${key}')" style="font-size:.5rem;padding:4px 10px;background:#7c5cfc;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:700;">Use</button>`;
+  } else if (canBuy) {
+    actionBtn = `<button onclick="buyTheme('${key}')" style="font-size:.5rem;padding:4px 10px;background:#f5a623;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:700;">Buy</button>`;
+  } else if (cannotAfford) {
+    actionBtn = `<div style="font-size:.5rem;padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:12px;color:rgba(200,210,255,0.4);font-weight:700;">${theme.cost}💎</div>`;
+  }
+  
+  return `
+    <div style="background:rgba(255,255,255,0.04);border:1px solid ${active ? 'rgba(124,92,252,0.5)' : 'rgba(124,92,252,0.15)'};border-radius:12px;padding:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-family:Nunito,sans-serif;font-weight:900;font-size:.65rem;color:${active ? '#a78bfa' : 'rgba(200,210,240,0.9)'};">${theme.name}</div>
+        ${theme.tier === 'gem' && !owned ? `<div style="font-size:.55rem;color:#f5a623;font-weight:700;">${theme.cost}💎</div>` : ''}
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;gap:4px;">${tilesHtml}</div>
+        ${actionBtn}
+      </div>
+    </div>
+  `;
+}
+
+function buyTheme(themeKey) {
+  const theme = THEMES[themeKey];
+  if (!theme || ownedThemes.includes(themeKey) || gems < theme.cost) return;
+  
+  gems -= theme.cost;
+  ownedThemes.push(themeKey);
+  saveThemeData();
+  updateGemDisplay();
+  openThemeShop(); // Refresh
+  hapticMed();
+  sfx(554, 0.12, 0.08);
+}
+
+function applyTheme(themeKey) {
+  if (!ownedThemes.includes(themeKey)) return;
+  currentTheme = themeKey;
+  saveThemeData();
+  closeThemeShop();
+  hapticLight();
+  sfx(440, 0.1, 0.08);
+  
+  // Update UI to show new theme on tiles
+  updateThemeDisplay();
+}
+
+function closeThemeShop() {
+  document.getElementById('theme-shop-overlay').classList.remove('open');
+}
+
+function openGemShop() {
+  const balanceEl = document.getElementById('gem-shop-balance');
+  if (balanceEl) balanceEl.textContent = gems + ' 💎';
+  document.getElementById('gem-shop-overlay').classList.add('open');
+}
+
+function closeGemShop() {
+  document.getElementById('gem-shop-overlay').classList.remove('open');
+}
+
+function buyGemPack(gemAmount, cents) {
+  // Call Android IAP
+  const gemPackId = `gems_${gemAmount}`;
+  
+  if (window.Android && window.Android.buyGemPack) {
+    try {
+      window.Android.buyGemPack(gemPackId);
+      closeGemShop();
+    } catch(e) {
+      console.error('IAP error:', e);
+      alert('Purchase failed. Please try again.');
+    }
+  } else {
+    // Testing fallback for web
+    const confirmed = confirm(`Purchase ${gemAmount} gems for $${(cents/100).toFixed(2)}?\n\n(Android IAP will trigger in production app)`);
+    if (confirmed) {
+      gems += gemAmount;
+      saveThemeData();
+      updateGemDisplay();
+      openGemShop(); // Refresh display
+      hapticMed();
+      sfx(659, 0.15, 0.08);
+      setTimeout(() => sfx(784, 0.15, 0.08), 100);
+    }
+  }
+}
+
+// Callback from Android when gem purchase completes
+window.onGemPurchaseComplete = function(gemAmount) {
+  gems += gemAmount;
+  saveThemeData();
+  updateGemDisplay();
+  hapticMed();
+  sfx(659, 0.15, 0.08);
+  setTimeout(() => sfx(784, 0.15, 0.08), 100);
+  
+  // Show success toast
+  const toast = document.getElementById('achievement-toast');
+  const text = document.getElementById('achievement-text');
+  if (toast && text) {
+    text.textContent = `Purchase successful! +${gemAmount} gems 💎`;
+    toast.style.top = '20px';
+    setTimeout(() => { toast.style.top = '-200px'; }, 3000);
+  }
+};
+
+// Callback from Android when ads are removed
+window.onAdEvent = function(eventType) {
+  if (eventType === 'ads_removed') {
+    console.log('Ads removed successfully');
+    // You could show a toast notification here if desired
+  }
+};
+
+function updateGemDisplay() {
+  const gemBal = document.getElementById('gem-balance');
+  if (gemBal) gemBal.textContent = gems;
+  
+  const themeCount = document.getElementById('theme-count');
+  const themeTotal = document.getElementById('theme-total');
+  if (themeCount) themeCount.textContent = ownedThemes.length;
+  if (themeTotal) themeTotal.textContent = Object.keys(THEMES).length;
+}
+
+function updateThemeDisplay() {
+  // This will be called when rendering tiles
+  // The lc() function will use currentTheme colors
+}
+
+function earnGems(amount) {
+  gems += amount;
+  saveThemeData();
+  updateGemDisplay();
+  
+  // Show gem reward notification
+  const toast = document.getElementById('achievement-toast');
+  const text = document.getElementById('achievement-text');
+  if (toast && text) {
+    text.textContent = `Earned ${amount} gems! 💎`;
+    toast.style.top = '20px';
+    hapticLight();
+    sfx(659, 0.1, 0.06);
+    setTimeout(() => { toast.style.top = '-200px'; }, 2000);
+  }
+}
+
+function saveThemeData() {
+  try {
+    localStorage.setItem('lexitris_themes', JSON.stringify({ gems, currentTheme, ownedThemes }));
+  } catch(e) {}
+}
+
+function loadThemeData() {
+  try {
+    const data = JSON.parse(localStorage.getItem('lexitris_themes') || '{}');
+    if (data.gems !== undefined) gems = data.gems;
+    if (data.currentTheme) currentTheme = data.currentTheme;
+    if (data.ownedThemes) ownedThemes = data.ownedThemes;
+  } catch(e) {}
+}
+
 // ── Boot ──────────────────────────────────────────────────────────────────
 // Force full screen fill on Android WebView
 (function(){
@@ -4408,7 +4848,10 @@ window.onAdEvent=function(event){
 // ── Daily Challenge ────────────────────────────────────────────────────────
 function getDailyDate(){
   const d=new Date();
-  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  const year = d.getFullYear();
+  const month = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return year+'-'+month+'-'+day;
 }
 function getDailySeed(){
   // Simple hash of date string for deterministic seed
@@ -4432,7 +4875,11 @@ function initDailyMode(){
   const today=getDailyDate();
   try{
     const saved=JSON.parse(localStorage.getItem('lexitris_daily')||'{}');
-    if(saved.date===today){
+    // Clear old daily data if it's from a previous day
+    if(saved.date && saved.date !== today){
+      localStorage.removeItem('lexitris_daily');
+      dailyCompleted=false;
+    } else if(saved.date===today){
       dailyCompleted=true;
       const btn=document.getElementById('daily-mode-btn');
       const desc=document.getElementById('daily-mode-desc');
@@ -4920,6 +5367,106 @@ function dismissOnboard(){
     </div>
     <button class="rate-btn" id="onboard-next-btn" onclick="onboardNext()" style="background:linear-gradient(135deg,#7c5cfc,#5533cc);color:#fff;">Next →</button>
     <button class="rate-btn" onclick="dismissOnboard()" style="background:rgba(255,255,255,0.04);color:rgba(200,210,255,0.45);padding:8px;">Skip tutorial</button>
+  </div>
+</div>
+
+<!-- Achievements Overlay -->
+<div id="achievements-overlay" class="lx-screen" onclick="if(event.target===this)closeAchievements()">
+  <div style="width:min(380px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;overflow-y:auto;padding-right:2px;">
+    
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;background:linear-gradient(135deg,#f5a623,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;">🏆 Achievements</div>
+    
+    <div id="achievements-list" style="width:100%;display:flex;flex-direction:column;gap:10px;">
+      <!-- Achievements will be populated here -->
+    </div>
+    
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeAchievements()">Close</button>
+  </div>
+</div>
+
+<!-- Theme Shop Overlay -->
+<div id="theme-shop-overlay" class="lx-screen" onclick="if(event.target===this)closeThemeShop()">
+  <div style="width:min(400px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:6px;overflow-y:auto;padding-right:2px;">
+    
+    <div style="width:100%;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;color:rgba(200,210,255,0.8);text-transform:uppercase;">🎨 Theme Shop</div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);border-radius:20px;padding:4px 10px;">
+        <span style="font-size:.9rem;">💎</span>
+        <span id="theme-shop-gems" style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:#f5a623;">0</span>
+      </div>
+    </div>
+    
+    <div id="theme-shop-list" style="width:100%;display:flex;flex-direction:column;gap:12px;">
+      <!-- Themes will be populated here -->
+    </div>
+    
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeThemeShop()">Close</button>
+  </div>
+</div>
+
+<!-- Gem Shop Overlay -->
+<div id="gem-shop-overlay" class="lx-screen" onclick="if(event.target===this)closeGemShop()">
+  <div style="width:min(360px,92vw);max-height:calc(100vh - 48px);display:flex;flex-direction:column;align-items:center;gap:8px;overflow-y:auto;padding-right:2px;">
+    
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;letter-spacing:.12em;background:linear-gradient(135deg,#f5a623,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;">💎 Buy Gems</div>
+    
+    <div style="width:100%;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.55rem;color:rgba(200,210,255,0.6);margin-bottom:4px;">Your Balance</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.2rem;color:#f5a623;" id="gem-shop-balance">0 💎</div>
+    </div>
+    
+    <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+      <!-- Starter Pack -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:rgba(200,210,240,0.9);">Starter Pack</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.55rem;color:rgba(200,210,255,0.6);">100 gems</div>
+          </div>
+          <button onclick="buyGemPack(100, 99)" style="font-size:.65rem;padding:6px 14px;background:#4ade80;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:900;font-family:'Nunito',sans-serif;">$0.99</button>
+        </div>
+      </div>
+      
+      <!-- Popular Pack -->
+      <div style="background:rgba(255,255,255,0.04);border:2px solid rgba(245,166,35,0.5);border-radius:12px;padding:12px;position:relative;">
+        <div style="position:absolute;top:-8px;right:12px;background:#f5a623;color:#fff;font-size:.5rem;padding:3px 8px;border-radius:8px;font-weight:900;font-family:'Nunito',sans-serif;">BEST VALUE</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:rgba(200,210,240,0.9);">Popular Pack</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.55rem;color:rgba(200,210,255,0.6);">300 gems + 50 bonus</div>
+          </div>
+          <button onclick="buyGemPack(350, 299)" style="font-size:.65rem;padding:6px 14px;background:#f5a623;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:900;font-family:'Nunito',sans-serif;">$2.99</button>
+        </div>
+      </div>
+      
+      <!-- Mega Pack -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:rgba(200,210,240,0.9);">Mega Pack</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.55rem;color:rgba(200,210,255,0.6);">700 gems + 150 bonus</div>
+          </div>
+          <button onclick="buyGemPack(850, 499)" style="font-size:.65rem;padding:6px 14px;background:#a78bfa;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:900;font-family:'Nunito',sans-serif;">$4.99</button>
+        </div>
+      </div>
+      
+      <!-- Ultimate Pack -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(124,92,252,0.2);border-radius:12px;padding:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:.7rem;color:rgba(200,210,240,0.9);">Ultimate Pack</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;font-size:.55rem;color:rgba(200,210,255,0.6);">1500 gems + 500 bonus</div>
+          </div>
+          <button onclick="buyGemPack(2000, 999)" style="font-size:.65rem;padding:6px 14px;background:#7c5cfc;border:none;border-radius:12px;color:#fff;cursor:pointer;font-weight:900;font-family:'Nunito',sans-serif;">$9.99</button>
+        </div>
+      </div>
+    </div>
+    
+    <div style="font-family:'Nunito',sans-serif;font-weight:600;font-size:.5rem;color:rgba(200,210,255,0.45);text-align:center;line-height:1.4;margin-top:4px;">
+      Purchase gems to unlock themes instantly.<br>Or earn them for free by playing!
+    </div>
+    
+    <button class="lx-btn lx-btn-ghost" style="width:100%;padding:8px" onclick="closeGemShop()">Close</button>
   </div>
 </div>
 
