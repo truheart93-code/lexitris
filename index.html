@@ -55,7 +55,7 @@ body{
 #hdr{
   width:100%;box-sizing:border-box;
   display:flex;flex-direction:column;
-  padding:3px 10px;
+  padding:max(8px, env(safe-area-inset-top, 8px)) 10px 3px;
   flex-shrink:0;
   background:rgba(10,12,28,0.9);border-bottom:1px solid rgba(124,92,252,0.2);
   box-shadow:0 1px 20px rgba(0,0,0,0.5);
@@ -2490,8 +2490,8 @@ const submittedLeaderboardKeys=new Set();
 let dropMs=1000,lastDropT=0,animId=null;
 let wordLog=[],highScores=[];
 // Per-mode best scores
-let modeBests={classic:0,timed:0,zen:0};
-let modeLastGame={classic:null,timed:null,zen:null};
+let modeBests={classic:0,timed:0,zen:0,daily:0};
+let modeLastGame={classic:null,timed:null,zen:null,daily:null};
 // Lifetime stats
 let lifetimeStats={
   gamesPlayed:0, totalScore:0, totalWords:0, totalLines:0,
@@ -4011,8 +4011,8 @@ function showIntro(){
   if(meta){
     bestScore=meta.bestScore||0;
     highScores=meta.highScores||[];
-    modeBests=meta.modeBests||{classic:0,timed:0,zen:0};
-    modeLastGame=meta.modeLastGame||{classic:null,timed:null,zen:null};
+    modeBests=meta.modeBests||{classic:0,timed:0,zen:0,daily:0};
+    modeLastGame=meta.modeLastGame||{classic:null,timed:null,zen:null,daily:null};
     if(meta.lifetimeStats)Object.assign(lifetimeStats,meta.lifetimeStats);
     if(meta.hallOfFame)hallOfFame=meta.hallOfFame;
     if(meta.unlockedAchievements)unlockedAchievements=meta.unlockedAchievements;
@@ -4960,6 +4960,14 @@ function initDailyMode(){
       dailyCompleted=false;
     } else if(saved.date===today){
       dailyCompleted=true;
+      // Sync daily score into modeLastGame/modeBests so mode dialog shows it
+      if(saved.score > 0){
+        if(!modeLastGame.daily || modeLastGame.daily.score !== saved.score){
+          modeLastGame.daily = modeLastGame.daily || {score:saved.score, level:0, lines:0, bestWord:'', bestWordPts:0};
+          modeLastGame.daily.score = saved.score;
+        }
+        if((modeBests.daily||0) < saved.score) modeBests.daily = saved.score;
+      }
       const btn=document.getElementById('daily-mode-btn');
       const desc=document.getElementById('daily-mode-desc');
       if(desc) desc.textContent="Today's score: "+saved.score.toLocaleString();
