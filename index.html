@@ -1748,9 +1748,12 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
   setTimeout(flushQueue, 3000);
 
   window.submitLeaderboardScore = async function(name, score, mode) {
-    const date = new Date().toISOString();
+    // For daily mode, use YYYY-MM-DD format to match query filter
+    // For other modes, use full ISO timestamp
+    const date = mode === 'daily' ? getDailyDate() : new Date().toISOString();
     try {
       await doSubmit(name, score, mode, date);
+      console.log('Score submitted successfully:', {name, score, mode, date});
     } catch(e) {
       // Network failed — queue for retry
       console.warn('Score submit failed, queuing for retry:', e.message);
@@ -1789,15 +1792,8 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
               {
                 fieldFilter: {
                   field: { fieldPath: "date" },
-                  op: "GREATER_THAN_OR_EQUAL",
-                  value: { stringValue: today + "T00:00:00" }
-                }
-              },
-              {
-                fieldFilter: {
-                  field: { fieldPath: "date" },
-                  op: "LESS_THAN",
-                  value: { stringValue: today + "T23:59:59" }
+                  op: "EQUAL",
+                  value: { stringValue: today }
                 }
               }
             ]
