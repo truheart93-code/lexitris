@@ -1738,8 +1738,14 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     const q = getPendingQueue();
     if(!q.length) return;
     const remaining = [];
+    const submitted = new Set();
     for(const item of q){
-      try{ await doSubmit(item.name, item.score, item.mode, item.date); }
+      const dedupKey = `${item.name}|${item.score}|${item.mode}`;
+      if(submitted.has(dedupKey)) continue; // Skip duplicates in queue
+      try{ 
+        await doSubmit(item.name, item.score, item.mode, item.date);
+        submitted.add(dedupKey);
+      }
       catch(e){ remaining.push(item); }
     }
     savePendingQueue(remaining);
@@ -1751,9 +1757,19 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
     // For daily mode, use YYYY-MM-DD format to match query filter
     // For other modes, use full ISO timestamp
     const date = mode === 'daily' ? getDailyDate() : new Date().toISOString();
+    
+    // Check for duplicate submission (same name, score, mode)
+    const dedupKey = `${name}|${score}|${mode}`;
+    const lastSubmit = localStorage.getItem('lexitris_last_submit');
+    if (lastSubmit === dedupKey) {
+      console.log('Duplicate score prevented:', {name, score, mode});
+      return; // Skip duplicate submission
+    }
+    
     try {
       await doSubmit(name, score, mode, date);
       console.log('Score submitted successfully:', {name, score, mode, date});
+      localStorage.setItem('lexitris_last_submit', dedupKey);
     } catch(e) {
       // Network failed — queue for retry
       console.warn('Score submit failed, queuing for retry:', e.message);
@@ -1805,11 +1821,11 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       // Remove duplicates - keep only highest score per player name
       const seen = new Map();
       scores.forEach(s => {
-        if(!seen.has(s.name) || seen.get(s.name) < s.score) {
-          seen.set(s.name, s.score);
+        if(!seen.has(s.name) || seen.get(s.name).score < s.score) {
+          seen.set(s.name, s);
         }
       });
-      scores = scores.filter(s => seen.get(s.name) === s.score);
+      scores = Array.from(seen.values());
       
       // Sort by score descending and take top 10
       scores.sort((a, b) => b.score - a.score);
