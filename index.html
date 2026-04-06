@@ -326,8 +326,8 @@ body{
 .wle .p{color:#f5a623;font-weight:700;}
 
 /* Canvas wrap */
-#cw{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;align-self:stretch;}
-canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;box-shadow:0 0 30px rgba(124,92,252,0.12),0 8px 32px rgba(0,0,0,0.5);}
+#cw{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;align-self:stretch;background:linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);border-radius:8px;}
+canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;box-shadow:0 0 30px rgba(124,92,252,0.12),0 8px 32px rgba(0,0,0,0.5);background:transparent;}
 #particle-cv{position:absolute;top:0;left:0;pointer-events:none;border:none;box-shadow:none;background:transparent;border-radius:8px;}
 
 /* Flash & popup */
@@ -1802,6 +1802,15 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         scores = scores.filter(s => s.date === today);
       }
       
+      // Remove duplicates - keep only highest score per player name
+      const seen = new Map();
+      scores.forEach(s => {
+        if(!seen.has(s.name) || seen.get(s.name) < s.score) {
+          seen.set(s.name, s.score);
+        }
+      });
+      scores = scores.filter(s => seen.get(s.name) === s.score);
+      
       // Sort by score descending and take top 10
       scores.sort((a, b) => b.score - a.score);
       return scores.slice(0, 10);
@@ -2053,8 +2062,10 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
 <div id="ad-spacer"></div>
 
 <!-- ═══ INTRO SCREEN ═══════════════════════════════════════════════ -->
-<div id="intro-screen" class="lx-screen open" style="justify-content:flex-start;overflow-y:auto;padding:8px 12px 16px;">
-  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:2px;">
+<div id="intro-screen" class="lx-screen open" style="justify-content:center;overflow-y:auto;padding:8px 12px 16px;">
+  <!-- Falling letter tiles background -->
+  <canvas id="intro-bg-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0.12;z-index:0;"></canvas>
+  <div style="width:100%;display:flex;flex-direction:column;gap:6px;align-items:center;padding-top:0;position:relative;z-index:1;">
 
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:0;">
@@ -2515,64 +2526,79 @@ const THEMES = {
   // Free themes
   classic: {
     name: 'Classic', cost: 0, tier: 'free',
-    colors: ['#8566fc,#6b4dd6,#4a33a0', '#4ade80,#22c55e,#16a34a', '#00e5cc,#00b8a9,#008577', '#f5a623,#ef9f27,#ba7517', '#ff3b6b,#e24b4a,#a32d2d']
+    colors: ['#8566fc,#6b4dd6,#4a33a0', '#4ade80,#22c55e,#16a34a', '#00e5cc,#00b8a9,#008577', '#f5a623,#ef9f27,#ba7517', '#ff3b6b,#e24b4a,#a32d2d'],
+    bg: 'linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%)'
   },
   midnight: {
     name: 'Midnight', cost: 0, tier: 'free',
-    colors: ['#5b4b8a,#3d3166,#2a1f4d', '#4a7a9e,#2f5873,#1e3a52', '#3d5a80,#293d57,#1a2633']
+    colors: ['#5b4b8a,#3d3166,#2a1f4d', '#4a7a9e,#2f5873,#1e3a52', '#3d5a80,#293d57,#1a2633'],
+    bg: 'linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f0f23 100%)'
   },
   sunset: {
     name: 'Sunset', cost: 0, tier: 'free',
-    colors: ['#f59e42,#d85a30,#993c1d', '#fbbf24,#f59e42,#d97706', '#ff6b6b,#ee5a52,#c92a2a']
+    colors: ['#f59e42,#d85a30,#993c1d', '#fbbf24,#f59e42,#d97706', '#ff6b6b,#ee5a52,#c92a2a'],
+    bg: 'linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0a08 100%)'
   },
   // Gem shop themes
   sakura: {
     name: 'Sakura', cost: 150, tier: 'gem',
-    colors: ['#ffc9e3,#ffb3d9,#ff8bc2', '#ffe5f0,#ffd4e5,#ffb3d9', '#ffb3d9,#ff8bc2,#ff5c9e']
+    colors: ['#ffc9e3,#ffb3d9,#ff8bc2', '#ffe5f0,#ffd4e5,#ffb3d9', '#ffb3d9,#ff8bc2,#ff5c9e'],
+    bg: 'linear-gradient(135deg, #2d1a28 0%, #3d2535 50%, #2a1825 100%)'
   },
   ocean: {
     name: 'Ocean', cost: 120, tier: 'gem',
-    colors: ['#5dcaa5,#1d9e75,#0f6e56', '#60a5fa,#3b82f6,#2563eb', '#06b6d4,#0891b2,#0e7490']
+    colors: ['#5dcaa5,#1d9e75,#0f6e56', '#60a5fa,#3b82f6,#2563eb', '#06b6d4,#0891b2,#0e7490'],
+    bg: 'linear-gradient(135deg, #0a1f28 0%, #0f2f3f 50%, #081820 100%)'
   },
   forest: {
     name: 'Forest', cost: 130, tier: 'gem',
-    colors: ['#86b15c,#639922,#3b6d11', '#92754f,#6b5637,#4a3a23', '#4d7c0f,#3f6212,#365314']
+    colors: ['#86b15c,#639922,#3b6d11', '#92754f,#6b5637,#4a3a23', '#4d7c0f,#3f6212,#365314'],
+    bg: 'linear-gradient(135deg, #0f1a0a 0%, #1a2815 50%, #0d150a 100%)'
   },
   inferno: {
     name: 'Inferno', cost: 180, tier: 'gem',
-    colors: ['#ff5c3d,#e24b4a,#a32d2d', '#fa9e3a,#ef9f27,#ba7517', '#ff6b35,#f7931e,#c87619']
+    colors: ['#ff5c3d,#e24b4a,#a32d2d', '#fa9e3a,#ef9f27,#ba7517', '#ff6b35,#f7931e,#c87619'],
+    bg: 'linear-gradient(135deg, #1a0a08 0%, #2d150f 50%, #1a0805 100%)'
   },
   neon: {
     name: 'Neon', cost: 200, tier: 'gem', special: 'neon',
-    colors: ['#00e5cc', '#ff3b6b', '#a78bfa', '#4ade80', '#fbbf24']
+    colors: ['#00e5cc', '#ff3b6b', '#a78bfa', '#4ade80', '#fbbf24'],
+    bg: 'radial-gradient(circle at 30% 50%, rgba(0,229,204,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(255,59,107,0.15) 0%, transparent 50%), #0a0a0a'
   },
   candy: {
     name: 'Candy', cost: 140, tier: 'gem',
-    colors: ['#f093fb,#f5576c,#c93966', '#a8edea,#fed6e3,#c9a9bc', '#fbc2eb,#a6c1ee,#8fa5d6']
+    colors: ['#f093fb,#f5576c,#c93966', '#a8edea,#fed6e3,#c9a9bc', '#fbc2eb,#a6c1ee,#8fa5d6'],
+    bg: 'linear-gradient(135deg, #2a1828 0%, #3d2838 50%, #281525 100%)'
   },
   space: {
     name: 'Space', cost: 170, tier: 'gem',
-    colors: ['#4c1d95,#2e1065,#1e0a45', '#1e293b,#0f172a,#020617', '#312e81,#1e1b4b,#14112e']
+    colors: ['#4c1d95,#2e1065,#1e0a45', '#1e293b,#0f172a,#020617', '#312e81,#1e1b4b,#14112e'],
+    bg: 'radial-gradient(circle at 20% 30%, rgba(76,29,149,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(30,41,59,0.3) 0%, transparent 50%), #050510'
   },
   wood: {
     name: 'Wood', cost: 160, tier: 'gem', special: 'texture',
-    colors: ['#b8956a,#9e7a4d,#7a5e38', '#8b6f47,#6b5434,#4d3c24', '#a0826d,#81674f,#5d4a37']
+    colors: ['#b8956a,#9e7a4d,#7a5e38', '#8b6f47,#6b5434,#4d3c24', '#a0826d,#81674f,#5d4a37'],
+    bg: 'linear-gradient(135deg, #1a1410 0%, #2d2318 50%, #1a140e 100%)'
   },
   gold: {
     name: 'Gold', cost: 220, tier: 'gem', special: 'shine',
-    colors: ['#fbbf24,#f59e0b,#d97706', '#fef3c7,#fde68a,#fbbf24', '#fcd34d,#fbbf24,#f59e0b']
+    colors: ['#fbbf24,#f59e0b,#d97706', '#fef3c7,#fde68a,#fbbf24', '#fcd34d,#fbbf24,#f59e0b'],
+    bg: 'linear-gradient(135deg, #1a1508 0%, #2d2310 50%, #1a1205 100%)'
   },
   rainbow: {
     name: 'Rainbow', cost: 250, tier: 'gem', special: 'rainbow',
-    colors: ['#ff0000,#ff8800,#ffff00', '#00ff00,#0088ff,#4400ff', '#8800ff,#ff0088,#ff4444', '#ffaa00,#00ffaa,#aa00ff']
+    colors: ['#ff0000,#ff8800,#ffff00', '#00ff00,#0088ff,#4400ff', '#8800ff,#ff0088,#ff4444', '#ffaa00,#00ffaa,#aa00ff'],
+    bg: 'linear-gradient(45deg, rgba(255,0,0,0.1) 0%, rgba(255,136,0,0.1) 14%, rgba(255,255,0,0.1) 28%, rgba(0,255,0,0.1) 42%, rgba(0,136,255,0.1) 57%, rgba(68,0,255,0.1) 71%, rgba(136,0,255,0.1) 85%, rgba(255,0,136,0.1) 100%), #0a0a0a'
   },
   carbon: {
     name: 'Carbon', cost: 110, tier: 'gem', special: 'texture',
-    colors: ['#3f3f46,#27272a,#18181b', '#52525b,#3f3f46,#27272a', '#71717a,#52525b,#3f3f46']
+    colors: ['#3f3f46,#27272a,#18181b', '#52525b,#3f3f46,#27272a', '#71717a,#52525b,#3f3f46'],
+    bg: 'linear-gradient(135deg, #0a0a0a 0%, #18181b 50%, #0a0a0a 100%)'
   },
   gem: {
     name: 'Gem', cost: 240, tier: 'gem', special: 'sparkle',
-    colors: ['#a78bfa,#7c3aed,#5b21b6', '#34d399,#10b981,#059669', '#f472b6,#ec4899,#db2777']
+    colors: ['#a78bfa,#7c3aed,#5b21b6', '#34d399,#10b981,#059669', '#f472b6,#ec4899,#db2777'],
+    bg: 'radial-gradient(circle at 30% 40%, rgba(167,139,250,0.2) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(52,211,153,0.2) 0%, transparent 50%), #0a0a14'
   }
 };
 
@@ -3043,9 +3069,7 @@ function roundRect(c,x,y,w,h,r){
 
 function draw(){
   ctx.clearRect(0,0,cv.width,cv.height);
-  // board bg
-  ctx.fillStyle='#080b18';
-  roundRect(ctx,0,0,cv.width,cv.height,6);ctx.fill();
+  // board bg - now handled by CSS background on #cw wrapper
 
   // grid lines
   ctx.strokeStyle='rgba(124,92,252,0.08)';ctx.lineWidth=1;
@@ -4619,8 +4643,15 @@ function applyTheme(themeKey) {
   hapticLight();
   sfx(440, 0.1, 0.08);
   
-  // Update UI to show new theme on tiles
+  // Update UI to show new theme on tiles and background
   updateThemeDisplay();
+  
+  // Apply background to game board
+  const theme = THEMES[themeKey];
+  const canvasWrapper = document.getElementById('cw');
+  if (canvasWrapper && theme.bg) {
+    canvasWrapper.style.background = theme.bg;
+  }
 }
 
 function closeThemeShop() {
@@ -4735,6 +4766,15 @@ function loadThemeData() {
     if (data.gems !== undefined) gems = data.gems;
     if (data.currentTheme) currentTheme = data.currentTheme;
     if (data.ownedThemes) ownedThemes = data.ownedThemes;
+    
+    // Apply background if theme is set
+    if (currentTheme && THEMES[currentTheme]) {
+      const theme = THEMES[currentTheme];
+      const canvasWrapper = document.getElementById('cw');
+      if (canvasWrapper && theme.bg) {
+        canvasWrapper.style.background = theme.bg;
+      }
+    }
   } catch(e) {}
 }
 
@@ -5222,6 +5262,101 @@ window.addEventListener('load',()=>{
     console.error('Init error:', err);
   }
 });
+</script>
+<script>
+// ══ FALLING LETTER TILES BACKGROUND (matches game style) ═════════════════
+(function(){
+  const canvas = document.getElementById('intro-bg-canvas');
+  if(!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const drops = [];
+  const tileSize = 32;
+  
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    // Initialize drops (one per ~60px column)
+    const cols = Math.floor(canvas.width / 60);
+    drops.length = 0;
+    for(let i = 0; i < cols; i++) {
+      drops.push({
+        x: i * 60 + 15,
+        y: Math.random() * -canvas.height - 100,
+        speed: 0.4 + Math.random() * 0.8,
+        letter: letters[Math.floor(Math.random() * letters.length)],
+        rotation: (Math.random() - 0.5) * 0.3
+      });
+    }
+  }
+  
+  function roundRect(c,x,y,w,h,r){
+    c.beginPath();
+    c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.arcTo(x+w,y,x+w,y+r,r);
+    c.lineTo(x+w,y+h-r);c.arcTo(x+w,y+h,x+w-r,y+h,r);
+    c.lineTo(x+r,y+h);c.arcTo(x,y+h,x,y+h-r,r);
+    c.lineTo(x,y+r);c.arcTo(x,y,x+r,y,r);
+    c.closePath();
+  }
+  
+  function animate() {
+    // Only animate when intro screen is visible
+    const introScreen = document.getElementById('intro-screen');
+    if(!introScreen || !introScreen.classList.contains('open')) {
+      requestAnimationFrame(animate);
+      return;
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw each falling tile
+    drops.forEach(drop => {
+      ctx.save();
+      ctx.translate(drop.x + tileSize/2, drop.y + tileSize/2);
+      ctx.rotate(drop.rotation);
+      
+      // Tile background (purple gradient)
+      const grad = ctx.createLinearGradient(-tileSize/2, -tileSize/2, tileSize/2, tileSize/2);
+      grad.addColorStop(0, 'rgba(124,92,252,0.85)');
+      grad.addColorStop(1, 'rgba(85,51,204,0.85)');
+      ctx.fillStyle = grad;
+      roundRect(ctx, -tileSize/2 + 2, -tileSize/2 + 2, tileSize - 4, tileSize - 4, 4);
+      ctx.fill();
+      
+      // Tile border
+      ctx.strokeStyle = 'rgba(167,139,250,0.9)';
+      ctx.lineWidth = 1.5;
+      roundRect(ctx, -tileSize/2 + 2, -tileSize/2 + 2, tileSize - 4, tileSize - 4, 4);
+      ctx.stroke();
+      
+      // Letter
+      ctx.fillStyle = '#fff';
+      ctx.font = `900 ${Math.floor(tileSize * 0.5)}px 'Nunito', sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(drop.letter, 0, 1);
+      
+      ctx.restore();
+      
+      // Move down
+      drop.y += drop.speed;
+      
+      // Reset when off screen
+      if(drop.y > canvas.height + 100) {
+        drop.y = -100;
+        drop.letter = letters[Math.floor(Math.random() * letters.length)];
+        drop.rotation = (Math.random() - 0.5) * 0.3;
+      }
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(animate);
+})();
 </script>
 <script>
 // ══ THREE LANTERN STUDIO SPLASH ══════════════════════════════════════════
