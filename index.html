@@ -1769,46 +1769,17 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
       const body = {
         structuredQuery: {
           from: [{ collectionId: "scores" }],
-          where: {},
+          where: {
+            fieldFilter: {
+              field: { fieldPath: "mode" },
+              op: "EQUAL",
+              value: { stringValue: mode }
+            }
+          },
           orderBy: [{ field: { fieldPath: "score" }, direction: "DESCENDING" }],
-          limit: 10
+          limit: 100
         }
       };
-      
-      // For daily mode, filter by both mode AND today's date
-      if (mode === 'daily') {
-        const today = getDailyDate(); // Format: YYYY-MM-DD
-        body.structuredQuery.where = {
-          compositeFilter: {
-            op: "AND",
-            filters: [
-              {
-                fieldFilter: {
-                  field: { fieldPath: "mode" },
-                  op: "EQUAL",
-                  value: { stringValue: mode }
-                }
-              },
-              {
-                fieldFilter: {
-                  field: { fieldPath: "date" },
-                  op: "EQUAL",
-                  value: { stringValue: today }
-                }
-              }
-            ]
-          }
-        };
-      } else {
-        // For all-time and zen modes, just filter by mode
-        body.structuredQuery.where = {
-          fieldFilter: {
-            field: { fieldPath: "mode" },
-            op: "EQUAL",
-            value: { stringValue: mode }
-          }
-        };
-      }
       
       const res = await apiFetch(BASE + ":runQuery?key=" + API_KEY, {
         method: "POST",
@@ -1816,14 +1787,28 @@ canvas{display:block;border:1px solid rgba(124,92,252,0.25);border-radius:8px;bo
         body: JSON.stringify(body)
       });
       const rows = await res.json();
-      return rows
+      let scores = rows
         .filter(r => r.document)
         .map(r => ({
           name:  r.document.fields.name.stringValue,
           score: parseInt(r.document.fields.score.integerValue),
-          mode:  r.document.fields.mode.stringValue
+          mode:  r.document.fields.mode.stringValue,
+          date:  r.document.fields.date.stringValue
         }));
-    } catch(e) { console.warn("Leaderboard fetch failed:", e.message); return []; }
+      
+      // For daily mode, filter client-side by today's date
+      if (mode === 'daily') {
+        const today = getDailyDate();
+        scores = scores.filter(s => s.date === today);
+      }
+      
+      // Sort by score descending and take top 10
+      scores.sort((a, b) => b.score - a.score);
+      return scores.slice(0, 10);
+    } catch(e) { 
+      console.warn("Leaderboard fetch failed:", e.message); 
+      return []; 
+    }
   };
 })();
 </script>
